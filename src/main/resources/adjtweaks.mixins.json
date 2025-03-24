@@ -6,10 +6,10 @@
   "priority": 2000,
   "mixins": [
     "campfire.CampfireMixin",
-    "combat.DisableSweepAndCrit",
+    "combat.PlayerMixin",
+    "entity.LivingEntityMixin",
     "potions.MobEffectInstanceAccessor",
-    "potions.PotionMixin",
-    "potions.ResistanceEffectMixin",
+    "potions.MobEffectsMixin",
     "tools.DurabilityMixin",
     "tools.ExtraFortune"
   ]

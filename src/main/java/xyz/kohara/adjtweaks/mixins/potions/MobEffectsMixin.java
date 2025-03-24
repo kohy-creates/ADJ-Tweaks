@@ -14,7 +14,7 @@ import xyz.kohara.adjtweaks.potion.MobEffectReplacement;
 
 
 @Mixin(MobEffects.class)
-public class PotionMixin {
+public class MobEffectsMixin {
     @Inject(method = "register", at = @At(value = "HEAD"), cancellable = true)
     private static void modifyEffects(int pId, String pKey, MobEffect pEffect, CallbackInfoReturnable<MobEffect> cir) {
         switch (pKey) {

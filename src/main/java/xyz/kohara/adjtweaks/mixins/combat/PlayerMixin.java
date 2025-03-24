@@ -10,7 +10,7 @@ import xyz.kohara.adjtweaks.ConfigHandler;
 import java.util.List;
 
 @Mixin(Player.class)
-public class DisableSweepAndCrit {
+public class PlayerMixin {
 
     @ModifyExpressionValue(
             method = "attack",

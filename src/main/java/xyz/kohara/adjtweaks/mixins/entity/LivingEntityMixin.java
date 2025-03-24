@@ -1,4 +1,4 @@
-package xyz.kohara.adjtweaks.mixins.potions;
+package xyz.kohara.adjtweaks.mixins.entity;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjtweaks.ConfigHandler;
 
 @Mixin(LivingEntity.class)
-public abstract class ResistanceEffectMixin {
+public abstract class LivingEntityMixin {
 
     @Inject(method = "getDamageAfterMagicAbsorb", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/LivingEntity;hasEffect(Lnet/minecraft/world/effect/MobEffect;)Z", ordinal = 0), cancellable = true)
     private void resistanceEdit(DamageSource pDamageSource, float pDamageAmount, CallbackInfoReturnable<Float> cir) {
