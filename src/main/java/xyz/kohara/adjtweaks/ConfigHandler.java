@@ -12,6 +12,11 @@ public class ConfigHandler {
     public static final ForgeConfigSpec.DoubleValue EXTRA_FORTUNE_CHANCE;
     public static final ForgeConfigSpec.BooleanValue DISABLE_CRITS;
     public static final ForgeConfigSpec.BooleanValue DISABLE_SWEEP_ATTACKS;
+    public static final ForgeConfigSpec.ConfigValue<Double> RESISTANCE_DAMAGE_REDUCTION;
+    public static final ForgeConfigSpec.ConfigValue<Double> INSTANT_HEALTH_HEAL_AMOUNT;
+    public static final ForgeConfigSpec.ConfigValue<Double> INSTANT_HEALTH_DAMAGE_AMOUNT ;
+    public static final ForgeConfigSpec.ConfigValue<Double> INSTANT_DAMAGE_HEAL_AMOUNT;
+    public static final ForgeConfigSpec.ConfigValue<Double> INSTANT_DAMAGE_DAMAGE_AMOUNT;
     public static final ForgeConfigSpec.ConfigValue<Integer> CAMPFIRE_HEAL_RATE;
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_AMOUNT;
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_RADIUS;
@@ -61,6 +66,38 @@ public class ConfigHandler {
         CAMPFIRE_HEAL_RADIUS_SIGNAL = BUILDER
                 .comment("Radius around a signal Campfire")
                 .define("healRadiusSignal", 32.0);
+
+        BUILDER.pop();
+
+        BUILDER.comment("Effects").push("effect");
+
+        RESISTANCE_DAMAGE_REDUCTION = BUILDER
+                .comment("How much damage reduction to give per level of Resistance")
+                .define("resistanceDR", 0.1);
+
+            BUILDER.comment("Instant Health Effect").push("instant_health");
+
+            INSTANT_HEALTH_HEAL_AMOUNT = BUILDER
+                    .comment("The amount healed by Instant Health effect")
+                    .define("healAmount", 6.0);
+
+            INSTANT_HEALTH_DAMAGE_AMOUNT = BUILDER
+                    .comment("The amount of damage dealt by Instant Health effect to undead mobs")
+                    .define("damageAmount", 6.0);
+
+            BUILDER.pop();
+
+            BUILDER.comment("Instant Damage Effect").push("instant_damage");
+
+            INSTANT_DAMAGE_HEAL_AMOUNT = BUILDER
+                    .comment("The amount healed by Instant Damage effect for undead mobs")
+                    .define("healAmount", 4.0);
+
+            INSTANT_DAMAGE_DAMAGE_AMOUNT = BUILDER
+                    .comment("The amount of damage dealt by Instant Damage effect")
+                    .define("damageAmount", 4.0);
+
+            BUILDER.pop();
 
         BUILDER.pop();
     }

@@ -9,6 +9,7 @@
     "combat.DisableSweepAndCrit",
     "potions.MobEffectInstanceAccessor",
     "potions.PotionMixin",
+    "potions.ResistanceEffectMixin",
     "tools.DurabilityMixin",
     "tools.ExtraFortune"
   ]
