@@ -18,7 +18,7 @@ public abstract class ResistanceEffectMixin {
         LivingEntity entity = (LivingEntity) (Object) this;
         MobEffectInstance resistanceEffect = entity.getEffect(MobEffects.DAMAGE_RESISTANCE);
         if (resistanceEffect != null) {
-            float reduction = (float) (ConfigHandler.RESISTANCE_DAMAGE_REDUCTION.get() * (resistanceEffect.getAmplifier() + 1)); // 10% per level
+            float reduction = (float) (ConfigHandler.RESISTANCE_DAMAGE_REDUCTION.get() * (resistanceEffect.getAmplifier() + 1));
             cir.setReturnValue(pDamageAmount * (1.0f - reduction));
         }
     }
