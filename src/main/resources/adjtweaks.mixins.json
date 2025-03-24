@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "xyz.kohara.adjtweaks.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "priority": 2000,
+  "mixins": [
+    "campfire.CampfireMixin",
+    "combat.DisableSweepAndCrit",
+    "potions.MobEffectInstanceAccessor",
+    "potions.PotionMixin",
+    "tools.DurabilityMixin",
+    "tools.ExtraFortune"
+  ]
+}
