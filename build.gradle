@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
 plugins {
     id 'eclipse'
     id 'idea'
@@ -183,12 +194,12 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
         jarJar.ranged(it, "[0.4.1,)")
     }
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.8.9'
 }
 
 mixin {
-    add sourceSets.main, "modid.refmap.json"
-    config "adjtweaks.mixins.json"
+    add sourceSets.main, 'mixins.adjtweaks.refmap.json'
+    config 'mixins.adjtweaks.json'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

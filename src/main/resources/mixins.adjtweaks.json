@@ -12,5 +12,6 @@
     "potions.MobEffectsMixin",
     "tools.DurabilityMixin",
     "tools.ExtraFortune"
-  ]
+  ],
+  "refmap": "mixins.adjtweaks.refmap.json"
 }

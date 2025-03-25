@@ -8,7 +8,7 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}" #optional
-mixins=["adjtweaks.mixins.json"]
+mixins=["mixins.adjtweaks.json"]
 
 # The description text for the mod (multi line!) )
 description='''${mod_description}'''
