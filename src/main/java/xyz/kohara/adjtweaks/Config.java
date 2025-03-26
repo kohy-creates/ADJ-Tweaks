@@ -4,7 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
-public class ConfigHandler {
+public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     // Configurable values
@@ -22,14 +22,14 @@ public class ConfigHandler {
         BUILDER.comment("Tools").push("tools");
 
         DURABILITY_SAVE_CHANCE = BUILDER
-            .comment("Chance (0 - 1) to prevent durability loss. Default: 0.5 (50%)")
-            .comment("Set to 0 to disable or 1 to make all items unbreakable")
-            .defineInRange("durabilitySaveChance", 0.5, 0, 1);
+                .comment("Chance (0 - 1) to prevent durability loss. Default: 0.5 (50%)")
+                .comment("Set to 0 to disable or 1 to make all items unbreakable")
+                .defineInRange("durabilitySaveChance", 0.5, 0, 1);
 
         EXTRA_FORTUNE_CHANCE = BUILDER
-            .comment("Chance (0 - 1) to treat blocks as if they were mined with Fortune higher by 1")
-            .comment("This also applies to breaking blocks without Fortune. Set to 0 to disable")
-            .defineInRange("extraFortuneChance", 1.0, 0, 1);
+                .comment("Chance (0 - 1) to treat blocks as if they were mined with Fortune higher by 1")
+                .comment("This also applies to breaking blocks without Fortune. Set to 0 to disable")
+                .defineInRange("extraFortuneChance", 1.0, 0, 1);
 
         BUILDER.pop();
 

@@ -1,4 +1,4 @@
-package xyz.kohara.adjtweaks.potion;
+package xyz.kohara.adjtweaks.potions;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -38,7 +38,7 @@ public class PotionConfigReader {
 
         File configFile = POTION_CONFIG.toFile();
         if (!configFile.exists()) {
-            ADJTweaks.log(Level.INFO,"No potion configuration found, skipping");
+            ADJTweaks.LOGGER.log(Level.INFO,"No potion configuration found, skipping");
             return new HashMap<>();
         }
 
@@ -52,18 +52,18 @@ public class PotionConfigReader {
                 for (JsonElement effectElement : effectsArray) {
                     PotionConfig config = getPotionConfig(effectElement);
                     potionConfigs.put(potionId, config);
-                    ADJTweaks.log(Level.INFO,
+                    ADJTweaks.LOGGER.log(Level.INFO,
                             "Found changes for potion '" + potionId +
                                     "': effect = " + config.effectID +
                                     "duration = " + config.minutes + ":" + config.seconds +
                                     " level = " + config.level
-                            );
+                    );
                 }
             }
 
         }
         catch (IOException e) {
-            ADJTweaks.log(Level.ERROR, "Unhandled exception!");
+            ADJTweaks.LOGGER.log(Level.ERROR, "Unhandled exception!");
             e.printStackTrace();
         }
         return potionConfigs;

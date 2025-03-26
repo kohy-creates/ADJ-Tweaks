@@ -1,40 +1,39 @@
 package xyz.kohara.adjtweaks.campfire;
 
-import net.minecraft.core.BlockPos;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import xyz.kohara.adjtweaks.ConfigHandler;
-import xyz.kohara.adjtweaks.effect.ModEffects;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
+import xyz.kohara.adjtweaks.Config;
+import xyz.kohara.adjtweaks.effects.ModEffects;
 
 import java.util.List;
 
 public class CozyCampfire {
-    public static boolean isCampfireSignal(Level level, BlockPos pos) {
-        BlockState state = level.getBlockState(pos);
-        return state.getBlock() instanceof CampfireBlock && state.getValue(CampfireBlock.SIGNAL_FIRE);
+    public static boolean isCampfireSignal(World world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        return (state.getBlock() instanceof CampfireBlock && state.get(Properties.SIGNAL_FIRE));
     }
 
     private static boolean isPassiveMob(Entity entity) {
-        return !(entity.getType().getCategory() == MobCategory.MONSTER);
+        return !(entity.getType().getSpawnGroup() == SpawnGroup.MONSTER);
     }
 
-    public static void applyEffects(Level level, BlockPos pos) {
-        if (!level.isClientSide()) {
-            double radius = (isCampfireSignal(level, pos)) ? ConfigHandler.CAMPFIRE_HEAL_RADIUS_SIGNAL.get() : ConfigHandler.CAMPFIRE_HEAL_RADIUS.get();
-            AABB area = new AABB(pos).inflate(radius);
-            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, area, livingEntity -> {
-                return isPassiveMob(livingEntity) && livingEntity.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= (radius * radius);
-            });
-            MobEffectInstance cozyCampfireEffect = new MobEffectInstance(ModEffects.COZY_CAMPFIRE.get(),16, 0, true, true, true);
+    public static void applyEffects(World world, BlockPos pos) {
+        if (!world.isClient()) {
+            double radius = (isCampfireSignal(world, pos)) ? Config.CAMPFIRE_HEAL_RADIUS_SIGNAL.get() : Config.CAMPFIRE_HEAL_RADIUS.get();
+            Box area = new Box(pos).expand(radius);
+            List<LivingEntity> list = world.getEntitiesByClass(LivingEntity.class, area, livingEntity -> isPassiveMob(livingEntity) && livingEntity.squaredDistanceTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= (radius * radius));
+            StatusEffectInstance cozyCampfireEffect = new StatusEffectInstance(ModEffects.COZY_CAMPFIRE.get(),16, 0, true, true, true);
             for (LivingEntity entity : list) {
-                entity.addEffect(cozyCampfireEffect);
+                entity.addStatusEffect(cozyCampfireEffect);
             }
         }
     }

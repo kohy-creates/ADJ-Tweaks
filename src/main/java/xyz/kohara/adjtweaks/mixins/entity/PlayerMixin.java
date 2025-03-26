@@ -1,38 +1,38 @@
-package xyz.kohara.adjtweaks.mixins.combat;
+package xyz.kohara.adjtweaks.mixins.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import xyz.kohara.adjtweaks.ConfigHandler;
+import xyz.kohara.adjtweaks.Config;
 
 import java.util.List;
 
-@Mixin(Player.class)
+@Mixin(PlayerEntity.class)
 public class PlayerMixin {
 
     @ModifyExpressionValue(
             method = "attack",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/player/Player;onClimbable()Z"
+                    target = "Lnet/minecraft/entity/player/PlayerEntity;isClimbing()Z"
             )
     )
     private boolean adjUtils$canCrit(boolean isOnClimbable)
     {
-        return ConfigHandler.DISABLE_CRITS.get() || isOnClimbable;
+        return Config.DISABLE_CRITS.get() || isOnClimbable;
     }
 
     @ModifyExpressionValue(
             method = "attack",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/Level;getEntitiesOfClass(Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;"
+                    target = "Lnet/minecraft/world/World;getNonSpectatingEntities(Ljava/lang/Class;Lnet/minecraft/util/math/Box;)Ljava/util/List;"
             )
     )
     private List<LivingEntity> adjUtils$modifyListOfSweepAttacks(List<LivingEntity> listOfSweepAttacks)
     {
-        return ConfigHandler.DISABLE_SWEEP_ATTACKS.get() ? List.of() : listOfSweepAttacks;
+        return Config.DISABLE_SWEEP_ATTACKS.get() ? List.of() : listOfSweepAttacks;
     }
 }
