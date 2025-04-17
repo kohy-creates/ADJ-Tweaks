@@ -12,17 +12,21 @@
 		"blocks.JukeboxDiscSoundMixin",
 		"effect.StatusEffectInstanceAccessor",
 		"effect.StatusEffectsMixin",
+		"enchantments.EfficiencyMixin",
+		"enchantments.EnchantmentMixin",
 		"enchantments.FortuneLootingMixin",
 		"enchantments.ImpalingMixin",
 		"enchantments.PowerMixin",
 		"enchantments.ProtectionMixin",
 		"enchantments.SharpnessMixin",
+		"enchantments.ThornsMixin",
 		"enchantments.UnbreakingMixin",
 		"entity.EnderPearlSoundMixin",
 		"entity.LivingEntityMixin",
 		"entity.PlayerMixin",
 		"items.BoatPlaceSoundMixin",
-		"items.BowPullbackSound",
+		"items.BowMixin",
+		"items.CrossbowMixin",
 		"items.ExtraFortune",
 		"items.ItemStackMixin",
 		"items.LeadAttachSoundMixin",
@@ -31,8 +35,7 @@
 		"items.SpawnEggUseSoundMixin",
 		"items.TridentPullbackSound"
 	],
-	"client": [
-	],
+	"client": [],
 	"injectors": {
 		"defaultRequire": 1
 	},

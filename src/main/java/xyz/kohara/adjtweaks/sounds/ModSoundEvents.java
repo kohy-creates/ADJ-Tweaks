@@ -146,7 +146,7 @@ public class ModSoundEvents {
             () -> SoundEvents.BLOCK_CANDLE_FALL);
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
-        Identifier id = new Identifier("auditory", name);
+        Identifier id = Identifier.of("auditory", name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.of(id));
     }
 

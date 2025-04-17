@@ -19,7 +19,7 @@ import xyz.kohara.adjtweaks.Config;
 import xyz.kohara.adjtweaks.sounds.ModSoundEvents;
 
 @Mixin(BowItem.class)
-public class BowPullbackSound {
+public class BowMixin {
 
     @Inject(method = "use", at = @At(value = "RETURN", target = "Lnet/minecraft/world/entity/player/Player;startUsingItem(Lnet/minecraft/world/InteractionHand;)V"))
     private void auditory_pullbackSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
