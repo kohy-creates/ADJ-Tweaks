@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjtweaks.misc.Colors;
 
 @Mixin(value = Enchantment.class, priority = 1500)
 public abstract class EnchantmentMixin {
@@ -20,16 +19,19 @@ public abstract class EnchantmentMixin {
     )
     public void modifyEnchColor(int level, CallbackInfoReturnable<Text> cir) {
         Enchantment enchantment = (Enchantment) (Object) this;
-        if (level >= enchantment.getMaxLevel() && cir.getReturnValue() instanceof MutableText text) {
-            if (enchantment.isTreasure() && !enchantment.isCursed()) {
-                cir.setReturnValue(text.setStyle(Style.EMPTY.withColor(Colors.YELLOW_FLASH)));
+        if (cir.getReturnValue() instanceof MutableText text) {
+            if (level >= enchantment.getMaxLevel()) {
+                if (enchantment.isTreasure() && !enchantment.isCursed()) {
+                    text.setStyle(Style.EMPTY.withColor(16761088));
+                } else {
+                    text.setStyle(Style.EMPTY.withColor(52735));
+                }
+            } else if (enchantment.isTreasure() && !enchantment.isCursed()) {
+                text.setStyle(Style.EMPTY.withColor(6549074));
+            } else if (enchantment.isCursed()) {
+                text.setStyle(Style.EMPTY.withColor(13701120));
             }
-            else if (enchantment.isCursed()) {
-                cir.setReturnValue(text.setStyle(Style.EMPTY.withColor(Colors.RED_FLASH)));
-            }
-            else {
-                cir.setReturnValue(text.setStyle(Style.EMPTY.withColor(Colors.LIGHT_BLUE_FLASH)));
-            }
+            cir.setReturnValue(text);
         }
     }
 }

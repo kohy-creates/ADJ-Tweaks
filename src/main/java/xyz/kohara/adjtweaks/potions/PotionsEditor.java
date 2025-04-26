@@ -16,7 +16,8 @@ public class PotionsEditor {
     }
 
     private static void forPotion(String potionId, PotionConfigReader.PotionConfig config) {
-        Identifier effectResourceLocation = new Identifier(config.effectID);
+        String[] id = config.effectID.split(":");
+        Identifier effectResourceLocation = Identifier.of(id[0], id[1]);
         StatusEffect effect = Registries.STATUS_EFFECT.get(effectResourceLocation);
 
         if (effect == null) {
@@ -24,7 +25,8 @@ public class PotionsEditor {
             return;
         }
 
-        Registries.POTION.get(new Identifier(potionId))
+        String[] id2 = potionId.split(":");
+        Registries.POTION.get(Identifier.of(id2[0], id2[1]))
                 .getEffects().forEach(statusEffectInstance -> {
                     if (statusEffectInstance.getEffectType().equals(effect)) {
                         ((StatusEffectInstanceAccessor) statusEffectInstance).setDuration((config.minutes * 60 + config.seconds) * 20);

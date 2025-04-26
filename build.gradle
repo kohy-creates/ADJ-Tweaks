@@ -32,7 +32,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
-    modImplementation(files('libs/Placebo-1.20.1-8.6.3.jar'))
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

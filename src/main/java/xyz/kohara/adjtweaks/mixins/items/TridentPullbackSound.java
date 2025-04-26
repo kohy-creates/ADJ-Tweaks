@@ -16,8 +16,8 @@ import xyz.kohara.adjtweaks.sounds.ModSoundEvents;
 @Mixin(TridentItem.class)
 public abstract class TridentPullbackSound {
 
-    @Inject(method = "use", at = @At(value = "RETURN", target = "Lnet/minecraft/world/entity/player/Player;startUsingItem(Lnet/minecraft/world/InteractionHand;)V"))
+    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setCurrentHand(Lnet/minecraft/util/Hand;)V"))
     private void auditory_pullbackSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-            world.playSound(null, user.getBlockPos(), ModSoundEvents.ITEM_TRIDENT_PULLING.get(), SoundCategory.PLAYERS, 0.1F, 0.8f + world.random.nextFloat() * 0.4F);
+           if (!world.isClient()) user.playSound(ModSoundEvents.ITEM_TRIDENT_PULLING.get(), SoundCategory.PLAYERS, 0.1F, 0.8f + world.random.nextFloat() * 0.4F);
     }
 }

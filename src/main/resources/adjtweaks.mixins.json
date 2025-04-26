@@ -16,6 +16,7 @@
 		"enchantments.EnchantmentMixin",
 		"enchantments.FortuneLootingMixin",
 		"enchantments.ImpalingMixin",
+		"enchantments.MultishotMixin",
 		"enchantments.PowerMixin",
 		"enchantments.ProtectionMixin",
 		"enchantments.SharpnessMixin",
