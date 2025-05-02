@@ -1,6 +1,7 @@
 package xyz.kohara.adjtweaks;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +35,6 @@ public class ADJTweaks {
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
