@@ -1,12 +1,12 @@
 package xyz.kohara.adjtweaks.mixins.enchantments;
 
-import net.minecraft.enchantment.ImpalingEnchantment;
+import net.minecraft.world.item.enchantment.TridentImpalerEnchantment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ImpalingEnchantment.class)
+@Mixin(TridentImpalerEnchantment.class)
 public class ImpalingMixin {
 
     @Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)

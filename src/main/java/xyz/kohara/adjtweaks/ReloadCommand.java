@@ -1,8 +1,8 @@
 package xyz.kohara.adjtweaks;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,10 +11,10 @@ import xyz.kohara.adjtweaks.potions.PotionsEditor;
 
 @Mod.EventBusSubscriber(modid = ADJTweaks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ReloadCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-                CommandManager.literal("adjreload")
-                        .requires(source -> source.hasPermissionLevel(2))
+                Commands.literal("adjreload")
+                        .requires(source -> source.hasPermission(2))
                         .executes(context -> {
                             PotionsEditor.edit();
                             AttributeReplace.loadConfig();

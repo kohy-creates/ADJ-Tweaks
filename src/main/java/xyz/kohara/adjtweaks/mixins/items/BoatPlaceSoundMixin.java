@@ -1,17 +1,18 @@
 // Auditory
 package xyz.kohara.adjtweaks.mixins.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.BoatItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
+import net.minecraft.server.dedicated.Settings;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,25 +24,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class BoatPlaceSoundMixin extends Item {
 
 
-    @Shadow @Final private BoatEntity.Type type;
+    @Shadow @Final private Boat.Type type;
 
-    public BoatPlaceSoundMixin(Settings settings) {
-        super(settings);
+    public BoatPlaceSoundMixin(Properties properties) {
+        super(properties);
     }
 
     @Inject(method = "use",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/World;emitGameEvent(Lnet/minecraft/entity/Entity;Lnet/minecraft/world/event/GameEvent;Lnet/minecraft/util/math/Vec3d;)V",
+                    target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/gameevent/GameEvent;Lnet/minecraft/world/phys/Vec3;)V",
                     shift = At.Shift.AFTER
             )
     )
-    private void auditory_placeSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (this.type == BoatEntity.Type.BAMBOO) {
-            world.playSound(null, raycast(world, user, RaycastContext.FluidHandling.ANY).getBlockPos(), SoundEvents.BLOCK_BAMBOO_WOOD_PLACE, SoundCategory.BLOCKS, 1.0f, 0.8f + world.random.nextFloat() * 0.4F);
-        } else if (this.type == BoatEntity.Type.CHERRY) {
-            world.playSound(null, raycast(world, user, RaycastContext.FluidHandling.ANY).getBlockPos(), SoundEvents.BLOCK_CHERRY_WOOD_PLACE, SoundCategory.BLOCKS, 1.0f, 0.8f + world.random.nextFloat() * 0.4F);
+    private void auditory_placeSound(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+        if (this.type == Boat.Type.BAMBOO) {
+            level.playSound(null, getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos(), SoundEvents.BAMBOO_WOOD_PLACE, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4F);
+        } else if (this.type == Boat.Type.CHERRY) {
+            level.playSound(null, getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos(), SoundEvents.CHERRY_WOOD_PLACE, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4F);
         } else {
-            world.playSound(null, raycast(world, user, RaycastContext.FluidHandling.ANY).getBlockPos(), SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0f, 0.8f + world.random.nextFloat() * 0.4F);
+            level.playSound(null, getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4F);
         }
     }
 }

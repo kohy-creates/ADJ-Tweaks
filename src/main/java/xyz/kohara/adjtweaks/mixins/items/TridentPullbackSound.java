@@ -1,12 +1,12 @@
 package xyz.kohara.adjtweaks.mixins.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,8 +16,14 @@ import xyz.kohara.adjtweaks.sounds.ModSoundEvents;
 @Mixin(TridentItem.class)
 public abstract class TridentPullbackSound {
 
-    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setCurrentHand(Lnet/minecraft/util/Hand;)V"))
-    private void auditory_pullbackSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-           if (!world.isClient()) user.playSound(ModSoundEvents.ITEM_TRIDENT_PULLING.get(), SoundCategory.PLAYERS, 0.1F, 0.8f + world.random.nextFloat() * 0.4F);
+    @Inject(
+            method = "use",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;startUsingItem(Lnet/minecraft/world/InteractionHand;)V"
+            )
+    )
+    private void auditory_pullbackSound(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+           if (!level.isClientSide()) player.playNotifySound(ModSoundEvents.ITEM_TRIDENT_PULLING.get(), SoundSource.PLAYERS, 0.1F, 0.8f + level.random.nextFloat() * 0.4F);
     }
 }

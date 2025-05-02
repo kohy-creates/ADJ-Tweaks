@@ -1,15 +1,15 @@
 package xyz.kohara.adjtweaks.mixins.items;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,13 +21,13 @@ import xyz.kohara.adjtweaks.sounds.ModSoundEvents;
 @Mixin(BowItem.class)
 public class BowMixin {
 
-    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/TypedActionResult;consume(Ljava/lang/Object;)Lnet/minecraft/util/TypedActionResult;"))
-    private void auditory_pullbackSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (!world.isClient()) user.playSound(ModSoundEvents.ITEM_BOW_PULLING.get(), SoundCategory.PLAYERS, 0.3F, 0.8f + world.random.nextFloat() * 0.4F);
+    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/InteractionResultHolder;consume(Ljava/lang/Object;)Lnet/minecraft/world/InteractionResultHolder;"))
+    private void auditory_pullbackSound(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+        if (!level.isClientSide()) player.playNotifySound(ModSoundEvents.ITEM_BOW_PULLING.get(), SoundSource.PLAYERS, 0.3F, 0.8f + level.random.nextFloat() * 0.4F);
     }
 
     @ModifyExpressionValue(
-            method = "onStoppedUsing",
+            method = "releaseUsing",
             at = @At(
                     value = "CONSTANT", args = "floatValue=1.0", ordinal = 0)
     )
@@ -36,14 +36,14 @@ public class BowMixin {
     }
 
     @Redirect(
-            method = "onStoppedUsing",
+            method = "releaseUsing",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setDamage(D)V"
+                    target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setBaseDamage(D)V"
             )
     )
-    private void modifySetDamage(PersistentProjectileEntity instance, double damage, ItemStack stack) {
-        double powerLevel = stack.getEnchantmentLevel(Enchantments.POWER);
+    private void modifySetDamage(AbstractArrow instance, double baseDamage, ItemStack stack) {
+        double powerLevel = stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
         double multiplier = 1.0;
 
         if (powerLevel == 1) {
@@ -56,7 +56,7 @@ public class BowMixin {
             multiplier = 1.60 + 0.10 * (powerLevel - 3);
         }
 
-        instance.setDamage(instance.getDamage() * multiplier);
+        instance.setBaseDamage(instance.getBaseDamage() * multiplier);
     }
 
 }

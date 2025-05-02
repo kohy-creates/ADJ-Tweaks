@@ -2,11 +2,12 @@ package xyz.kohara.adjtweaks.attributes;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -68,12 +69,12 @@ public class AttributeReplace {
     }
 
 
-    private static EntityAttribute attributeFromString(String string) {
+    private static Attribute attributeFromString(String string) {
         String[] s = string.split(":");
-        return ForgeRegistries.ATTRIBUTES.getValue(Identifier.of(s[0], s[1]));
+        return ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.fromNamespaceAndPath(s[0], s[1]));
     }
 
-    private static Identifier itemID(Item item) {
+    private static ResourceLocation itemID(Item item) {
         return ForgeRegistries.ITEMS.getKey(item);
     }
 
@@ -83,13 +84,13 @@ public class AttributeReplace {
 
     @SubscribeEvent
     public static void onItemAttributeModifier(ItemAttributeModifierEvent event) {
-        Multimap<EntityAttribute, EntityAttributeModifier> originalModifiers = event.getModifiers();
-        List<Map<EntityAttribute, EntityAttributeModifier>> replacementModifiers = new ArrayList<>();
+        Multimap<Attribute, AttributeModifier> originalModifiers = event.getModifiers();
+        List<Map<Attribute, AttributeModifier>> replacementModifiers = new ArrayList<>();
 
         // Turn the multimap into a list
         // Will be used later
-        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : originalModifiers.entries()) {
-            Map<EntityAttribute, EntityAttributeModifier> singleMap = new HashMap<>();
+        for (Map.Entry<Attribute, AttributeModifier> entry : originalModifiers.entries()) {
+            Map<Attribute, AttributeModifier> singleMap = new HashMap<>();
             singleMap.put(entry.getKey(), entry.getValue());
             replacementModifiers.add(singleMap);
         }
@@ -101,24 +102,24 @@ public class AttributeReplace {
             if (config.replace != null) {
                 config.replace.forEach((configKey, configEntry) -> {
                     String[] key = parseEntry(configKey);
-                    EntityAttribute targetAttribute = attributeFromString(key[0]);
+                    Attribute targetAttribute = attributeFromString(key[0]);
                     if (originalModifiers.keySet().contains(targetAttribute)) {
-                        ListIterator<Map<EntityAttribute, EntityAttributeModifier>> iterator = replacementModifiers.listIterator();
+                        ListIterator<Map<Attribute, AttributeModifier>> iterator = replacementModifiers.listIterator();
                         while (iterator.hasNext()) {
-                            Map<EntityAttribute, EntityAttributeModifier> map = iterator.next();
-                            EntityAttributeModifier modifier = map.get(targetAttribute);
-                            if (modifier != null && modifier.getOperation().getId() == Integer.parseInt(key[1])) {
+                            Map<Attribute, AttributeModifier> map = iterator.next();
+                            AttributeModifier modifier = map.get(targetAttribute);
+                            if (modifier != null && modifier.getOperation().ordinal() == Integer.parseInt(key[1])) {
                                 iterator.remove();
 
                                 String[] configNew = parseEntry(configEntry);
-                                EntityAttributeModifier newModifier = new EntityAttributeModifier(
+                                AttributeModifier newModifier = new AttributeModifier(
                                         UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"),
                                         modifier.getName(),
-                                        modifier.getValue(),
-                                        EntityAttributeModifier.Operation.fromId(Integer.parseInt(configNew[1])));
-                                EntityAttribute newAttribute = attributeFromString(configNew[0]);
+                                        modifier.getAmount(),
+                                        AttributeModifier.Operation.fromValue(Integer.parseInt(configNew[1])));
+                                Attribute newAttribute = attributeFromString(configNew[0]);
 
-                                Map<EntityAttribute, EntityAttributeModifier> newMap = new HashMap<>();
+                                Map<Attribute, AttributeModifier> newMap = new HashMap<>();
                                 newMap.put(newAttribute, newModifier);
 
                                 iterator.add(newMap);
@@ -129,11 +130,11 @@ public class AttributeReplace {
             }
             if (config.remove != null) {
                 config.remove.forEach(configEntry -> {
-                    ListIterator<Map<EntityAttribute, EntityAttributeModifier>> iterator = replacementModifiers.listIterator();
-                    EntityAttribute targetAttribute = attributeFromString(configEntry);
+                    ListIterator<Map<Attribute, AttributeModifier>> iterator = replacementModifiers.listIterator();
+                    Attribute targetAttribute = attributeFromString(configEntry);
                     while (iterator.hasNext()) {
-                        Map<EntityAttribute, EntityAttributeModifier> map = iterator.next();
-                        for (EntityAttribute attr : map.keySet()) {
+                        Map<Attribute, AttributeModifier> map = iterator.next();
+                        for (Attribute attr : map.keySet()) {
                             if (attr == targetAttribute) {
                                 iterator.remove();
                             }
@@ -146,14 +147,14 @@ public class AttributeReplace {
                     EquipmentSlot slot = event.getSlotType();
                     String[] entry = parseEntry(configEntry);
                     if (slot == EquipmentSlot.byName(entry[3].toLowerCase())) {
-                        EntityAttributeModifier newModifier = new EntityAttributeModifier(
+                        AttributeModifier newModifier = new AttributeModifier(
                                 UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"),
                                 "ADJ Tweaks",
                                 Double.parseDouble(entry[2]),
-                                EntityAttributeModifier.Operation.fromId(Integer.parseInt(entry[1])));
-                        EntityAttribute newAttribute = attributeFromString(entry[0]);
+                                AttributeModifier.Operation.fromValue(Integer.parseInt(entry[1])));
+                        Attribute newAttribute = attributeFromString(entry[0]);
 
-                        Map<EntityAttribute, EntityAttributeModifier> newMap = new HashMap<>();
+                        Map<Attribute, AttributeModifier> newMap = new HashMap<>();
                         newMap.put(newAttribute, newModifier);
 
                         replacementModifiers.add(newMap);
@@ -165,24 +166,24 @@ public class AttributeReplace {
         // Global configuration
         REPLACEMENTS.global.forEach((configKey, configEntry) -> {
             String[] key = parseEntry(configKey);
-            EntityAttribute targetAttribute = attributeFromString(key[0]);
+            Attribute targetAttribute = attributeFromString(key[0]);
 
-            ListIterator<Map<EntityAttribute, EntityAttributeModifier>> iterator = replacementModifiers.listIterator();
+            ListIterator<Map<Attribute, AttributeModifier>> iterator = replacementModifiers.listIterator();
             while (iterator.hasNext()) {
-                Map<EntityAttribute, EntityAttributeModifier> map = iterator.next();
-                EntityAttributeModifier modifier = map.get(targetAttribute);
-                if (modifier != null && modifier.getOperation().getId() == Integer.parseInt(key[1])) {
+                Map<Attribute, AttributeModifier> map = iterator.next();
+                AttributeModifier modifier = map.get(targetAttribute);
+                if (modifier != null && modifier.getOperation().ordinal() == Integer.parseInt(key[1])) {
                     iterator.remove();
 
                     String[] configNew = parseEntry(configEntry);
-                    EntityAttributeModifier newModifier = new EntityAttributeModifier(
+                    AttributeModifier newModifier = new AttributeModifier(
                             UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"),
                             modifier.getName(),
-                            modifier.getValue(),
-                            EntityAttributeModifier.Operation.fromId(Integer.parseInt(configNew[1])));
-                    EntityAttribute newAttribute = attributeFromString(configNew[0]);
+                            modifier.getAmount(),
+                            AttributeModifier.Operation.fromValue(Integer.parseInt(configNew[1])));
+                    Attribute newAttribute = attributeFromString(configNew[0]);
 
-                    Map<EntityAttribute, EntityAttributeModifier> newMap = new HashMap<>();
+                    Map<Attribute, AttributeModifier> newMap = new HashMap<>();
                     newMap.put(newAttribute, newModifier);
 
                     iterator.add(newMap);
@@ -190,13 +191,13 @@ public class AttributeReplace {
             }
         });
 
-        List<Map.Entry<EntityAttribute, EntityAttributeModifier>> toRemove = new ArrayList<>(originalModifiers.entries());
-        for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : toRemove) {
+        List<Map.Entry<Attribute, AttributeModifier>> toRemove = new ArrayList<>(originalModifiers.entries());
+        for (Map.Entry<Attribute, AttributeModifier> entry : toRemove) {
             event.removeModifier(entry.getKey(), entry.getValue());
         }
 
-        for (Map<EntityAttribute, EntityAttributeModifier> map : replacementModifiers) {
-            for (Map.Entry<EntityAttribute, EntityAttributeModifier> entry : map.entrySet()) {
+        for (Map<Attribute, AttributeModifier> map : replacementModifiers) {
+            for (Map.Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
                 event.addModifier(entry.getKey(), entry.getValue());
             }
         }

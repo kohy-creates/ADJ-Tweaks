@@ -1,10 +1,10 @@
 // Auditory
 package xyz.kohara.adjtweaks.sounds;
 
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraftforge.common.util.ForgeSoundType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,124 +30,124 @@ public class ModSoundEvents {
 
     // - Block Sounds:
 
-    public static final RegistryObject<SoundEvent> BLOCK_SHULKER_BOX_BREAK = registerSoundEvent("block.shulker_box.break");
-    public static final RegistryObject<SoundEvent> BLOCK_SHULKER_BOX_STEP = registerSoundEvent("block.shulker_box.step");
-    public static final RegistryObject<SoundEvent> BLOCK_SHULKER_BOX_PLACE = registerSoundEvent("block.shulker_box.place");
-    public static final RegistryObject<SoundEvent> BLOCK_SHULKER_BOX_HIT = registerSoundEvent("block.shulker_box.hit");
-    public static final RegistryObject<SoundEvent> BLOCK_SHULKER_BOX_FALL = registerSoundEvent("block.shulker_box.fall");
+    public static final RegistryObject<SoundEvent> SHULKER_BOX_BREAK = registerSoundEvent("block.shulker_box.break");
+    public static final RegistryObject<SoundEvent> SHULKER_BOX_STEP = registerSoundEvent("block.shulker_box.step");
+    public static final RegistryObject<SoundEvent> SHULKER_BOX_PLACE = registerSoundEvent("block.shulker_box.place");
+    public static final RegistryObject<SoundEvent> SHULKER_BOX_HIT = registerSoundEvent("block.shulker_box.hit");
+    public static final RegistryObject<SoundEvent> SHULKER_BOX_FALL = registerSoundEvent("block.shulker_box.fall");
 
-    public static final RegistryObject<SoundEvent> BLOCK_PURPUR_BREAK = registerSoundEvent("block.purpur.break");
-    public static final RegistryObject<SoundEvent> BLOCK_PURPUR_STEP = registerSoundEvent("block.purpur.step");
-    public static final RegistryObject<SoundEvent> BLOCK_PURPUR_PLACE = registerSoundEvent("block.purpur.place");
-    public static final RegistryObject<SoundEvent> BLOCK_PURPUR_HIT = registerSoundEvent("block.purpur.hit");
-    public static final RegistryObject<SoundEvent> BLOCK_PURPUR_FALL = registerSoundEvent("block.purpur.fall");
+    public static final RegistryObject<SoundEvent> PURPUR_BREAK = registerSoundEvent("block.purpur.break");
+    public static final RegistryObject<SoundEvent> PURPUR_STEP = registerSoundEvent("block.purpur.step");
+    public static final RegistryObject<SoundEvent> PURPUR_PLACE = registerSoundEvent("block.purpur.place");
+    public static final RegistryObject<SoundEvent> PURPUR_HIT = registerSoundEvent("block.purpur.hit");
+    public static final RegistryObject<SoundEvent> PURPUR_FALL = registerSoundEvent("block.purpur.fall");
 
-    public static final RegistryObject<SoundEvent> BLOCK_CHORUS_PLANT_BREAK = registerSoundEvent("block.chorus_plant.break");
-    public static final RegistryObject<SoundEvent> BLOCK_CHORUS_PLANT_STEP = registerSoundEvent("block.chorus_plant.step");
-    public static final RegistryObject<SoundEvent> BLOCK_CHORUS_PLANT_PLACE = registerSoundEvent("block.chorus_plant.place");
-    public static final RegistryObject<SoundEvent> BLOCK_CHORUS_PLANT_HIT = registerSoundEvent("block.chorus_plant.hit");
-    public static final RegistryObject<SoundEvent> BLOCK_CHORUS_PLANT_FALL = registerSoundEvent("block.chorus_plant.fall");
+    public static final RegistryObject<SoundEvent> CHORUS_PLANT_BREAK = registerSoundEvent("block.chorus_plant.break");
+    public static final RegistryObject<SoundEvent> CHORUS_PLANT_STEP = registerSoundEvent("block.chorus_plant.step");
+    public static final RegistryObject<SoundEvent> CHORUS_PLANT_PLACE = registerSoundEvent("block.chorus_plant.place");
+    public static final RegistryObject<SoundEvent> CHORUS_PLANT_HIT = registerSoundEvent("block.chorus_plant.hit");
+    public static final RegistryObject<SoundEvent> CHORUS_PLANT_FALL = registerSoundEvent("block.chorus_plant.fall");
 
-    public static final RegistryObject<SoundEvent> BLOCK_SPAWNER_BREAK = registerSoundEvent("block.spawner.break");
+    public static final RegistryObject<SoundEvent> SPAWNER_BREAK = registerSoundEvent("block.spawner.break");
 
-    public static final RegistryObject<SoundEvent> BLOCK_ICE_BREAK = registerSoundEvent("block.ice.break");
-    public static final RegistryObject<SoundEvent> BLOCK_ICE_STEP = registerSoundEvent("block.ice.step");
-    public static final RegistryObject<SoundEvent> BLOCK_ICE_PLACE = registerSoundEvent("block.ice.place");
-    public static final RegistryObject<SoundEvent> BLOCK_ICE_HIT = registerSoundEvent("block.ice.hit");
-    public static final RegistryObject<SoundEvent> BLOCK_ICE_FALL = registerSoundEvent("block.ice.fall");
+    public static final RegistryObject<SoundEvent> ICE_BREAK = registerSoundEvent("block.ice.break");
+    public static final RegistryObject<SoundEvent> ICE_STEP = registerSoundEvent("block.ice.step");
+    public static final RegistryObject<SoundEvent> ICE_PLACE = registerSoundEvent("block.ice.place");
+    public static final RegistryObject<SoundEvent> ICE_HIT = registerSoundEvent("block.ice.hit");
+    public static final RegistryObject<SoundEvent> ICE_FALL = registerSoundEvent("block.ice.fall");
 
-    public static final RegistryObject<SoundEvent> BLOCK_GOURD_BREAK = registerSoundEvent("block.gourd.break");
-    public static final RegistryObject<SoundEvent> BLOCK_GOURD_STEP = registerSoundEvent("block.gourd.step");
-    public static final RegistryObject<SoundEvent> BLOCK_GOURD_PLACE = registerSoundEvent("block.gourd.place");
-    public static final RegistryObject<SoundEvent> BLOCK_GOURD_HIT = registerSoundEvent("block.gourd.hit");
-    public static final RegistryObject<SoundEvent> BLOCK_GOURD_FALL = registerSoundEvent("block.gourd.fall");
+    public static final RegistryObject<SoundEvent> GOURD_BREAK = registerSoundEvent("block.gourd.break");
+    public static final RegistryObject<SoundEvent> GOURD_STEP = registerSoundEvent("block.gourd.step");
+    public static final RegistryObject<SoundEvent> GOURD_PLACE = registerSoundEvent("block.gourd.place");
+    public static final RegistryObject<SoundEvent> GOURD_HIT = registerSoundEvent("block.gourd.hit");
+    public static final RegistryObject<SoundEvent> GOURD_FALL = registerSoundEvent("block.gourd.fall");
 
     // - Other Sounds:
 
     public static final RegistryObject<SoundEvent> ENTITY_PLAYER_DROP_ITEM = registerSoundEvent("entity.player.drop_item");
-    public static final RegistryObject<SoundEvent> BLOCK_JUKEBOX_USE = registerSoundEvent("block.jukebox.use");
-    public static final RegistryObject<SoundEvent> BLOCK_JUKEBOX_EJECT = registerSoundEvent("block.jukebox.eject");
+    public static final RegistryObject<SoundEvent> JUKEBOX_USE = registerSoundEvent("block.jukebox.use");
+    public static final RegistryObject<SoundEvent> JUKEBOX_EJECT = registerSoundEvent("block.jukebox.eject");
 
     // Sound Groups:
 
-    public static final BlockSoundGroup ICE = new ForgeSoundType(1f, 1f,
-            ModSoundEvents.BLOCK_ICE_BREAK, ModSoundEvents.BLOCK_ICE_STEP,
-            ModSoundEvents.BLOCK_ICE_PLACE, ModSoundEvents.BLOCK_ICE_HIT,
-            ModSoundEvents.BLOCK_ICE_FALL);
+    public static final SoundType ICE = new ForgeSoundType(1f, 1f,
+            ModSoundEvents.ICE_BREAK, ModSoundEvents.ICE_STEP,
+            ModSoundEvents.ICE_PLACE, ModSoundEvents.ICE_HIT,
+            ModSoundEvents.ICE_FALL);
 
-    public static final BlockSoundGroup GOURD = new ForgeSoundType(1f, 1f,
-            ModSoundEvents.BLOCK_GOURD_BREAK, ModSoundEvents.BLOCK_GOURD_STEP,
-            ModSoundEvents.BLOCK_GOURD_PLACE, ModSoundEvents.BLOCK_GOURD_HIT,
-            ModSoundEvents.BLOCK_GOURD_FALL);
+    public static final SoundType GOURD = new ForgeSoundType(1f, 1f,
+            ModSoundEvents.GOURD_BREAK, ModSoundEvents.GOURD_STEP,
+            ModSoundEvents.GOURD_PLACE, ModSoundEvents.GOURD_HIT,
+            ModSoundEvents.GOURD_FALL);
 
-    public static final BlockSoundGroup SHULKER_BOX = new ForgeSoundType(1f, 1f,
-            ModSoundEvents.BLOCK_SHULKER_BOX_BREAK, ModSoundEvents.BLOCK_SHULKER_BOX_STEP,
-            ModSoundEvents.BLOCK_SHULKER_BOX_PLACE, ModSoundEvents.BLOCK_SHULKER_BOX_HIT,
-            ModSoundEvents.BLOCK_SHULKER_BOX_FALL);
+    public static final SoundType SHULKER_BOX = new ForgeSoundType(1f, 1f,
+            ModSoundEvents.SHULKER_BOX_BREAK, ModSoundEvents.SHULKER_BOX_STEP,
+            ModSoundEvents.SHULKER_BOX_PLACE, ModSoundEvents.SHULKER_BOX_HIT,
+            ModSoundEvents.SHULKER_BOX_FALL);
 
-    public static final BlockSoundGroup SPAWNER = new ForgeSoundType(1f, 1f,
-            ModSoundEvents.BLOCK_SPAWNER_BREAK, () -> SoundEvents.BLOCK_NETHERITE_BLOCK_STEP,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_PLACE, () -> SoundEvents.BLOCK_NETHERITE_BLOCK_HIT,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_FALL);
+    public static final SoundType SPAWNER = new ForgeSoundType(1f, 1f,
+            ModSoundEvents.SPAWNER_BREAK, () -> SoundEvents.NETHERITE_BLOCK_STEP,
+            () -> SoundEvents.NETHERITE_BLOCK_PLACE, () -> SoundEvents.NETHERITE_BLOCK_HIT,
+            () -> SoundEvents.NETHERITE_BLOCK_FALL);
 
-    public static final BlockSoundGroup PURPUR = new ForgeSoundType(1f, 1f,
-            ModSoundEvents.BLOCK_PURPUR_BREAK, ModSoundEvents.BLOCK_PURPUR_STEP,
-            ModSoundEvents.BLOCK_PURPUR_PLACE, ModSoundEvents.BLOCK_PURPUR_HIT,
-            ModSoundEvents.BLOCK_PURPUR_FALL);
+    public static final SoundType PURPUR = new ForgeSoundType(1f, 1f,
+            ModSoundEvents.PURPUR_BREAK, ModSoundEvents.PURPUR_STEP,
+            ModSoundEvents.PURPUR_PLACE, ModSoundEvents.PURPUR_HIT,
+            ModSoundEvents.PURPUR_FALL);
 
-    public static final BlockSoundGroup CHORUS_PLANT = new ForgeSoundType(1f, 1f,
-            ModSoundEvents.BLOCK_CHORUS_PLANT_BREAK, ModSoundEvents.BLOCK_CHORUS_PLANT_STEP,
-            ModSoundEvents.BLOCK_CHORUS_PLANT_PLACE, ModSoundEvents.BLOCK_CHORUS_PLANT_HIT,
-            ModSoundEvents.BLOCK_CHORUS_PLANT_FALL);
+    public static final SoundType CHORUS_PLANT = new ForgeSoundType(1f, 1f,
+            ModSoundEvents.CHORUS_PLANT_BREAK, ModSoundEvents.CHORUS_PLANT_STEP,
+            ModSoundEvents.CHORUS_PLANT_PLACE, ModSoundEvents.CHORUS_PLANT_HIT,
+            ModSoundEvents.CHORUS_PLANT_FALL);
 
-    public static final BlockSoundGroup STONE_ORE = new ForgeSoundType(1f, 0.9f,
-            () -> SoundEvents.BLOCK_NETHER_ORE_BREAK, () -> SoundEvents.BLOCK_NETHER_ORE_STEP,
-            () -> SoundEvents.BLOCK_NETHER_ORE_PLACE, () -> SoundEvents.BLOCK_NETHER_ORE_HIT,
-            () -> SoundEvents.BLOCK_NETHER_ORE_FALL);
+    public static final SoundType STONE_ORE = new ForgeSoundType(1f, 0.9f,
+            () -> SoundEvents.NETHER_ORE_BREAK, () -> SoundEvents.NETHER_ORE_STEP,
+            () -> SoundEvents.NETHER_ORE_PLACE, () -> SoundEvents.NETHER_ORE_HIT,
+            () -> SoundEvents.NETHER_ORE_FALL);
 
-    public static final BlockSoundGroup OBSIDIAN = new ForgeSoundType(1f, 0.7f,
-            () -> SoundEvents.BLOCK_DEEPSLATE_BREAK, () -> SoundEvents.BLOCK_DEEPSLATE_STEP,
-            () -> SoundEvents.BLOCK_DEEPSLATE_PLACE, () -> SoundEvents.BLOCK_DEEPSLATE_HIT,
-            () -> SoundEvents.BLOCK_DEEPSLATE_FALL);
+    public static final SoundType OBSIDIAN = new ForgeSoundType(1f, 0.7f,
+            () -> SoundEvents.DEEPSLATE_BREAK, () -> SoundEvents.DEEPSLATE_STEP,
+            () -> SoundEvents.DEEPSLATE_PLACE, () -> SoundEvents.DEEPSLATE_HIT,
+            () -> SoundEvents.DEEPSLATE_FALL);
 
-    public static final BlockSoundGroup TERRACOTTA = new ForgeSoundType(1f, 0.6f,
-            () -> SoundEvents.BLOCK_CALCITE_BREAK, () -> SoundEvents.BLOCK_CALCITE_STEP,
-            () -> SoundEvents.BLOCK_CALCITE_PLACE, () -> SoundEvents.BLOCK_CALCITE_HIT,
-            () -> SoundEvents.BLOCK_CALCITE_FALL);
+    public static final SoundType TERRACOTTA = new ForgeSoundType(1f, 0.6f,
+            () -> SoundEvents.CALCITE_BREAK, () -> SoundEvents.CALCITE_STEP,
+            () -> SoundEvents.CALCITE_PLACE, () -> SoundEvents.CALCITE_HIT,
+            () -> SoundEvents.CALCITE_FALL);
 
-    public static final BlockSoundGroup STONE_BRICKS = new ForgeSoundType(1f, 0.6f,
-            () -> SoundEvents.BLOCK_DEEPSLATE_TILES_BREAK, () -> SoundEvents.BLOCK_DEEPSLATE_TILES_STEP,
-            () -> SoundEvents.BLOCK_DEEPSLATE_TILES_PLACE, () -> SoundEvents.BLOCK_DEEPSLATE_TILES_HIT,
-            () -> SoundEvents.BLOCK_DEEPSLATE_TILES_FALL);
+    public static final SoundType STONE_BRICKS = new ForgeSoundType(1f, 0.6f,
+            () -> SoundEvents.DEEPSLATE_TILES_BREAK, () -> SoundEvents.DEEPSLATE_TILES_STEP,
+            () -> SoundEvents.DEEPSLATE_TILES_PLACE, () -> SoundEvents.DEEPSLATE_TILES_HIT,
+            () -> SoundEvents.DEEPSLATE_TILES_FALL);
 
-    public static final BlockSoundGroup CLAY_BRICKS = new ForgeSoundType(1f, 1.3f,
-            () -> SoundEvents.BLOCK_NETHER_BRICKS_BREAK, () -> SoundEvents.BLOCK_NETHER_BRICKS_STEP,
-            () -> SoundEvents.BLOCK_NETHER_BRICKS_PLACE, () -> SoundEvents.BLOCK_NETHER_BRICKS_HIT,
-            () -> SoundEvents.BLOCK_NETHER_BRICKS_FALL);
+    public static final SoundType CLAY_BRICKS = new ForgeSoundType(1f, 1.3f,
+            () -> SoundEvents.NETHER_BRICKS_BREAK, () -> SoundEvents.NETHER_BRICKS_STEP,
+            () -> SoundEvents.NETHER_BRICKS_PLACE, () -> SoundEvents.NETHER_BRICKS_HIT,
+            () -> SoundEvents.NETHER_BRICKS_FALL);
 
-    public static final BlockSoundGroup METAL = new ForgeSoundType(1f, 1.2f,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_BREAK, () -> SoundEvents.BLOCK_NETHERITE_BLOCK_STEP,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_PLACE, () -> SoundEvents.BLOCK_NETHERITE_BLOCK_HIT,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_FALL);
+    public static final SoundType METAL = new ForgeSoundType(1f, 1.2f,
+            () -> SoundEvents.NETHERITE_BLOCK_BREAK, () -> SoundEvents.NETHERITE_BLOCK_STEP,
+            () -> SoundEvents.NETHERITE_BLOCK_PLACE, () -> SoundEvents.NETHERITE_BLOCK_HIT,
+            () -> SoundEvents.NETHERITE_BLOCK_FALL);
 
-    public static final BlockSoundGroup GOLD = new ForgeSoundType(1f, 1.6f,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_BREAK, () -> SoundEvents.BLOCK_NETHERITE_BLOCK_STEP,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_PLACE, () -> SoundEvents.BLOCK_NETHERITE_BLOCK_HIT,
-            () -> SoundEvents.BLOCK_NETHERITE_BLOCK_FALL);
+    public static final SoundType GOLD = new ForgeSoundType(1f, 1.6f,
+            () -> SoundEvents.NETHERITE_BLOCK_BREAK, () -> SoundEvents.NETHERITE_BLOCK_STEP,
+            () -> SoundEvents.NETHERITE_BLOCK_PLACE, () -> SoundEvents.NETHERITE_BLOCK_HIT,
+            () -> SoundEvents.NETHERITE_BLOCK_FALL);
 
-    public static final BlockSoundGroup LILY_PAD = new ForgeSoundType(1f, 1f,
-            () -> SoundEvents.BLOCK_BIG_DRIPLEAF_BREAK, () -> SoundEvents.BLOCK_BIG_DRIPLEAF_STEP,
-            () -> SoundEvents.BLOCK_LILY_PAD_PLACE, () -> SoundEvents.BLOCK_BIG_DRIPLEAF_HIT,
-            () -> SoundEvents.BLOCK_BIG_DRIPLEAF_FALL);
+    public static final SoundType LILY_PAD = new ForgeSoundType(1f, 1f,
+            () -> SoundEvents.BIG_DRIPLEAF_BREAK, () -> SoundEvents.BIG_DRIPLEAF_STEP,
+            () -> SoundEvents.LILY_PAD_PLACE, () -> SoundEvents.BIG_DRIPLEAF_HIT,
+            () -> SoundEvents.BIG_DRIPLEAF_FALL);
 
-    public static final BlockSoundGroup SMALL_OBJECT = new ForgeSoundType(1f, 0.8f,
-            () -> SoundEvents.BLOCK_CANDLE_BREAK, () -> SoundEvents.BLOCK_CANDLE_STEP,
-            () -> SoundEvents.BLOCK_CANDLE_PLACE, () -> SoundEvents.BLOCK_CANDLE_HIT,
-            () -> SoundEvents.BLOCK_CANDLE_FALL);
+    public static final SoundType SMALL_OBJECT = new ForgeSoundType(1f, 0.8f,
+            () -> SoundEvents.CANDLE_BREAK, () -> SoundEvents.CANDLE_STEP,
+            () -> SoundEvents.CANDLE_PLACE, () -> SoundEvents.CANDLE_HIT,
+            () -> SoundEvents.CANDLE_FALL);
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
-        Identifier id = Identifier.of("auditory", name);
-        return SOUND_EVENTS.register(name, () -> SoundEvent.of(id));
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath("auditory", name);
+        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 
     public static void registerSounds() {

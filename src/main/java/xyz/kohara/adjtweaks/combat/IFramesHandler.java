@@ -1,9 +1,9 @@
 package xyz.kohara.adjtweaks.combat;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -17,8 +17,8 @@ public class IFramesHandler {
     private static int INVUL_TIME;
 
     public static void setInvulTime(LivingEntity entity, int time) {
-        entity.timeUntilRegen = time * 2;
-        entity.hurtTime = entity.maxHurtTime = time;
+        entity.invulnerableTime = time * 2;
+        entity.hurtTime = entity.hurtDuration = time;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -42,15 +42,15 @@ public class IFramesHandler {
     public void onLivingHurtEvent(LivingHurtEvent event) {
 
         DamageSource source = event.getSource();
-        if (!source.isIn(ModDamageTypeTags.IGNORES_COOLDOWN)) return;
+        if (!source.is(ModDamageTypeTags.IGNORES_COOLDOWN)) return;
 
         LivingEntity entity = event.getEntity();
 
         INVUL_TIME = 0;
-        if (source.isIn(ModDamageTypeTags.MELEE)) {
-            if (source.isIn(ModDamageTypeTags.PLAYER_MELEE)) INVUL_TIME = 8;
+        if (source.is(ModDamageTypeTags.MELEE)) {
+            if (source.is(ModDamageTypeTags.PLAYER_MELEE)) INVUL_TIME = 8;
             else INVUL_TIME = 3;
-        } else if (source.isOf(DamageTypes.WITHER) || source.isIn(DamageTypeTags.IS_FIRE)) {
+        } else if (source.is(DamageTypes.WITHER) || source.is(DamageTypeTags.IS_FIRE)) {
             INVUL_TIME = 8;
         }
         setInvulTime(entity, INVUL_TIME);
