@@ -24,3 +24,9 @@ mandatory=true
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
+[[dependencies.${mod_id}]]
+modId="attributeslib"
+mandatory=true
+versionRange="[${attributeslib_version},)"
+ordering="AFTER"
+side="BOTH"

@@ -10,6 +10,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xyz.kohara.adjtweaks.combat.IFramesHandler;
+import xyz.kohara.adjtweaks.combat.VariatedDamage;
 import xyz.kohara.adjtweaks.effects.ModEffects;
 import xyz.kohara.adjtweaks.potions.PotionsEditor;
 import xyz.kohara.adjtweaks.sounds.ModSoundEvents;
@@ -29,6 +31,8 @@ public class ADJTweaks {
         MOD_BUS.addListener(this::clientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new IFramesHandler());
+        MinecraftForge.EVENT_BUS.register(new VariatedDamage());
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);

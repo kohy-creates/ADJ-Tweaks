@@ -8,10 +8,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import xyz.kohara.adjtweaks.ADJTweaks;
 
-@Mod.EventBusSubscriber(modid = ADJTweaks.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IFramesHandler {
 
     private static int INVUL_TIME;
@@ -38,7 +35,7 @@ public class IFramesHandler {
         setInvulTime(entity, INVUL_TIME);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onLivingHurtEvent(LivingHurtEvent event) {
 
         DamageSource source = event.getSource();

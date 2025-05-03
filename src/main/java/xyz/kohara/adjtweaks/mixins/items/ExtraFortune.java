@@ -30,8 +30,7 @@ public class ExtraFortune {
             )
     )
     private int addFortuneLevel(int level, ItemStack stack, LootContext lootContext) {
-        Entity entity = lootContext.getParam(LootContextParams.THIS_ENTITY);
-
+        Entity entity = lootContext.getParamOrNull(LootContextParams.THIS_ENTITY);
         if (entity instanceof LivingEntity
                 && this.enchantment != Enchantments.SILK_TOUCH
                 && Math.random() <= Config.EXTRA_FORTUNE_CHANCE.get()) {

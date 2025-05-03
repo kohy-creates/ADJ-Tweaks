@@ -20,6 +20,7 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_RADIUS;
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_RADIUS_SIGNAL;
     public static final ForgeConfigSpec.DoubleValue BOW_INACCURACY;
+    public static final ForgeConfigSpec.DoubleValue RANDOM_DAMAGE_VARIATION;
 
     static {
         BUILDER.comment("Tools").push("tools");
@@ -55,6 +56,10 @@ public class Config {
         DISABLE_SWEEP_ATTACKS = BUILDER
                 .comment("Disables sweep attacks")
                 .define("DISABLE_SWEEP_ATTACKS", true);
+
+        RANDOM_DAMAGE_VARIATION = BUILDER
+                .comment("Variates dealt damage by +-% this value")
+                .defineInRange("RANDOM_DAMAGE_VARIATION", 20d, 0d, 100d);
 
         BUILDER.pop();
 

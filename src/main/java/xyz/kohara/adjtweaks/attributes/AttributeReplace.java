@@ -3,7 +3,6 @@ package xyz.kohara.adjtweaks.attributes;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -87,6 +86,15 @@ public class AttributeReplace {
         Multimap<Attribute, AttributeModifier> originalModifiers = event.getModifiers();
         List<Map<Attribute, AttributeModifier>> replacementModifiers = new ArrayList<>();
 
+        String itemKey = itemID(event.getItemStack().getItem()).toString();
+        AttributeConfig.ItemConfig config = REPLACEMENTS.items.get(itemKey);
+
+        if (originalModifiers.isEmpty() && config == null) {
+            // String text = "Skipping item " + event.getItemStack().getItem();
+            // ADJTweaks.LOGGER.log(Level.INFO, text);
+            return;
+        }
+
         // Turn the multimap into a list
         // Will be used later
         for (Map.Entry<Attribute, AttributeModifier> entry : originalModifiers.entries()) {
@@ -96,9 +104,7 @@ public class AttributeReplace {
         }
 
         // Per item configuration
-        String itemKey = itemID(event.getItemStack().getItem()).toString();
-        if (REPLACEMENTS.items.containsKey(itemKey)) {
-            AttributeConfig.ItemConfig config = REPLACEMENTS.items.get(itemKey);
+        if (config != null) {
             if (config.replace != null) {
                 config.replace.forEach((configKey, configEntry) -> {
                     String[] key = parseEntry(configKey);
