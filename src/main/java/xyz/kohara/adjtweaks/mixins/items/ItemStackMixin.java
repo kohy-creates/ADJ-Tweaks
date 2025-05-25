@@ -6,6 +6,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +22,9 @@ abstract class ItemStackMixin {
 
     @Shadow public abstract boolean is(TagKey<Item> tag);
 
+    /**
+     *   Reduces durability damage taken
+     */
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     public void modifyDurability(int amount, RandomSource random, ServerPlayer user, CallbackInfoReturnable<Boolean> cir) {
         if (Math.random() <= Config.DURABILITY_SAVE_CHANCE.get()) {
@@ -40,5 +45,15 @@ abstract class ItemStackMixin {
         } else if (this.is(AuditoryTags.VEGETABLE_SOUNDS)) {
             cir.setReturnValue(ModSoundEvents.VEGETABLE_EAT.get());
         }
+    }
+
+    /**
+     *   Doubles the durability of tools that have the Unbreaking enchantment
+     */
+    @Inject(method = "getMaxDamage", at = @At("RETURN"), cancellable = true)
+    public void getMaxDamage(CallbackInfoReturnable<Integer> cir) {
+        ItemStack stack = ((ItemStack) (Object) this);
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack) != 0)
+            cir.setReturnValue((int) (cir.getReturnValue() * Config.UNBREAKNG_DURABILITY_MULTIPLIER.get()));
     }
 }

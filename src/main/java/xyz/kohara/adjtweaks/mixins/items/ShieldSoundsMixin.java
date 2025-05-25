@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,12 +27,14 @@ public abstract class ShieldSoundsMixin extends Item implements Equipable {
     // Plays a sound when the user raises their shield
     @Inject(at = @At("HEAD"), method = "use")
     private void auditory_blockSound(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        player.playNotifySound(ModSoundEvents.ITEM_SHIELD_RAISE.get(), SoundSource.PLAYERS, 0.3F, 0.8f + level.random.nextFloat() * 0.4F);
+        if (!level.isClientSide()) {
+            player.playNotifySound(ModSoundEvents.ITEM_SHIELD_RAISE.get(), SoundSource.PLAYERS, 0.3F, 0.8f + level.random.nextFloat() * 0.4F);
+        }
     }
 
     // Shields now have a unique equipping sound
     @Override
-    public SoundEvent getEquipSound() {
+    public @NotNull SoundEvent getEquipSound() {
         return ModSoundEvents.ITEM_SHIELD_EQUIP.get();
     }
 }

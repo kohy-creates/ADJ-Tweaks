@@ -46,25 +46,25 @@ public class AttributeReplace {
         } catch (Exception e) {
             throw new RuntimeException("Failed to load attribute replacement config", e);
         }
-        System.out.println("Global:");
-        REPLACEMENTS.global.forEach((k, v) -> System.out.println(k + " -> " + v));
-
-        System.out.println("\nItems:");
-        REPLACEMENTS.items.forEach((itemId, itemConfig) -> {
-            System.out.println("Item: " + itemId);
-            if (itemConfig.replace != null) {
-                System.out.println("  Replace:");
-                itemConfig.replace.forEach((k, v) -> System.out.println("    " + k + " -> " + v));
-            }
-            if (itemConfig.add != null) {
-                System.out.println("  Add:");
-                itemConfig.add.forEach(a -> System.out.println("    " + a));
-            }
-            if (itemConfig.remove != null) {
-                System.out.println("  Remove:");
-                itemConfig.remove.forEach(a -> System.out.println("    " + a));
-            }
-        });
+//        System.out.println("Global:");
+//        REPLACEMENTS.global.forEach((k, v) -> System.out.println(k + " -> " + v));
+//
+//        System.out.println("\nItems:");
+//        REPLACEMENTS.items.forEach((itemId, itemConfig) -> {
+//            System.out.println("Item: " + itemId);
+//            if (itemConfig.replace != null) {
+//                System.out.println("  Replace:");
+//                itemConfig.replace.forEach((k, v) -> System.out.println("    " + k + " -> " + v));
+//            }
+//            if (itemConfig.add != null) {
+//                System.out.println("  Add:");
+//                itemConfig.add.forEach(a -> System.out.println("    " + a));
+//            }
+//            if (itemConfig.remove != null) {
+//                System.out.println("  Remove:");
+//                itemConfig.remove.forEach(a -> System.out.println("    " + a));
+//            }
+//        });
     }
 
 

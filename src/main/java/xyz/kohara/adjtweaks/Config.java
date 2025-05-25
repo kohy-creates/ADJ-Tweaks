@@ -21,6 +21,7 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_RADIUS_SIGNAL;
     public static final ForgeConfigSpec.DoubleValue BOW_INACCURACY;
     public static final ForgeConfigSpec.DoubleValue RANDOM_DAMAGE_VARIATION;
+    public static final ForgeConfigSpec.DoubleValue UNBREAKNG_DURABILITY_MULTIPLIER;
 
     static {
         BUILDER.comment("Tools").push("tools");
@@ -44,6 +45,10 @@ public class Config {
                 .comment("Inaccuracy of bows")
                 .comment("1 is vanilla")
                 .defineInRange("BOW_INACCURACY", 1.8d, 0d, 90.0d);
+
+        UNBREAKNG_DURABILITY_MULTIPLIER = BUILDER
+                .comment("Durability multiplier for items enchanted with Unbreaking")
+                .defineInRange("BOW_INACCURACY", 2.0d, 1.0d, Double.MAX_VALUE);
 
         BUILDER.pop();
 

@@ -24,17 +24,14 @@ public class VariatedDamage {
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
         DamageSource source = event.getSource();
-        System.out.println("attack");
         for (TagKey<DamageType> tag : DISALLOWED_TAGS) {
             if (source.is(tag)) {
-                System.out.println("is in tag " + tag);
                 return;
             }
         }
         double min = 1d - VARIATION.get(),
                 max = 1d + VARIATION.get(),
                 multiplier = min + Math.random() * (max - min);
-        System.out.println(VARIATION.get() + " " + min + " " +  max + " " +  multiplier);
         event.setAmount((float) (event.getAmount() * multiplier));
     }
 }
