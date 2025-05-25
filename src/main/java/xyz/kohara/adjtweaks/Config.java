@@ -48,7 +48,7 @@ public class Config {
 
         UNBREAKNG_DURABILITY_MULTIPLIER = BUILDER
                 .comment("Durability multiplier for items enchanted with Unbreaking")
-                .defineInRange("BOW_INACCURACY", 2.0d, 1.0d, Double.MAX_VALUE);
+                .defineInRange("UNBREAKNG_DURABILITY_MULTIPLIER", 2.0d, 1.0d, Double.MAX_VALUE);
 
         BUILDER.pop();
 

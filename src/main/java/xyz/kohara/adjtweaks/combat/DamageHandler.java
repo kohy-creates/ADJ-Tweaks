@@ -4,12 +4,13 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class IFramesHandler {
+public class DamageHandler {
 
     private static int INVUL_TIME;
 
@@ -21,7 +22,6 @@ public class IFramesHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onLivingKnockback(LivingKnockBackEvent event) {
         LivingEntity entity = event.getEntity();
-
 
         int cooldown = entity.aDJTweaks$getKnockbackCooldown();
         if (cooldown > 0) {

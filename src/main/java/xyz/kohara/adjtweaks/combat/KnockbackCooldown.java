@@ -8,5 +8,4 @@ public interface KnockbackCooldown {
 
     default void aDJTweaks$setKnockbackCooldown(int cooldown) {
     }
-
 }

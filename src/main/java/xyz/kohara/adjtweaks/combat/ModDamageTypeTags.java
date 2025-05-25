@@ -12,7 +12,5 @@ public class ModDamageTypeTags {
     // public static final TagKey<DamageType> MOB_MELEE = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJTweaks.MOD_ID, "mob_melee"));
     // public static final TagKey<DamageType> DOT = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJTweaks.MOD_ID, "dot"));
 
-    public static final TagKey<DamageType> VILLAGER_IMMUNE = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJTweaks.MOD_ID, "immunity/villager"));
-
     public static final TagKey<DamageType> IGNORES_COOLDOWN = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJTweaks.MOD_ID, "bypasses_cooldown"));
 }
