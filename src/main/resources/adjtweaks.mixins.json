@@ -5,7 +5,6 @@
 	"minVersion": "0.8",
 	"mixins": [
 		"AttributesLibNuker",
-		"DamageReductionReworker",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
