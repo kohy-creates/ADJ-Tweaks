@@ -31,6 +31,10 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
+    maven {
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 
@@ -46,6 +50,8 @@ dependencies {
     implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
     modImplementation "dev.shadowsoffire:Placebo:${project.minecraft_version}-${project.placebo_version}"
     modImplementation "dev.shadowsoffire:ApothicAttributes:${project.minecraft_version}-${project.attributeslib_version}"
+
+    modImplementation "top.theillusivec4.curios:curios-forge:${curios_version}"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
@@ -55,7 +61,8 @@ def replaceProperties = [
         loader_version_range : loader_version_range,
         mod_id               : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
         mod_authors          : mod_authors, mod_description: mod_description,
-        attributeslib_version: attributeslib_version
+        attributeslib_version: attributeslib_version,
+        curios_version: curios_version
 ]
 processResources {
     inputs.properties replaceProperties

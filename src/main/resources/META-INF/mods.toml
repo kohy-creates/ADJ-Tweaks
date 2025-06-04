@@ -30,3 +30,9 @@ mandatory=true
 versionRange="[${attributeslib_version},)"
 ordering="AFTER"
 side="BOTH"
+[[dependencies.${mod_id}]]
+modId="curios"
+mandatory=true
+versionRange="[${curios_version},)"
+ordering="AFTER"
+side="BOTH"

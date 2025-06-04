@@ -12,7 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.kohara.adjtweaks.combat.DamageHandler;
 import xyz.kohara.adjtweaks.combat.VariatedDamage;
+import xyz.kohara.adjtweaks.curio.CurioControl;
 import xyz.kohara.adjtweaks.effects.ModEffects;
+import xyz.kohara.adjtweaks.entity.WanderingTraderEdits;
 import xyz.kohara.adjtweaks.misc.DelayedTaskScheduler;
 import xyz.kohara.adjtweaks.potions.PotionsEditor;
 import xyz.kohara.adjtweaks.sounds.ModSoundEvents;
@@ -32,10 +34,11 @@ public class ADJTweaks {
         MOD_BUS.addListener(this::clientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(DamageHandler.class);
-        MinecraftForge.EVENT_BUS.register(VariatedDamage.class);
+        MinecraftForge.EVENT_BUS.register(new DamageHandler());
+        MinecraftForge.EVENT_BUS.register(new VariatedDamage());
         MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
         MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
+        MinecraftForge.EVENT_BUS.register(CurioControl.class);
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);

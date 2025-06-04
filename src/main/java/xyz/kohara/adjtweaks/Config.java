@@ -22,6 +22,7 @@ public class Config {
     public static final ForgeConfigSpec.DoubleValue BOW_INACCURACY;
     public static final ForgeConfigSpec.DoubleValue RANDOM_DAMAGE_VARIATION;
     public static final ForgeConfigSpec.DoubleValue UNBREAKNG_DURABILITY_MULTIPLIER;
+    public static final ForgeConfigSpec.ConfigValue<String> CURIO_TYPE_TO_KEEP;
 
     static {
         BUILDER.comment("Tools").push("tools");
@@ -49,6 +50,11 @@ public class Config {
         UNBREAKNG_DURABILITY_MULTIPLIER = BUILDER
                 .comment("Durability multiplier for items enchanted with Unbreaking")
                 .defineInRange("UNBREAKNG_DURABILITY_MULTIPLIER", 2.0d, 1.0d, Double.MAX_VALUE);
+
+        CURIO_TYPE_TO_KEEP = BUILDER
+                .comment("Removes curio slots other than this one. Also assigns all curios to the specified slot.")
+                .comment("Probably case sensitive")
+                .define("CURIO_TYPE_TO_KEEP", "ring");
 
         BUILDER.pop();
 

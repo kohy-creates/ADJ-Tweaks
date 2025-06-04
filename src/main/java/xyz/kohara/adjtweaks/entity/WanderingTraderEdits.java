@@ -1,10 +1,10 @@
-package xyz.kohara.adjtweaks;
+package xyz.kohara.adjtweaks.entity;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -21,12 +21,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BellBlock;
-import net.minecraft.world.level.block.CraftingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import xyz.kohara.adjtweaks.ADJTweaks;
 import xyz.kohara.adjtweaks.misc.DelayedTaskScheduler;
 
 public class WanderingTraderEdits {
@@ -41,11 +41,6 @@ public class WanderingTraderEdits {
         Player player = event.getEntity();
         BlockState state = level.getBlockState(pos);
 
-        if (state.getBlock() instanceof CraftingTableBlock) {
-            player.getPersistentData().remove(ADJTweaks.MOD_ID + ":last_bell_day");
-            return;
-        }
-
         if (!(state.getBlock() instanceof BellBlock)) return;
 
         long currentTime = level.getDayTime();
@@ -53,7 +48,7 @@ public class WanderingTraderEdits {
 
         ItemStack heldItem = player.getMainHandItem();
 
-        if (currentTime - lastSummoned < 24000) {
+        if (currentTime - lastSummoned < 24000 && lastSummoned != 0) {
             if (heldItem.getItem() == Items.EMERALD) {
                 player.displayClientMessage(Component.literal("You can only summon a Wandering Trader once a day").withStyle(ChatFormatting.RED), true);
             }
@@ -113,7 +108,9 @@ public class WanderingTraderEdits {
 
         if (entity instanceof WanderingTrader) {
             if (!entity.getTags().contains("adj.bell")) {
-                for (ServerPlayer player : event.getLevel().getServer().getPlayerList().getPlayers()) {
+                MinecraftServer server = event.getLevel().getServer();
+                if (server == null) return;
+                for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                     player.sendSystemMessage(Component.translatable("A %s has arrived near %s", entity.getName(), event.getLevel().getNearestPlayer(entity, 64D).getName()).withStyle(ChatFormatting.YELLOW));
                 }
             }

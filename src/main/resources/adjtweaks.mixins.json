@@ -42,5 +42,5 @@
 	"injectors": {
 		"defaultRequire": 1
 	},
-	"refmap": "xyz.kohara.adjtweaks-refmap.json"
+	"refmap": "adjtweaks-refmap.json"
 }
