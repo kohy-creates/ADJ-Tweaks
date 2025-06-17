@@ -38,11 +38,15 @@ public class EffectsEditor {
                 EffectEditorConfig.ConfigData data = config.get(id);
 
                 MobEffectAccessor accessor = (MobEffectAccessor) effect;
-                Map<Attribute, AttributeModifier> attributeModifierMap = accessor.getAttributeModifiers();
-                if (data.replace && !attributeModifierMap.isEmpty()) {
-                    attributeModifierMap.clear();
+                Map<Attribute, AttributeModifier> oldAttr = accessor.getAttributeModifiers();
+                System.out.println(oldAttr);
+                Map<Attribute, AttributeModifier> attributeModifierMap;
+                if (!data.replace && !oldAttr.isEmpty()) {
+                    attributeModifierMap = oldAttr;
+                } else {
+                    attributeModifierMap = new HashMap<>();
                 }
-
+                System.out.println(attributeModifierMap);
                 data.attributes.forEach(s -> {
                     String[] entry = s.split(";");
                     Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(entry[0]));
@@ -55,7 +59,7 @@ public class EffectsEditor {
                     );
                     attributeModifierMap.put(attribute, modifier);
                 });
-
+                System.out.println(attributeModifierMap);
                 accessor.setAttributeModifiers(attributeModifierMap);
             }
         }
