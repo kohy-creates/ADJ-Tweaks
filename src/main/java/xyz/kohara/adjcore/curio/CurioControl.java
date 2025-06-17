@@ -17,6 +17,7 @@ import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
 
 import java.util.*;
@@ -75,7 +76,7 @@ public class CurioControl {
         List<TagKey<Item>> exclusionList = new ArrayList<>();
         // Loop through all tags and create an exclusion list
         for (TagKey<Item> tagKey : itemRegistry.getTags().map(Pair::getFirst).collect(Collectors.toSet())) {
-            if (tagKey.location().toString().indexOf("adjtweaks:curio_exclusions/") == 0) {
+            if (tagKey.location().toString().indexOf(ADJCore.MOD_ID + ":curio_exclusions/") == 0) {
                 exclusionList.add(tagKey);
             }
         }

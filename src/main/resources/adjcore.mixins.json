@@ -13,6 +13,7 @@
 		"blocks.FlowerPotPlantSoundMixin",
 		"blocks.JukeboxDiscSoundMixin",
 		"client.ArmorTrimMixin",
+		"effect.MobEffectAccessor",
 		"effect.MobEffectInstanceAccessor",
 		"effect.MobEffectsMixin",
 		"enchantments.EfficiencyMixin",

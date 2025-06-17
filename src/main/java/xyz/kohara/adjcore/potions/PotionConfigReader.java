@@ -32,7 +32,7 @@ public class PotionConfigReader {
         }
     }
 
-    private static final Path POTION_CONFIG = FMLPaths.CONFIGDIR.get().resolve("adjtweaks/potions_config.json");
+    private static final Path POTION_CONFIG = FMLPaths.CONFIGDIR.get().resolve(ADJCore.MOD_ID + "/potions_config.json");
 
     public static Map<String, PotionConfig> loadPotionConfig() {
 

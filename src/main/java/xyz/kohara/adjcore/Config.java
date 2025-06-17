@@ -12,7 +12,6 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Integer> SHIELD_DELAY;
     public static final ForgeConfigSpec.BooleanValue DISABLE_CRITS;
     public static final ForgeConfigSpec.BooleanValue DISABLE_SWEEP_ATTACKS;
-    public static final ForgeConfigSpec.ConfigValue<Double> RESISTANCE_DAMAGE_REDUCTION;
     public static final ForgeConfigSpec.ConfigValue<Integer> CAMPFIRE_HEAL_RATE;
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_AMOUNT;
     public static final ForgeConfigSpec.ConfigValue<Double> CAMPFIRE_HEAL_RADIUS;
@@ -89,14 +88,6 @@ public class Config {
         CAMPFIRE_HEAL_RADIUS_SIGNAL = BUILDER
                 .comment("Radius around a signal Campfire")
                 .define("CAMPFIRE_HEAL_RADIUS_SIGNAL", 32.0);
-
-        BUILDER.pop();
-
-        BUILDER.comment("Effects").push("effect");
-
-        RESISTANCE_DAMAGE_REDUCTION = BUILDER
-                .comment("How much damage reduction to give per level of Resistance")
-                .define("RESISTANCE_DAMAGE_REDUCTION", 0.1);
 
         BUILDER.pop();
 

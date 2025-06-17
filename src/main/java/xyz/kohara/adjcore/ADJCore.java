@@ -10,20 +10,23 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xyz.kohara.adjcore.attributes.DamageReduction;
+import xyz.kohara.adjcore.attributes.ModAttributes;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.VariatedDamage;
 import xyz.kohara.adjcore.curio.CurioControl;
 import xyz.kohara.adjcore.effects.ModEffects;
+import xyz.kohara.adjcore.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.sounds.ModSoundEvents;
 
-@Mod("adjtweaks")
+@Mod(ADJCore.MOD_ID)
 public class ADJCore {
 
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final String MOD_ID = "adjtweaks";
+    public static final String MOD_ID = "adjcore";
 
     public ADJCore() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, MOD_ID + ".toml");
@@ -39,14 +42,18 @@ public class ADJCore {
         MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
         MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
         MinecraftForge.EVENT_BUS.register(CurioControl.class);
+        MinecraftForge.EVENT_BUS.register(DamageReduction.class);
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
+        ModAttributes.register(MOD_BUS);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         PotionsEditor.edit();
+        EffectsEditor.edit();
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {}
+    private void clientSetup(final FMLClientSetupEvent event) {
+    }
 }

@@ -22,7 +22,7 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = ADJCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AttributeReplace {
 
-    private static final String CONFIG_FILE = "config/adjcore/attribute_replace.json";
+    private static final String CONFIG_FILE = "config/" + ADJCore.MOD_ID + "/attribute_replace.json";
     private static AttributeConfig REPLACEMENTS;
 
     static {
