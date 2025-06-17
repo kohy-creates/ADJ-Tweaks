@@ -1,0 +1,7 @@
+{
+  "effect.adjcore.cozy_campfire": "Cozy Campfire",
+
+  "attribute.name.generic.damage_reduction": "Damage Reduction",
+  "attribute.name.generic.projectile_damage_reduction": "Projectile Damage Reduction",
+  "attribute.name.generic.damage_taken": "Damage Taken"
+}

@@ -17,9 +17,10 @@ loom {
     silentMojangMappingsLicense()
     forge {
         mixinConfigs = [
-                "adjtweaks.mixins.json"
+                "adjcore.mixins.json"
         ]
     }
+    accessWidenerPath = file("src/main/resources/adjcore.accesswidener")
 }
 
 repositories {
@@ -48,6 +49,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
+
+//    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.2-beta.4"))
+//    implementation(include("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.2-beta.4"))
+
     modImplementation "dev.shadowsoffire:Placebo:${project.minecraft_version}-${project.placebo_version}"
     modImplementation "dev.shadowsoffire:ApothicAttributes:${project.minecraft_version}-${project.attributeslib_version}"
 

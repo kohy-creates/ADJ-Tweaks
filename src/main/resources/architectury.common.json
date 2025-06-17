@@ -1,7 +1,8 @@
 {
 	"injected_interfaces": {
 		"net/minecraft/class_1309": [
-			"xyz/kohara/adjtweaks/combat/KnockbackCooldown"
+			"xyz/kohara/adjcore/combat/KnockbackCooldown"
 		]
-	}
+	},
+	"accessWidener": "adjcore.accesswidener"
 }
