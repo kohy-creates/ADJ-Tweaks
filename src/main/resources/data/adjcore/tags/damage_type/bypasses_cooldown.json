@@ -1,0 +1,10 @@
+{
+	"values": [
+		"minecraft:sonic_boom",
+		"#minecraft:is_projectile",
+		"#adjcore:melee",
+		"#adjcore:dot",
+		"#minecraft:is_explosion",
+		"minecraft:fall"
+	]
+}
