@@ -13,4 +13,7 @@ public class ModDamageTypeTags {
     // public static final TagKey<DamageType> DOT = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJCore.MOD_ID, "dot"));
 
     public static final TagKey<DamageType> IGNORES_COOLDOWN = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJCore.MOD_ID, "bypasses_cooldown"));
+
+    public static final TagKey<DamageType> IS_ENVIRONMENTAL = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJCore.MOD_ID, "is_environmental"));
+    public static final TagKey<DamageType> IS_PHYSICAL = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ADJCore.MOD_ID, "is_physical"));
 }

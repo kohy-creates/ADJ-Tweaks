@@ -1,5 +1,6 @@
 package xyz.kohara.adjcore;
 
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -56,4 +57,9 @@ public class ADJCore {
 
     private void clientSetup(final FMLClientSetupEvent event) {
     }
+
+    public static final EnchantmentCategory RANGED_WEAPON = EnchantmentCategory.create(
+            "bow_and_sword",
+            item -> EnchantmentCategory.BOW.canEnchant(item) || EnchantmentCategory.CROSSBOW.canEnchant(item)
+    );
 }
