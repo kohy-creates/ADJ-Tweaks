@@ -1,7 +1,8 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.items;
 
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.TierSortingRegistry;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.misc.ModBlockTags;
 
-@Mixin(DiggerItem.class)
-public class TierSortingMixin {
+@Mixin(value = DiggerItem.class, priority = 4000)
+public class DiggerItemMixin {
 
     @Inject(
             method = "isCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z",

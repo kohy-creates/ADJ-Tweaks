@@ -5,7 +5,6 @@
 	"minVersion": "0.8",
 	"mixins": [
 		"AttributesLibNuker",
-		"TierSortingMixin",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
@@ -31,7 +30,9 @@
 		"entity.PlayerMixin",
 		"items.BoatPlaceSoundMixin",
 		"items.BowMixin",
+		"items.CrossbowItemAccessor",
 		"items.CrossbowMixin",
+		"items.DiggerItemMixin",
 		"items.ExtraFortune",
 		"items.ItemStackMixin",
 		"items.LeadAttachSoundMixin",

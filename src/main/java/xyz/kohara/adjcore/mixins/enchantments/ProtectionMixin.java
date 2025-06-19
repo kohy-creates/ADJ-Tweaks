@@ -58,7 +58,7 @@ public class ProtectionMixin {
         } else if (enchantment.type == ProtectionEnchantment.Type.EXPLOSION && source.is(ModDamageTypeTags.IS_ENVIRONMENTAL)) {
             cir.setReturnValue(level * 2);
         } else if (enchantment.type == ProtectionEnchantment.Type.FALL && source.is(DamageTypeTags.IS_FALL)) {
-            cir.setReturnValue(level * 3);
+            cir.setReturnValue(level * 4);
         } else {
             cir.setReturnValue(0);
         }
