@@ -14,13 +14,15 @@ java {
 }
 
 loom {
+    accessWidenerPath = file("src/main/resources/adjcore.accesswidener")
     silentMojangMappingsLicense()
     forge {
         mixinConfigs = [
                 "adjcore.mixins.json"
         ]
+        convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
-    accessWidenerPath = file("src/main/resources/adjcore.accesswidener")
 }
 
 repositories {

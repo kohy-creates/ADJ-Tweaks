@@ -100,20 +100,4 @@ public class WanderingTraderEdits {
             }
         }
     }
-
-    @SubscribeEvent
-    public static void onMobSpawnEvent(MobSpawnEvent.FinalizeSpawn event) {
-
-        LivingEntity entity = event.getEntity();
-
-        if (entity instanceof WanderingTrader) {
-            if (!entity.getTags().contains("adj.bell")) {
-                MinecraftServer server = event.getLevel().getServer();
-                if (server == null) return;
-                for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                    player.sendSystemMessage(Component.translatable("A %s has arrived near %s", entity.getName(), event.getLevel().getNearestPlayer(entity, 64D).getName()).withStyle(ChatFormatting.YELLOW));
-                }
-            }
-        }
-    }
 }

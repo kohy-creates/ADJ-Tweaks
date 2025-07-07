@@ -32,7 +32,6 @@
 		"items.BowMixin",
 		"items.CrossbowItemAccessor",
 		"items.CrossbowMixin",
-		"items.DiggerItemMixin",
 		"items.ExtraFortune",
 		"items.ItemStackMixin",
 		"items.LeadAttachSoundMixin",

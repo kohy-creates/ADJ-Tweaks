@@ -19,7 +19,7 @@ public class ReloadCommand {
                         .executes(context -> {
                             PotionsEditor.edit();
                             AttributeReplace.loadConfig();
-                            EffectsEditor.loadConfig();
+                            EffectsEditor.edit();
                             return 1;
                         })
         );

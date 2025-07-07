@@ -9,6 +9,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}" #optional
 mixins=["mixins.adjcore.json"]
+accessWidener = "adjcore.accesswidener"
 
 # The description text for the mod (multi line!) )
 description='''${mod_description}'''
