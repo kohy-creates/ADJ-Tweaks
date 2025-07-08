@@ -3,17 +3,22 @@ package xyz.kohara.adjcore.curio;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
+import top.theillusivec4.curios.api.event.DropRulesEvent;
 import top.theillusivec4.curios.api.type.ISlotType;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
@@ -82,6 +87,16 @@ public class CurioControl {
         }
         setExclusionList(exclusionList);
     }
+
+    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
+            Config.SOULBOUND_FOR_CURIOS.get()
+    ));
+
+    @SubscribeEvent
+    public static void soulboundCurio(DropRulesEvent event) {
+        event.addOverride(i -> i.getEnchantmentLevel(CURIO_SOULBOUND) > 0, ICurio.DropRule.ALWAYS_KEEP);
+    }
+
 
     public static void setExclusionList(List<TagKey<Item>> exclusionList) {
         EXCLUSION_LIST = exclusionList;

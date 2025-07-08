@@ -20,6 +20,7 @@ public class Config {
     public static final ForgeConfigSpec.DoubleValue RANDOM_DAMAGE_VARIATION;
     public static final ForgeConfigSpec.DoubleValue UNBREAKNG_DURABILITY_MULTIPLIER;
     public static final ForgeConfigSpec.ConfigValue<String> CURIO_TYPE_TO_KEEP;
+    public static final ForgeConfigSpec.ConfigValue<String> SOULBOUND_FOR_CURIOS;
 
     static {
         BUILDER.comment("Tools").push("tools");
@@ -52,6 +53,11 @@ public class Config {
                 .comment("Removes curio slots other than this one. Also assigns all curios to the specified slot.")
                 .comment("Probably case sensitive")
                 .define("CURIO_TYPE_TO_KEEP", "ring");
+
+        SOULBOUND_FOR_CURIOS = BUILDER
+                .comment("What enchantment causes Curios to be kept?")
+                .comment("Set to a placeholder so that it doesn't crash if set to something modded that isn't loaded")
+                .define("SOULBOUND_FOR_CURIOS", "minecraft:efficiency");
 
         BUILDER.pop();
 

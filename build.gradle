@@ -38,6 +38,10 @@ repositories {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 
@@ -51,6 +55,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
+
+    //implementation "dev.emi:emi-forge:${emi_version}:api"
+    modImplementation "dev.emi:emi-forge:${emi_version}"
 
 //    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.2-beta.4"))
 //    implementation(include("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.2-beta.4"))
@@ -69,7 +76,8 @@ def replaceProperties = [
         mod_id               : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
         mod_authors          : mod_authors, mod_description: mod_description,
         attributeslib_version: attributeslib_version,
-        curios_version: curios_version
+        curios_version       : curios_version,
+        emi_version          : emi_version
 ]
 processResources {
     inputs.properties replaceProperties
