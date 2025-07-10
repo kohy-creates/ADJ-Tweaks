@@ -18,6 +18,7 @@ import xyz.kohara.adjcore.combat.VariatedDamage;
 import xyz.kohara.adjcore.curio.CurioControl;
 import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
+import xyz.kohara.adjcore.networking.ModMessages;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
 import xyz.kohara.adjcore.potions.PotionsEditor;
@@ -51,6 +52,7 @@ public class ADJCore {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(ModMessages::register);
         PotionsEditor.edit();
         EffectsEditor.edit();
     }

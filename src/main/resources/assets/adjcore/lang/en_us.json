@@ -3,6 +3,6 @@
 
 	"attribute.name.generic.damage_reduction": "Damage Reduction",
 	"attribute.name.generic.damage_reduction.desc": "Percent reduction to incoming damage",
-	"attribute.name.generic.projectile_damage_reduction": "Damage Reduction",
-	"attribute.name.generic.projectile_damage_reduction.desc": "Percent reduction to incoming projectile damage"
+	"attribute.name.generic.projectile_damage_reduction": "Projectile Damage Reduction",
+	"attribute.name.generic.projectile_damage_reduction.desc": "Percent reduction to incoming projectile damage (Arrows, Fireballs, etc.)"
 }
