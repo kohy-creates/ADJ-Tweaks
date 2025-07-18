@@ -42,6 +42,30 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
+    maven {
+        name "Modding Legacy Maven"
+        url "https://maven.moddinglegacy.com/repository/maven-public"
+    }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.latvian.apps"
+        }
+    }
+
+    maven {
+        url 'https://jitpack.io'
+        content {
+            includeGroup "com.github.rtyley"
+        }
+    }
 }
 
 
@@ -66,6 +90,12 @@ dependencies {
     modImplementation "dev.shadowsoffire:ApothicAttributes:${project.minecraft_version}-${project.attributeslib_version}"
 
     modImplementation "top.theillusivec4.curios:curios-forge:${curios_version}"
+
+    modImplementation "com.legacy:structure-gel:${structure_gel_version}"
+    modImplementation "curse.maven:selene-499980:6740431"
+    modImplementation "curse.maven:mmmmmmmmmmmm-225738:6608233"
+
+    modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
@@ -77,7 +107,8 @@ def replaceProperties = [
         mod_authors          : mod_authors, mod_description: mod_description,
         attributeslib_version: attributeslib_version,
         curios_version       : curios_version,
-        emi_version          : emi_version
+        emi_version          : emi_version,
+        structure_gel_version: structure_gel_version
 ]
 processResources {
     inputs.properties replaceProperties

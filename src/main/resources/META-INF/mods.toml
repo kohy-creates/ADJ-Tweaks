@@ -43,3 +43,9 @@ mandatory=true
 versionRange="[${emi_version},)"
 ordering="AFTER"
 side="BOTH"
+[[dependencies.${mod_id}]]
+modId="structure_gel"
+mandatory=true
+versionRange="[${structure_gel_version},)"
+ordering="AFTER"
+side="BOTH"

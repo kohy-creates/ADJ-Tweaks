@@ -28,6 +28,7 @@
 		"entity.EnderPearlSoundMixin",
 		"entity.LivingEntityMixin",
 		"entity.PlayerMixin",
+		"entity.ServerPlayerMixin",
 		"items.BoatPlaceSoundMixin",
 		"items.BowMixin",
 		"items.CrossbowItemAccessor",
@@ -38,9 +39,13 @@
 		"items.MinecartPlaceSoundMixin",
 		"items.ShieldSoundsMixin",
 		"items.SpawnEggUseSoundMixin",
-		"items.TridentPullbackSound"
+		"items.TridentPullbackSound",
+		"items.buildtool.StructureGelBuildToolMixin"
 	],
-	"client": [],
+	"client": [
+		"items.buildtool.BuildToolRendererMixin",
+		"items.buildtool.BuildToolOverlayMixin"
+	],
 	"injectors": {
 		"defaultRequire": 1
 	},

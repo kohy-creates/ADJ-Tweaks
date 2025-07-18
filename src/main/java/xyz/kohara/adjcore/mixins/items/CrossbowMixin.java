@@ -31,7 +31,7 @@ public abstract class CrossbowMixin {
 
         int reduction = 0;
         for (int i = 0; i < lvl; i++) {
-            reduction += (6 - i);
+            reduction += (5 - i);
         }
         int pullTime = 30 - reduction;
         cir.setReturnValue(pullTime);
