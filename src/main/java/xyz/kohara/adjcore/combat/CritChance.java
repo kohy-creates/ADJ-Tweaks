@@ -20,8 +20,8 @@ public class CritChance {
     private static final UUID CRIT_CHANCE_MODIFIER = UUID.fromString("290504cc-7633-4667-a091-75a50f3efd81");
     public static final Supplier<Attribute> CRITICAL_CHANCE = ALObjects.Attributes.CRIT_CHANCE;
 
-    private static final UUID CRIT_DAMAGE_MODIFIER = UUID.fromString("b70dc46e-6652-4a37-8886-21c3e3c85bdf");
-    public static final Supplier<Attribute> CRITICAL_DAMAGE = ALObjects.Attributes.CRIT_DAMAGE;
+//    private static final UUID CRIT_DAMAGE_MODIFIER = UUID.fromString("b70dc46e-6652-4a37-8886-21c3e3c85bdf");
+//    public static final Supplier<Attribute> CRITICAL_DAMAGE = ALObjects.Attributes.CRIT_DAMAGE;
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -41,17 +41,17 @@ public class CritChance {
             );
             crChance.addTransientModifier(modifier);
         }
-        AttributeInstance crDamage = player.getAttribute(CRITICAL_DAMAGE.get());
-        if (crDamage != null) {
-            crDamage.removeModifier(CRIT_DAMAGE_MODIFIER);
-            AttributeModifier modifier = new AttributeModifier(
-                    CRIT_DAMAGE_MODIFIER,
-                    "Level based crit damage",
-                    scaleWithExperience(player, 10),
-                    AttributeModifier.Operation.MULTIPLY_TOTAL
-            );
-            crDamage.addTransientModifier(modifier);
-        }
+//        AttributeInstance crDamage = player.getAttribute(CRITICAL_DAMAGE.get());
+//        if (crDamage != null) {
+//            crDamage.removeModifier(CRIT_DAMAGE_MODIFIER);
+//            AttributeModifier modifier = new AttributeModifier(
+//                    CRIT_DAMAGE_MODIFIER,
+//                    "Level based crit damage",
+//                    scaleWithExperience(player, 10),
+//                    AttributeModifier.Operation.MULTIPLY_TOTAL
+//            );
+//            crDamage.addTransientModifier(modifier);
+//        }
     }
 
     private static double scaleWithExperience(Player player, double step) {

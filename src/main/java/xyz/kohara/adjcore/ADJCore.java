@@ -1,7 +1,11 @@
 package xyz.kohara.adjcore;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -10,16 +14,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.kohara.adjcore.attributes.DamageReduction;
 import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.combat.CombatRules;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.VariatedDamage;
+import xyz.kohara.adjcore.combat.critevent.ApothCritStrikeEvent;
 import xyz.kohara.adjcore.curio.CurioControl;
 import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
-import xyz.kohara.adjcore.networking.ModMessages;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
+import xyz.kohara.adjcore.networking.ModMessages;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.sounds.ModSoundEvents;
 
@@ -43,7 +48,7 @@ public class ADJCore {
         MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
         MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
         MinecraftForge.EVENT_BUS.register(CurioControl.class);
-        MinecraftForge.EVENT_BUS.register(DamageReduction.class);
+        MinecraftForge.EVENT_BUS.register(CombatRules.class);
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
@@ -59,4 +64,11 @@ public class ADJCore {
     private void clientSetup(final FMLClientSetupEvent event) {
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onApothicCrit(ApothCritStrikeEvent event) {
+        if (event.attacker instanceof Player player) {
+            CriticalHitEvent e = new CriticalHitEvent(player, event.victim, event.multiplier, false);
+            MinecraftForge.EVENT_BUS.post(e);
+        }
+    }
 }

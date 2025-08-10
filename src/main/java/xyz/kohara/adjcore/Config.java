@@ -22,6 +22,10 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<String> CURIO_TYPE_TO_KEEP;
     public static final ForgeConfigSpec.ConfigValue<String> SOULBOUND_FOR_CURIOS;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> MIN_DAMAGE_TAKEN;
+    public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_POINT_REDUCTION_FACTOR;
+    public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_DURABILITY_DAMAGE_FACTOR;
+
     static {
         BUILDER.comment("Tools").push("tools");
 
@@ -74,6 +78,18 @@ public class Config {
         RANDOM_DAMAGE_VARIATION = BUILDER
                 .comment("Variates dealt damage by +-% this value")
                 .defineInRange("RANDOM_DAMAGE_VARIATION", 20d, 0d, 100d);
+
+        ARMOR_POINT_REDUCTION_FACTOR = BUILDER
+                .comment("How many armor points for damage to get reduced by 1")
+                .defineInRange("ARMOR_POINT_REDUCTION_FACTOR", 2d, 0d, Double.MAX_VALUE);
+
+        MIN_DAMAGE_TAKEN = BUILDER
+                .comment("Minimum damage dealt by an attack after all forms of reductions")
+                .defineInRange("MIN_DAMAGE_TAKEN", 0.2d, 0d, 100d);
+
+        ARMOR_DURABILITY_DAMAGE_FACTOR = BUILDER
+                .comment("How many damage points per 1 durability lost on block")
+                .defineInRange("ARMOR_DURABILITY_DAMAGE_FACTOR", 4d, 1d, 100d);
 
         BUILDER.pop();
 

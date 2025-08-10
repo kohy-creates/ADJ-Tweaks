@@ -4,7 +4,8 @@
 	"compatibilityLevel": "JAVA_17",
 	"minVersion": "0.8",
 	"mixins": [
-		"AttributesLibNuker",
+		"AttributesLibEventsMixin",
+		"InventoryMixin",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
@@ -15,6 +16,7 @@
 		"effect.MobEffectAccessor",
 		"effect.MobEffectInstanceAccessor",
 		"effect.MobEffectsMixin",
+		"effect.MobEffectUtilMixin",
 		"enchantments.EfficiencyMixin",
 		"enchantments.EnchantmentMixin",
 		"enchantments.FortuneLootingMixin",
@@ -43,8 +45,10 @@
 		"items.buildtool.StructureGelBuildToolMixin"
 	],
 	"client": [
-		"items.buildtool.BuildToolRendererMixin",
-		"items.buildtool.BuildToolOverlayMixin"
+		"client.GuiMixin",
+		"client.EffectInventoryScreenMixin",
+		"items.buildtool.BuildToolOverlayMixin",
+		"items.buildtool.BuildToolRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

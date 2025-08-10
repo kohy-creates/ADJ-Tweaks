@@ -119,7 +119,7 @@ public class AttributeReplace {
 
                                 String[] configNew = parseEntry(configEntry);
                                 AttributeModifier newModifier = new AttributeModifier(
-                                        UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"),
+                                        UUID.nameUUIDFromBytes((itemKey + key[0]).getBytes()),
                                         modifier.getName(),
                                         modifier.getAmount(),
                                         AttributeModifier.Operation.fromValue(Integer.parseInt(configNew[1])));
@@ -153,8 +153,15 @@ public class AttributeReplace {
                     EquipmentSlot slot = event.getSlotType();
                     String[] entry = parseEntry(configEntry);
                     if (slot == EquipmentSlot.byName(entry[3].toLowerCase())) {
+                        UUID uuid = UUID.nameUUIDFromBytes((itemKey + entry[0]).getBytes());
+                        if (entry.length == 5) {
+                            switch (entry[4]) {
+                                case "ATTACK_SPEED" -> uuid = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+                                case "ATTACK_DAMAGE" -> uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5C");
+                            }
+                        }
                         AttributeModifier newModifier = new AttributeModifier(
-                                UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"),
+                                uuid,
                                 "ADJ Tweaks",
                                 Double.parseDouble(entry[2]),
                                 AttributeModifier.Operation.fromValue(Integer.parseInt(entry[1])));
@@ -185,7 +192,7 @@ public class AttributeReplace {
 
                         String[] configNew = parseEntry(configEntry);
                         AttributeModifier newModifier = new AttributeModifier(
-                                UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3"),
+                                UUID.nameUUIDFromBytes((itemKey + configNew[0]).getBytes()),
                                 modifier.getName(),
                                 modifier.getAmount(),
                                 AttributeModifier.Operation.fromValue(Integer.parseInt(configNew[1])));
