@@ -3,6 +3,8 @@ package xyz.kohara.adjcore.combat;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -32,7 +34,6 @@ public class CombatRules {
                 damage *= 1 - getValue(entity, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
             }
         }
-
         // Armor points
         if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
             int armorPoints = (int) getValue(entity, Attributes.ARMOR);

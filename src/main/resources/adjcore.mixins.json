@@ -6,6 +6,7 @@
 	"mixins": [
 		"AttributesLibEventsMixin",
 		"InventoryMixin",
+		"TerraCurioEntityMixinFix",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
@@ -45,8 +46,8 @@
 		"items.buildtool.StructureGelBuildToolMixin"
 	],
 	"client": [
-		"client.GuiMixin",
 		"client.EffectInventoryScreenMixin",
+		"client.GuiMixin",
 		"items.buildtool.BuildToolOverlayMixin",
 		"items.buildtool.BuildToolRendererMixin"
 	],
