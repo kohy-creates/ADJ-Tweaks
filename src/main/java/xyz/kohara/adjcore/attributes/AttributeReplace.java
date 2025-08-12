@@ -87,6 +87,7 @@ public class AttributeReplace {
         List<Map<Attribute, AttributeModifier>> replacementModifiers = new ArrayList<>();
 
         String itemKey = itemID(event.getItemStack().getItem()).toString();
+		if (checkReplacementsNullability(true, false)) return;
         AttributeConfig.ItemConfig config = REPLACEMENTS.items.get(itemKey);
 
         if (originalModifiers.isEmpty() && config == null) {
@@ -177,35 +178,37 @@ public class AttributeReplace {
         }
 
         // Global configuration
-        REPLACEMENTS.global.forEach((configKey, configEntry) -> {
-            String[] key = parseEntry(configKey);
-            Attribute targetAttribute = attributeFromString(key[0]);
-
-            ListIterator<Map<Attribute, AttributeModifier>> iterator = replacementModifiers.listIterator();
-            while (iterator.hasNext()) {
-                Map<Attribute, AttributeModifier> map = iterator.next();
-                AttributeModifier modifier = map.get(targetAttribute);
-                if (modifier != null && modifier.getOperation().ordinal() == Integer.parseInt(key[1])) {
-                    iterator.remove();
-
-                    if (!Objects.equals(configEntry, "remove")) {
-
-                        String[] configNew = parseEntry(configEntry);
-                        AttributeModifier newModifier = new AttributeModifier(
-                                UUID.nameUUIDFromBytes((itemKey + configNew[0]).getBytes()),
-                                modifier.getName(),
-                                modifier.getAmount(),
-                                AttributeModifier.Operation.fromValue(Integer.parseInt(configNew[1])));
-                        Attribute newAttribute = attributeFromString(configNew[0]);
-
-                        Map<Attribute, AttributeModifier> newMap = new HashMap<>();
-                        newMap.put(newAttribute, newModifier);
-
-                        iterator.add(newMap);
-                    }
-                }
-            }
-        });
+	    if (!checkReplacementsNullability(false, true)) {
+		    REPLACEMENTS.global.forEach((configKey, configEntry) -> {
+			    String[] key = parseEntry(configKey);
+			    Attribute targetAttribute = attributeFromString(key[0]);
+			    
+			    ListIterator<Map<Attribute, AttributeModifier>> iterator = replacementModifiers.listIterator();
+			    while (iterator.hasNext()) {
+				    Map<Attribute, AttributeModifier> map = iterator.next();
+				    AttributeModifier modifier = map.get(targetAttribute);
+				    if (modifier != null && modifier.getOperation().ordinal() == Integer.parseInt(key[1])) {
+					    iterator.remove();
+					    
+					    if (!Objects.equals(configEntry, "remove")) {
+						    
+						    String[] configNew = parseEntry(configEntry);
+						    AttributeModifier newModifier = new AttributeModifier(
+							    UUID.nameUUIDFromBytes((itemKey + configNew[0]).getBytes()),
+							    modifier.getName(),
+							    modifier.getAmount(),
+							    AttributeModifier.Operation.fromValue(Integer.parseInt(configNew[1])));
+						    Attribute newAttribute = attributeFromString(configNew[0]);
+						    
+						    Map<Attribute, AttributeModifier> newMap = new HashMap<>();
+						    newMap.put(newAttribute, newModifier);
+						    
+						    iterator.add(newMap);
+					    }
+				    }
+			    }
+		    });
+	    }
 
         List<Map.Entry<Attribute, AttributeModifier>> toRemove = new ArrayList<>(originalModifiers.entries());
         for (Map.Entry<Attribute, AttributeModifier> entry : toRemove) {
@@ -218,6 +221,11 @@ public class AttributeReplace {
             }
         }
     }
+	
+	//yes
+	private static boolean checkReplacementsNullability(boolean items, boolean global) {
+		return REPLACEMENTS == null || (items && REPLACEMENTS.items == null) || (global && REPLACEMENTS.global == null);
+	}
 
     public static class AttributeConfig {
         public Map<String, String> global;
