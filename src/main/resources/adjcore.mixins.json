@@ -7,6 +7,7 @@
 		"AttributesLibEventsMixin",
 		"InventoryMixin",
 		"TerraCurioEntityMixinFix",
+		"TerraCurioNukeJEIDescriptions",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
@@ -49,7 +50,9 @@
 		"client.EffectInventoryScreenMixin",
 		"client.GuiMixin",
 		"items.buildtool.BuildToolOverlayMixin",
-		"items.buildtool.BuildToolRendererMixin"
+		"items.buildtool.BuildToolRendererMixin",
+		"music.MusicManagerMixin",
+		"music.MusicMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

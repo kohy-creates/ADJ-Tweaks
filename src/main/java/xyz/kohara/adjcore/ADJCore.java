@@ -24,6 +24,7 @@ import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
+import xyz.kohara.adjcore.music.MusicConfig;
 import xyz.kohara.adjcore.networking.ModMessages;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.sounds.ModSoundEvents;
@@ -53,6 +54,7 @@ public class ADJCore {
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
         ModAttributes.register(MOD_BUS);
+        MusicConfig.load(MOD_BUS);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
