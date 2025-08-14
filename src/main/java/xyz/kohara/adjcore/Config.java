@@ -24,6 +24,7 @@ public class Config {
 
     public static final ForgeConfigSpec.ConfigValue<Double> MIN_DAMAGE_TAKEN;
     public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_POINT_REDUCTION_FACTOR;
+    public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_POINT_REDUCTION_FACTOR_ENTITY;
     public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_DURABILITY_DAMAGE_FACTOR;
 
     static {
@@ -80,8 +81,12 @@ public class Config {
                 .defineInRange("RANDOM_DAMAGE_VARIATION", 20d, 0d, 100d);
 
         ARMOR_POINT_REDUCTION_FACTOR = BUILDER
-                .comment("How many armor points for damage to get reduced by 1")
+                .comment("How many armor points for damage to get reduced by 1 (for players)")
                 .defineInRange("ARMOR_POINT_REDUCTION_FACTOR", 2d, 0d, Double.MAX_VALUE);
+
+        ARMOR_POINT_REDUCTION_FACTOR_ENTITY = BUILDER
+                .comment("How many armor points for damage to get reduced by 1 (for entities)")
+                .defineInRange("ARMOR_POINT_REDUCTION_FACTOR_ENTITY", 2d, 0d, Double.MAX_VALUE);
 
         MIN_DAMAGE_TAKEN = BUILDER
                 .comment("Minimum damage dealt by an attack after all forms of reductions")

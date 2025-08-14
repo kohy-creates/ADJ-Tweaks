@@ -3,13 +3,11 @@ package xyz.kohara.adjcore.combat;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.Config;
@@ -19,6 +17,7 @@ public class CombatRules {
 
     private static final float MIN_DAMAGE = Config.MIN_DAMAGE_TAKEN.get().floatValue();
     private static final float ARMOR_POINT_FACTOR = Config.ARMOR_POINT_REDUCTION_FACTOR.get().floatValue();
+    private static final float ARMOR_POINT_FACTOR_ENTITY = Config.ARMOR_POINT_REDUCTION_FACTOR_ENTITY.get().floatValue();
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
@@ -46,7 +45,8 @@ public class CombatRules {
                 armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
             }
 
-            damage = Math.max(MIN_DAMAGE, damage - ((float) armorPoints / ARMOR_POINT_FACTOR));
+            float factor = (entity instanceof Player) ? ARMOR_POINT_FACTOR : ARMOR_POINT_FACTOR_ENTITY;
+            damage = Math.max(MIN_DAMAGE, damage - (((float) armorPoints) / factor));
         }
 
         event.setAmount(damage);

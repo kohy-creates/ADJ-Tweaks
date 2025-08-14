@@ -15,7 +15,7 @@ public class FireImmunityCurios {
     private static final int BASE_DURATION = 140;
 
     public static void applyEffect(Player player) {
-        if (player.isInLava()) return;
+        if (player.isInLava() || player.isOnFire()) return;
 
         Optional<ICuriosItemHandler> curios = CuriosApi.getCuriosInventory(player).resolve();
         if (curios.isEmpty()) return;

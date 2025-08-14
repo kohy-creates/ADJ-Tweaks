@@ -5,8 +5,6 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundSource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,64 +12,81 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.kohara.adjcore.ADJCore;
 
 import javax.annotation.Nullable;
 
 @Mixin(MusicManager.class)
 public abstract class MusicManagerMixin {
 
-    private static final Logger LOGGER = LogManager.getLogger("MusicManagerMixin");
-
-    @Shadow @Final private Minecraft minecraft;
-    @Shadow @Nullable private SoundInstance currentMusic;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
+    @Shadow
+    @Nullable
+    private SoundInstance currentMusic;
 
     // Custom field to track volume from 1.0 down to 0 and back
     @Unique
-    private float fadeVolume = 1.0f;
+    private float adj$fadeVolume = 1.0f;
 
     // True when fading out, false when fading in or idle
     @Unique
-    private boolean fadingOut = false;
+    private boolean adj$fadingOut = false;
+
+    @Unique
+    private double adj$goalVolume;
 
     @Inject(method = "tick()V", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         float baseVolume = minecraft.options.getSoundSourceVolume(SoundSource.MUSIC);
-        LOGGER.debug("Tick called. currentMusic: {}, fadingOut: {}, fadeVolume: {}, baseVolume: {}", currentMusic, fadingOut, fadeVolume, baseVolume);
-
-        if (currentMusic != null && fadingOut) {
-            fadeVolume -= 0.03f; // fade out step
-            LOGGER.debug("Fading out. New fadeVolume: {}", fadeVolume);
-            if (fadeVolume <= 0f) {
-                fadeVolume = 0f;
-                fadingOut = false;
-                LOGGER.debug("Fade out complete, stopping music.");
+        // LOGGER.info("Tick called. currentMusic: {}, adj$fadingOut: {}, adj$fadeVolume: {}, baseVolume: {}", currentMusic, adj$fadingOut, adj$fadeVolume, baseVolume);
+        if (adj$fadeVolume == 1.0F) adj$goalVolume = baseVolume;
+        if (currentMusic != null && adj$fadingOut) {
+            adj$fadeVolume -= (float) (0.025f * adj$goalVolume); // fade out step
+            // LOGGER.info("Fading out. New adj$fadeVolume: {}, adj$goalVolume: {}", adj$fadeVolume, adj$goalVolume);
+            if (adj$fadeVolume <= 0f) {
+                adj$fadeVolume = 0f;
+                adj$fadingOut = false;
+                // LOGGER.info("Fade out complete, stopping music.");
 
                 SoundManager manager = minecraft.getSoundManager();
                 manager.stop(currentMusic);
                 currentMusic = null;
             }
-            setMusicVolume(fadeVolume);
-        } else if (currentMusic != null && fadeVolume < 1.0f) {
-            fadeVolume += 0.03f;
-            if (fadeVolume > 1.0f) fadeVolume = 1.0f;
-            LOGGER.debug("Fading in. New fadeVolume: {}", fadeVolume);
-            setMusicVolume(fadeVolume);
+            adj$setMusicVolume(adj$fadeVolume);
+        } else if (currentMusic != null && adj$fadeVolume < adj$goalVolume) {
+            adj$fadeVolume += (float) (0.025f * adj$goalVolume);
+            if (adj$fadeVolume > adj$goalVolume) adj$fadeVolume = (float) adj$goalVolume;
+            // LOGGER.info("Fading in. New adj$fadeVolume: {}, adj$goalVolume: {}", adj$fadeVolume, adj$goalVolume);
+            adj$setMusicVolume(adj$fadeVolume);
+        } else if (currentMusic == null && adj$fadingOut) {
+            adj$fadeVolume -= (float) (0.025f * adj$goalVolume); // fade out step
+            // LOGGER.info("Fading out. New adj$fadeVolume: {}, adj$goalVolume: {}", adj$fadeVolume, adj$goalVolume);
+            if (adj$fadeVolume <= 0f) {
+                adj$fadeVolume = 0f;
+                adj$fadingOut = false;
+                // LOGGER.info("Fade out complete, stopping music.");
+
+                SoundManager manager = minecraft.getSoundManager();
+                manager.stop(currentMusic);
+                currentMusic = null;
+            }
+            adj$setMusicVolume(adj$fadeVolume);
         }
     }
 
     @Inject(method = "stopPlaying()V", at = @At("HEAD"), cancellable = true)
     private void onStopPlaying(CallbackInfo ci) {
-        LOGGER.debug("stopPlaying() called. currentMusic: {}, fadingOut: {}", currentMusic, fadingOut);
-        if (currentMusic != null && !fadingOut) {
+        if (currentMusic != null && !adj$fadingOut) {
             ci.cancel();
-            fadingOut = true; // start fading out
-            LOGGER.debug("Cancelling stopPlaying and starting fade out.");
+            adj$fadingOut = true;
+            ADJCore.LOGGER.info("Cancelling stopPlaying and starting fade out.");
         }
     }
 
     @Unique
-    private void setMusicVolume(float volume) {
-        LOGGER.debug("Setting music volume to {}", volume);
-        minecraft.getSoundManager().updateSourceVolume(SoundSource.MUSIC, volume);
+    private void adj$setMusicVolume(float volume) {
+        minecraft.options.getSoundSourceOptionInstance(SoundSource.MUSIC).set((double) volume);
     }
 }

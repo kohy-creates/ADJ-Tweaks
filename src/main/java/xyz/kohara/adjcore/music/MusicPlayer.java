@@ -13,16 +13,24 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.mixins.music.MusicManagerAccessor;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 public class MusicPlayer {
+
+    // This will hold pre-built Music objects after load()
+    public static Music resolvedMenu;
+    public static Map<String, ResolvedEntry> resolvedDefaults = new HashMap<>();
+    public static Map<String, ResolvedEntry> resolvedBiomes = new HashMap<>();
+    public static Map<String, ResolvedBossMusic> resolvedBosses = new HashMap<>();
 
     private static final Predicate<WitherBoss> WITHER_PREDICATE = (entity) -> true;
     private static final Predicate<LivingEntity> ENTITY_PREDICATE = (entity) -> true;
@@ -30,82 +38,106 @@ public class MusicPlayer {
 
     public static Music CURRENT_TRACK = null;
 
-    private static boolean isPlayingBossMusic(MusicManager musicManager) {
-        for (Music music : bossMusic) {
-            if (musicManager.isPlayingMusic(music)) {
-                return true;
+    public static void buildResolvedMaps() {
+        MusicConfig cfg = MusicConfig.CONFIG;
+
+        resolvedMenu = getTrack(cfg.menu);
+
+        if (cfg.defaults != null) {
+            for (Map.Entry<String, MusicConfig.MusicEntry> e : cfg.defaults.entrySet()) {
+                resolvedDefaults.put(e.getKey(), resolveEntry(e.getValue()));
             }
         }
 
-        return false;
+        if (cfg.biome != null) {
+            for (Map.Entry<String, MusicConfig.MusicEntry> e : cfg.biome.entrySet()) {
+                resolvedBiomes.put(e.getKey(), resolveEntry(e.getValue()));
+            }
+        }
+
+        if (cfg.boss != null) {
+            for (Map.Entry<String, MusicConfig.BossMusic> e : cfg.boss.entrySet()) {
+                Music start = getTrack(e.getValue().start);
+                Music loop = getTrack(e.getValue().loop);
+                Music stop = getTrack(e.getValue().stop);
+                resolvedBosses.put(e.getKey(), new ResolvedBossMusic(start, loop, stop));
+            }
+        }
     }
 
-    private static String getMonsterName(LivingEntity e) {
-        return e.getName().toString().replace("translation{key='", "").replace("', args=[]}", "");
+    private static ResolvedEntry resolveEntry(MusicConfig.MusicEntry entry) {
+        if (entry == null) return null;
+        Music track = getTrack(entry.track);
+        Map<String, Music> conds = null;
+        if (entry.conditions != null) {
+            conds = new HashMap<>();
+            for (Map.Entry<String, String> c : entry.conditions.entrySet()) {
+                conds.put(c.getKey(), getTrack(c.getValue()));
+            }
+        }
+        return new ResolvedEntry(track, conds);
     }
 
     public static Music findMusic(MusicManager musicManager) {
-        MusicConfig config = MusicConfig.CONFIG;
-        boolean isBoss = false;
-        String track = config.menu;
+        if (resolvedMenu == null) buildResolvedMaps();
+        Music track = resolvedMenu;
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            track = config.defaults.get("minecraft:overworld").conditions.get("day");
+            ResolvedEntry overworld = resolvedDefaults.get("minecraft:overworld");
+            if (overworld != null && overworld.conditions != null) {
+                track = overworld.conditions.get(getVariant(player.level()).id);
+            }
 
             String dimension = player.level().dimension().location().toString();
-            Holder<Biome> biome = player.level().getBiome(player.getOnPos());
-            ResourceLocation biomeRL = biome.unwrapKey().map(ResourceKey::location).orElse(ResourceLocation.fromNamespaceAndPath("unknown", "unknown"));
-            String biomeName = biomeRL.toString();
+            String biomeName = player.level()
+                    .getBiome(player.getOnPos())
+                    .unwrapKey()
+                    .map(ResourceKey::location)
+                    .orElse(ResourceLocation.fromNamespaceAndPath("unknown", "unknown"))
+                    .toString();
 
-            for (String key : config.defaults.keySet()) {
-                if (dimension.equals(key)) {
-                    MusicConfig.MusicEntry entry = config.defaults.get(key);
-
-                    if (entry.track != null) {
-                        track = entry.track;
-                    } else {
-                        track = entry.conditions.get(getVariant(player.level()).id);
-                    }
-                    break;
+            // dimension-specific
+            ResolvedEntry dimEntry = resolvedDefaults.get(dimension);
+            if (dimEntry != null) {
+                if (dimEntry.track != null) {
+                    track = dimEntry.track;
+                } else if (dimEntry.conditions != null) {
+                    Music condTrack = dimEntry.conditions.get(getVariant(player.level()).id);
+                    if (condTrack != null) track = condTrack;
                 }
             }
 
-            for (String key : config.biome.keySet()) {
+            // biome-specific
+            for (String key : resolvedBiomes.keySet()) {
                 boolean found = false;
-                if (key.indexOf("#") == 0 && biome.is(TagKey.create(Registries.BIOME, ResourceLocation.parse(key.replace("#", ""))))) {
-                    System.out.println("is in tag " + key);
+                if (key.startsWith("#") && player.level().getBiome(player.getOnPos())
+                        .is(TagKey.create(Registries.BIOME, ResourceLocation.parse(key.substring(1))))) {
                     found = true;
                 } else if (biomeName.equals(key)) {
-                    System.out.println("in biome " + key);
                     found = true;
                 }
                 if (found) {
-                    MusicConfig.MusicEntry entry = config.biome.get(key);
-                    if (entry.track != null) {
-                        track = entry.track;
-                    } else {
-                        String checkTrack = null;
-                        checkTrack = entry.conditions.get(getVariant(player.level()).id);
-
-                        if (checkTrack != null) {
-                            track = checkTrack;
-                        }
+                    ResolvedEntry biomeEntry = resolvedBiomes.get(key);
+                    if (biomeEntry.track != null) {
+                        track = biomeEntry.track;
+                    } else if (biomeEntry.conditions != null) {
+                        Music condTrack = biomeEntry.conditions.get(getVariant(player.level()).id);
+                        if (condTrack != null) track = condTrack;
                     }
                 }
             }
-
         }
-        System.out.println(track);
-        Music music = getTrack(track, isBoss);
-        if (CURRENT_TRACK == null || CURRENT_TRACK != music) {
-            if (CURRENT_TRACK != null) musicManager.stopPlaying(CURRENT_TRACK);
-            CURRENT_TRACK = music;
+        if (CURRENT_TRACK != null && CURRENT_TRACK != track && ((MusicManagerAccessor) musicManager).getCurrentMusic() != null) {
+            //System.out.println(CURRENT_TRACK.getEvent() + " <- " + track.getEvent());
+            musicManager.stopPlaying(CURRENT_TRACK);
         }
-        return music;
+        CURRENT_TRACK = track;
+        return track;
     }
 
-    private static Music getTrack(String str, boolean replace) {
+    private static Music getTrack(String str) {
+        if (str == null) return null;
         ResourceLocation id = ResourceLocation.parse(str);
         Optional<Holder<SoundEvent>> optional = ForgeRegistries.SOUND_EVENTS.getHolder(id);
         if (optional.isEmpty()) {
@@ -113,29 +145,35 @@ public class MusicPlayer {
             return null;
         }
         Holder<SoundEvent> holder = optional.get();
-        return new Music(holder, 0, 0, replace);
+        return new Music(holder, 10, 20, false);
     }
 
     public static boolean shouldPlayMusic(MusicManager musicManager) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) {
-            return true;
-        } else {
+        if (player != null) {
             String dimension = player.level().dimension().location().toString();
             double i = player.getY();
             double j = player.getX();
             double k = player.getZ();
             float f = 50.0F;
-            AABB box = new AABB((float) i - f, (float) j - f, (float) k - f, (float) (i + (double) 1.0F) + f, (float) (j + (double) 1.0F) + f, (float) (k + (double) 1.0F) + f);
+            AABB box = new AABB((float) i - f, (float) j - f, (float) k - f, (float) (i + 1.0F) + f, (float) (j + 1.0F) + f, (float) (k + 1.0F) + f);
 
             for (LivingEntity e : player.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), box, ENTITY_PREDICATE)) {
-                if (!dimension.equals("javd:void") && (getMonsterName(e).contains("entity.witherstormmod.witherstorm") || getMonsterName(e).contains("entity.aquamirae.captain_cornelia") || getMonsterName(e).contains("entity.blue_skies.summoner") || getMonsterName(e).contains("entity.blue_skies.alchemist") || getMonsterName(e).contains("entity.unusualend.endstone_golem"))) {
+                if ((getMonsterName(e).contains("entity.witherstormmod.witherstorm") ||
+                        getMonsterName(e).contains("entity.aquamirae.captain_cornelia") ||
+                        getMonsterName(e).contains("entity.unusualend.endstone_golem"))) {
                     return false;
                 }
             }
-
-            return true;
+            return JukeboxTracker.noJukeboxesInRange();
         }
+        return true;
+    }
+
+    private static String getMonsterName(LivingEntity e) {
+        return e.getName().toString()
+                .replace("translation{key='", "")
+                .replace("', args=[]}", "");
     }
 
     private static TrackVariant getVariant(Level level) {
@@ -145,28 +183,26 @@ public class MusicPlayer {
         long time = level.getDayTime();
         if (time % 24000L < 12550) {
             return TrackVariant.DAY;
-        } /* else if (time % 24000L > 23000L && time % 24000L < 0L) {
-            return TrackVariant.SUNRISE;
-        } else if (time % 24000L > 12000L && time % 24000L < 13000L) {
-            return TrackVariant.SUNSET;
-        } */
+        }
         return TrackVariant.NIGHT;
     }
 
     private enum TrackVariant {
-        //SUNRISE("sunrise"),
         DAY("day"),
-        //SUNSET("sunset"),
         NIGHT("night"),
-
         RAIN("rain"),
         THUNDER("thunder");
 
-        public String id;
+        public final String id;
 
         TrackVariant(String text) {
             this.id = text;
         }
+    }
 
+    public record ResolvedEntry(Music track, Map<String, Music> conditions) {
+    }
+
+    public record ResolvedBossMusic(Music start, Music loop, Music stop) {
     }
 }

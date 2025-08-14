@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class MusicConfig {
 
@@ -60,7 +62,7 @@ public class MusicConfig {
         }
     }
 
-    public static void load() {
+    public static void load(IEventBus bus) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MusicEntry.class, new MusicEntryDeserializer())
                 .create();
@@ -122,7 +124,7 @@ public class MusicConfig {
             e.printStackTrace();
             CONFIG = new MusicConfig();
         }
-        SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SOUNDS.register(bus);
     }
 
     private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ADJCore.MOD_ID.replace("core", ""));

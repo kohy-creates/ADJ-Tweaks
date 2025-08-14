@@ -44,15 +44,18 @@
 		"items.ShieldSoundsMixin",
 		"items.SpawnEggUseSoundMixin",
 		"items.TridentPullbackSound",
-		"items.buildtool.StructureGelBuildToolMixin"
+		"items.buildtool.StructureGelBuildToolMixin",
+		"music.JukeboxHandler"
 	],
 	"client": [
 		"client.EffectInventoryScreenMixin",
 		"client.GuiMixin",
 		"items.buildtool.BuildToolOverlayMixin",
 		"items.buildtool.BuildToolRendererMixin",
+		"music.MusicManagerAccessor",
 		"music.MusicManagerMixin",
-		"music.MusicMixin"
+		"music.MusicMixin",
+		"music.SoundEngineMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
