@@ -4,7 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,7 +19,7 @@ import xyz.kohara.adjcore.ADJCore;
 
 import javax.annotation.Nullable;
 
-@Mixin(MusicManager.class)
+@Mixin(value = MusicManager.class, priority = 90000)
 public abstract class MusicManagerMixin {
 
     @Shadow
@@ -25,6 +28,11 @@ public abstract class MusicManagerMixin {
     @Shadow
     @Nullable
     private SoundInstance currentMusic;
+
+    @Shadow private int nextSongDelay;
+    @Shadow @Final private RandomSource random;
+
+    @Shadow public abstract void startPlaying(Music selector);
 
     // Custom field to track volume from 1.0 down to 0 and back
     @Unique
@@ -39,6 +47,7 @@ public abstract class MusicManagerMixin {
 
     @Inject(method = "tick()V", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
+        ci.cancel();
         float baseVolume = minecraft.options.getSoundSourceVolume(SoundSource.MUSIC);
         // LOGGER.info("Tick called. currentMusic: {}, adj$fadingOut: {}, adj$fadeVolume: {}, baseVolume: {}", currentMusic, adj$fadingOut, adj$fadeVolume, baseVolume);
         if (adj$fadeVolume == 1.0F) adj$goalVolume = baseVolume;
@@ -73,6 +82,24 @@ public abstract class MusicManagerMixin {
                 currentMusic = null;
             }
             adj$setMusicVolume(adj$fadeVolume);
+        }
+
+        Music music = this.minecraft.getSituationalMusic();
+        if (this.currentMusic != null) {
+            if (!music.getEvent().value().getLocation().equals(this.currentMusic.getLocation()) && music.replaceCurrentMusic()) {
+                this.minecraft.getSoundManager().stop(this.currentMusic);
+                this.nextSongDelay = Mth.nextInt(this.random, 0, music.getMinDelay() / 2);
+            }
+
+            if (!this.minecraft.getSoundManager().isActive(this.currentMusic)) {
+                this.currentMusic = null;
+                this.nextSongDelay = Math.min(this.nextSongDelay, Mth.nextInt(this.random, music.getMinDelay(), music.getMaxDelay()));
+            }
+        }
+
+        this.nextSongDelay = Math.min(this.nextSongDelay, music.getMaxDelay());
+        if (this.currentMusic == null && this.nextSongDelay-- <= 0) {
+            this.startPlaying(music);
         }
     }
 

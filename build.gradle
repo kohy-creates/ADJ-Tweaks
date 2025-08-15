@@ -117,6 +117,10 @@ dependencies {
     modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
     modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-fabric-api:${jei_version}")
     modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-fabric:${jei_version}")
+
+//    modImplementation("curse.maven:konkrete-410295:5028413")
+//    modImplementation("curse.maven:melody-938643:5109692")
+//    modImplementation("curse.maven:fancymenu-367706:6785137")
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
