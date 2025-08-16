@@ -7,8 +7,8 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.kohara.adjcore.attributes.AttributeReplace;
+import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
-import xyz.kohara.adjcore.music.MusicConfig;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 
 @Mod.EventBusSubscriber(modid = ADJCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -21,6 +21,7 @@ public class ReloadCommand {
                             PotionsEditor.edit();
                             AttributeReplace.loadConfig();
                             EffectsEditor.edit();
+                            DamageHandler.loadConfig();
                             return 1;
                         })
         );

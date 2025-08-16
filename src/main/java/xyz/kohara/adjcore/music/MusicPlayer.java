@@ -35,8 +35,14 @@ public class MusicPlayer {
     private static final Predicate<WitherBoss> WITHER_PREDICATE = (entity) -> true;
     private static final Predicate<LivingEntity> ENTITY_PREDICATE = (entity) -> true;
     private static Music[] bossMusic;
+    public static boolean isStopping = false;
+    public static boolean isFadingOut;
 
     public static Music CURRENT_TRACK = null;
+
+    static {
+        buildResolvedMaps();
+    }
 
     public static void buildResolvedMaps() {
         MusicConfig cfg = MusicConfig.CONFIG;
@@ -79,7 +85,6 @@ public class MusicPlayer {
     }
 
     public static Music findMusic(MusicManager musicManager) {
-        if (resolvedMenu == null) buildResolvedMaps();
         Music track = resolvedMenu;
 
         LocalPlayer player = Minecraft.getInstance().player;
@@ -128,11 +133,14 @@ public class MusicPlayer {
                 }
             }
         }
-        if (CURRENT_TRACK != null && CURRENT_TRACK != track && ((MusicManagerAccessor) musicManager).getCurrentMusic() != null) {
-            //System.out.println(CURRENT_TRACK.getEvent() + " <- " + track.getEvent());
-            musicManager.stopPlaying(CURRENT_TRACK);
+        if (track != null && CURRENT_TRACK != track) {
+            if (CURRENT_TRACK != null && ((MusicManagerAccessor) musicManager).getCurrentMusic() != null) {
+                musicManager.stopPlaying(CURRENT_TRACK);
+                isStopping = true;
+            }
+            CURRENT_TRACK = track;
         }
-        CURRENT_TRACK = track;
+
         return track;
     }
 
@@ -161,7 +169,8 @@ public class MusicPlayer {
             for (LivingEntity e : player.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), box, ENTITY_PREDICATE)) {
                 if ((getMonsterName(e).contains("entity.witherstormmod.witherstorm") ||
                         getMonsterName(e).contains("entity.aquamirae.captain_cornelia") ||
-                        getMonsterName(e).contains("entity.unusualend.endstone_golem"))) {
+                        getMonsterName(e).contains("entity.unusualend.endstone_golem") ||
+                        dimension.equals("witherstormmod:bowels"))) {
                     return false;
                 }
             }
@@ -205,4 +214,5 @@ public class MusicPlayer {
 
     public record ResolvedBossMusic(Music start, Music loop, Music stop) {
     }
+
 }

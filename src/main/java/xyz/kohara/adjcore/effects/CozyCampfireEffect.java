@@ -16,8 +16,8 @@ public class CozyCampfireEffect extends MobEffect {
     @Override
     public void applyEffectTick(@NotNull LivingEntity entity, int pAmplifier) {
         if (!entity.level().isClientSide()) {
-            if (entity.tickCount % 100 == 0 && entity.getHealth() < entity.getMaxHealth()) {
-                entity.heal(1.0F);
+            if (entity.tickCount % 20 == 0 && entity.getHealth() < entity.getMaxHealth()) {
+                entity.heal(0.5F);
                 if (entity instanceof ServerPlayer player) {
                     player.connection.send(
                             new ClientboundSetHealthPacket(
@@ -35,5 +35,4 @@ public class CozyCampfireEffect extends MobEffect {
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
-
 }

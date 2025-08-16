@@ -6,6 +6,7 @@ import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.spongepowered.asm.mixin.Final;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.music.MusicPlayer;
 
 import javax.annotation.Nullable;
 
@@ -39,43 +41,36 @@ public abstract class MusicManagerMixin {
     private float adj$fadeVolume = 1.0f;
 
     // True when fading out, false when fading in or idle
-    @Unique
-    private boolean adj$fadingOut = false;
 
     @Unique
     private double adj$goalVolume;
 
-    @Inject(method = "tick()V", at = @At("HEAD"))
+    @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     private void onTick(CallbackInfo ci) {
         ci.cancel();
         float baseVolume = minecraft.options.getSoundSourceVolume(SoundSource.MUSIC);
-        // LOGGER.info("Tick called. currentMusic: {}, adj$fadingOut: {}, adj$fadeVolume: {}, baseVolume: {}", currentMusic, adj$fadingOut, adj$fadeVolume, baseVolume);
+        if (baseVolume == 0 && adj$fadeVolume != 0) return;
         if (adj$fadeVolume == 1.0F) adj$goalVolume = baseVolume;
-        if (currentMusic != null && adj$fadingOut) {
-            adj$fadeVolume -= (float) (0.025f * adj$goalVolume); // fade out step
-            // LOGGER.info("Fading out. New adj$fadeVolume: {}, adj$goalVolume: {}", adj$fadeVolume, adj$goalVolume);
+        if (currentMusic != null && MusicPlayer.isFadingOut) {
+            adj$fadeVolume -= (float) (0.035f * adj$goalVolume);
             if (adj$fadeVolume <= 0f) {
                 adj$fadeVolume = 0f;
-                adj$fadingOut = false;
-                // LOGGER.info("Fade out complete, stopping music.");
-
+                MusicPlayer.isFadingOut = false;
                 SoundManager manager = minecraft.getSoundManager();
                 manager.stop(currentMusic);
+                MusicPlayer.isStopping = false;
                 currentMusic = null;
             }
             adj$setMusicVolume(adj$fadeVolume);
         } else if (currentMusic != null && adj$fadeVolume < adj$goalVolume) {
-            adj$fadeVolume += (float) (0.025f * adj$goalVolume);
+            adj$fadeVolume += (float) (0.035f * adj$goalVolume);
             if (adj$fadeVolume > adj$goalVolume) adj$fadeVolume = (float) adj$goalVolume;
-            // LOGGER.info("Fading in. New adj$fadeVolume: {}, adj$goalVolume: {}", adj$fadeVolume, adj$goalVolume);
             adj$setMusicVolume(adj$fadeVolume);
-        } else if (currentMusic == null && adj$fadingOut) {
-            adj$fadeVolume -= (float) (0.025f * adj$goalVolume); // fade out step
-            // LOGGER.info("Fading out. New adj$fadeVolume: {}, adj$goalVolume: {}", adj$fadeVolume, adj$goalVolume);
+        } else if (currentMusic == null && MusicPlayer.isFadingOut) {
+            adj$fadeVolume -= (float) (0.035f * adj$goalVolume);
             if (adj$fadeVolume <= 0f) {
                 adj$fadeVolume = 0f;
-                adj$fadingOut = false;
-                // LOGGER.info("Fade out complete, stopping music.");
+                MusicPlayer.isFadingOut = false;
 
                 SoundManager manager = minecraft.getSoundManager();
                 manager.stop(currentMusic);
@@ -83,6 +78,9 @@ public abstract class MusicManagerMixin {
             }
             adj$setMusicVolume(adj$fadeVolume);
         }
+
+        // Default logic
+        // Copy so that other mods don't interfere
 
         Music music = this.minecraft.getSituationalMusic();
         if (this.currentMusic != null) {
@@ -105,10 +103,11 @@ public abstract class MusicManagerMixin {
 
     @Inject(method = "stopPlaying()V", at = @At("HEAD"), cancellable = true)
     private void onStopPlaying(CallbackInfo ci) {
-        if (currentMusic != null && !adj$fadingOut) {
+        if (currentMusic != null && !MusicPlayer.isFadingOut) {
             ci.cancel();
-            adj$fadingOut = true;
-            ADJCore.LOGGER.info("Cancelling stopPlaying and starting fade out.");
+            MusicPlayer.isFadingOut = true;
+            System.out.println(this.currentMusic);
+            //ADJCore.LOGGER.info("Cancelling stopPlaying and starting fade out.");
         }
     }
 

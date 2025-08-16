@@ -15,9 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.kohara.adjcore.attributes.ModAttributes;
-import xyz.kohara.adjcore.combat.CombatRules;
 import xyz.kohara.adjcore.combat.DamageHandler;
-import xyz.kohara.adjcore.combat.VariatedDamage;
 import xyz.kohara.adjcore.combat.critevent.ApothCritStrikeEvent;
 import xyz.kohara.adjcore.curio.CurioControl;
 import xyz.kohara.adjcore.effects.ModEffects;
@@ -46,11 +44,9 @@ public class ADJCore {
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
-        MinecraftForge.EVENT_BUS.register(new VariatedDamage());
         MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
         MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
         MinecraftForge.EVENT_BUS.register(CurioControl.class);
-        MinecraftForge.EVENT_BUS.register(CombatRules.class);
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);

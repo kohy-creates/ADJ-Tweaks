@@ -17,6 +17,7 @@
 		"client.ArmorTrimMixin",
 		"effect.MobEffectAccessor",
 		"effect.MobEffectInstanceAccessor",
+		"effect.MobEffectMixin",
 		"effect.MobEffectsMixin",
 		"effect.MobEffectUtilMixin",
 		"enchantments.EfficiencyMixin",
@@ -30,6 +31,7 @@
 		"enchantments.ThornsMixin",
 		"enchantments.UnbreakingMixin",
 		"entity.EnderPearlSoundMixin",
+		"entity.EntityMixin",
 		"entity.LivingEntityMixin",
 		"entity.PlayerMixin",
 		"entity.ServerPlayerMixin",
@@ -55,7 +57,8 @@
 		"music.MusicManagerAccessor",
 		"music.MusicManagerMixin",
 		"music.MusicMixin",
-		"music.SoundEngineMixin"
+		"music.SoundEngineMixin",
+		"music.SoundManagerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
