@@ -29,9 +29,9 @@ public abstract class MobEffectMixin {
                 livingEntity.heal(1.0F);
             }
         } else if (effect == MobEffects.POISON) {
-            // 8 damage per tick on entities
-            // and 3 on players
-            float amount = (livingEntity instanceof Player) ? 3f : 5f;
+            // 6 damage per tick on entities
+            // and 4 on players
+            float amount = (livingEntity instanceof Player) ? 4f : 6f;
             if (livingEntity.getHealth() > amount * 2) {
                 livingEntity.hurt(livingEntity.damageSources().magic(), amount);
             }
