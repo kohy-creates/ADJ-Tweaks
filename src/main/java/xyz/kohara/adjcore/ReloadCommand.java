@@ -22,6 +22,7 @@ public class ReloadCommand {
                             AttributeReplace.loadConfig();
                             EffectsEditor.edit();
                             DamageHandler.loadConfig();
+                            DamageHandler.loadIFrameConfig();
                             return 1;
                         })
         );

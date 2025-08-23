@@ -31,7 +31,7 @@ public class AttributesLibEventsMixin {
         return ArrayListMultimap.create();
     }
 
-    @Inject(method = "apothCriticalStrike", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/entity/living/LivingHurtEvent;setAmount(F)V"))
+    @Inject(method = "apothCriticalStrike", at = @At(value = "INVOKE", target = "Ldev/shadowsoffire/placebo/network/PacketDistro;sendToTracking(Lnet/minecraftforge/network/simple/SimpleChannel;Ljava/lang/Object;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;)V"))
     private void critStrikeHook(LivingHurtEvent e, CallbackInfo ci, @Local LivingEntity attacker, @Local double critChance, @Local(ordinal = 0) float critDmg, @Local(ordinal = 1) float critMult) {
         ApothCritStrikeEvent eventHook = new ApothCritStrikeEvent(
                 attacker,

@@ -22,6 +22,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.attributes.ModAttributes;
 
@@ -46,16 +48,20 @@ public class DamageHandler {
             DamageTypeTags.BYPASSES_INVULNERABILITY
     );
     private static final Supplier<Double> VARIATION = () -> Config.RANDOM_DAMAGE_VARIATION.get() / 100d;
-    private static final String PATH = "config/adjcore/damage_multipliers.json";
 
     private static final Supplier<Float> MIN_DAMAGE = () -> Config.MIN_DAMAGE_TAKEN.get().floatValue();
-    private static final Supplier<Float> ARMOR_POINT_FACTOR = () ->  Config.ARMOR_POINT_REDUCTION_FACTOR.get().floatValue();
-    private static final Supplier<Float> ARMOR_POINT_FACTOR_ENTITY = () ->  Config.ARMOR_POINT_REDUCTION_FACTOR_ENTITY.get().floatValue();
+    private static final Supplier<Float> ARMOR_POINT_FACTOR = () -> Config.ARMOR_POINT_REDUCTION_FACTOR.get().floatValue();
+    private static final Supplier<Float> ARMOR_POINT_FACTOR_ENTITY = () -> Config.ARMOR_POINT_REDUCTION_FACTOR_ENTITY.get().floatValue();
 
+    private static final String PATH = "config/adjcore/damage_multipliers.json";
     public static Map<String, Double> MULTIPLIERS = new HashMap<>();
+
+    public static Map<String, IFrameConfig> IFRAMES = new HashMap<>();
+    public static final String IFRAMES_PATH = "config/adjcore/iframes.json";
 
     static {
         loadConfig();
+        loadIFrameConfig();
     }
 
     public static void setInvulTime(LivingEntity entity, int time) {
@@ -81,19 +87,60 @@ public class DamageHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void adjustIFrames(LivingHurtEvent event) {
         DamageSource source = event.getSource();
-        if (!source.is(ModDamageTypeTags.IGNORES_COOLDOWN)) return;
-
         LivingEntity entity = event.getEntity();
+        Entity attacker = source.getEntity();
 
-        INVUL_TIME = 0;
-        if (source.is(ModDamageTypeTags.MELEE)) {
-            INVUL_TIME = source.is(ModDamageTypeTags.PLAYER_MELEE) ? 8 : 3;
-        } else if (source.is(DamageTypes.WITHER) || source.is(DamageTypeTags.IS_FIRE)) {
-            INVUL_TIME = 8;
+        int finalIFrames = -1;
+
+//        ADJCore.LOGGER.info("Handling damage event: source={}, entity={}, attacker={}",
+//                source.type().msgId(),
+//                entity.getType(),
+//                attacker != null ? ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()) : "none");
+
+        for (String id : IFRAMES.keySet()) {
+            IFrameConfig cfg = IFRAMES.get(id);
+//            ADJCore.LOGGER.info("Checking config entry: {}", id);
+
+            if (id.startsWith("#")) {
+                TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
+                if (source.is(damageTypeTag)) {
+                    finalIFrames = cfg.iframes;
+//                    ADJCore.LOGGER.info("Matched tag {} with base iframes={}", id, finalIFrames);
+
+                    if (attacker != null) {
+                        String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
+                        if (cfg.overrides.containsKey(attackerId)) {
+                            finalIFrames = cfg.overrides.get(attackerId);
+//                            ADJCore.LOGGER.info("Applied override for attacker {} -> iframes={}", attackerId, finalIFrames);
+                        }
+                    }
+                }
+            } else {
+                if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
+                    finalIFrames = cfg.iframes;
+//                    ADJCore.LOGGER.info("Matched damage type {} with base iframes={}", id, finalIFrames);
+
+                    if (attacker != null) {
+                        String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
+                        if (cfg.overrides.containsKey(attackerId)) {
+                            finalIFrames = cfg.overrides.get(attackerId);
+//                            ADJCore.LOGGER.info("Applied override for attacker {} -> iframes={}", attackerId, finalIFrames);
+                        }
+                    }
+                    break;
+                }
+            }
         }
 
-        setInvulTime(entity, INVUL_TIME);
+        if (finalIFrames >= 0) {
+//            ADJCore.LOGGER.info("Setting invulnerability time for {} -> {}", entity.getName().getString(), finalIFrames);
+            INVUL_TIME = finalIFrames;
+            setInvulTime(entity, INVUL_TIME);
+        } // else {
+//            ADJCore.LOGGER.info("No iframe config matched for this damage event.");
+//        }
     }
+
 
     private static float getValue(LivingEntity entity, Attribute attribute) {
         AttributeInstance instance = entity.getAttribute(attribute);
@@ -102,12 +149,27 @@ public class DamageHandler {
 
     public static void loadConfig() {
         Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Double>>() {}.getType();
+        Type type = new TypeToken<Map<String, Double>>() {
+        }.getType();
 
         if (!Files.exists(Path.of(PATH))) return;
 
         try (FileReader reader = new FileReader(PATH)) {
             MULTIPLIERS = gson.fromJson(reader, type);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void loadIFrameConfig() {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, IFrameConfig>>() {
+        }.getType();
+
+        if (!Files.exists(Path.of(IFRAMES_PATH))) return;
+
+        try (FileReader reader = new FileReader(IFRAMES_PATH)) {
+            IFRAMES = gson.fromJson(reader, type);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -181,5 +243,10 @@ public class DamageHandler {
 
         // 4. Ensure minimum damage for bypass types
         event.setAmount(Math.max(Math.round(finalAmount), MIN_DAMAGE.get()));
+    }
+
+    public static class IFrameConfig {
+        public int iframes;
+        public Map<String, Integer> overrides = new HashMap<>();
     }
 }

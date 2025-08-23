@@ -60,8 +60,7 @@
 		"music.MusicManagerAccessor",
 		"music.MusicManagerMixin",
 		"music.MusicMixin",
-		"music.SoundEngineMixin",
-		"music.SoundManagerMixin"
+		"music.SoundEngineMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
