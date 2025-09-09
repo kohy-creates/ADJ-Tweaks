@@ -22,6 +22,7 @@ import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
+import xyz.kohara.adjcore.misc.biomemodifiers.ModBiomeModifiers;
 import xyz.kohara.adjcore.music.JukeboxTracker;
 import xyz.kohara.adjcore.music.MusicConfig;
 import xyz.kohara.adjcore.networking.ModMessages;
@@ -53,6 +54,7 @@ public class ADJCore {
         ModAttributes.register(MOD_BUS);
         MusicConfig.load(MOD_BUS);
         JukeboxTracker.init();
+        ModBiomeModifiers.register(MOD_BUS);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
