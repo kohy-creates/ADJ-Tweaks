@@ -3,6 +3,7 @@ package xyz.kohara.adjcore.mixins.enchantments;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.EnderEyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.enchantment.DamageEnchantment;
@@ -43,13 +44,13 @@ public class SharpnessMixin extends Enchantment {
         cir.cancel();
         DamageEnchantment enchantment = (DamageEnchantment) (Object) this;
         if (enchantment.type == 0) {
-            float amount = 6F + 4F * (level - 1);
+            float amount = 2.5F + 1.5F * (level - 1);
             cir.setReturnValue(amount);
         } else if (enchantment.type == 1 && type == MobType.UNDEAD) {
-            float amount = 9F + 5F * (level - 1);
+            float amount = 3F + 2F * (level - 1);
             cir.setReturnValue(amount);
         } else {
-            float amount = 9F + 5F * (level - 1);
+            float amount = 3F + 2F * (level - 1);
             cir.setReturnValue(enchantment.type == 2 && type == MobType.ARTHROPOD ? amount : 0.0F);
         }
     }

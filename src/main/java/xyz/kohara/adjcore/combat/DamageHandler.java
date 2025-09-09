@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -132,15 +133,13 @@ public class DamageHandler {
             }
         }
 
-        if (finalIFrames >= 0) {
-//            ADJCore.LOGGER.info("Setting invulnerability time for {} -> {}", entity.getName().getString(), finalIFrames);
-            INVUL_TIME = finalIFrames;
-            setInvulTime(entity, INVUL_TIME);
-        } // else {
-//            ADJCore.LOGGER.info("No iframe config matched for this damage event.");
-//        }
-    }
+        if (finalIFrames < 0) {
+            finalIFrames = 10;
+        }
 
+        INVUL_TIME = finalIFrames;
+        setInvulTime(entity, INVUL_TIME);
+    }
 
     private static float getValue(LivingEntity entity, Attribute attribute) {
         AttributeInstance instance = entity.getAttribute(attribute);

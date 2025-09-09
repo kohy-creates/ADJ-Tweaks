@@ -47,7 +47,7 @@ public abstract class MobEffectMixin {
             }
         } else if ((effect != MobEffects.HEAL || livingEntity.isInvertedHealAndHarm()) && (effect != MobEffects.HARM || !livingEntity.isInvertedHealAndHarm())) {
             if (effect == MobEffects.HARM && !livingEntity.isInvertedHealAndHarm() || effect == MobEffects.HEAL && livingEntity.isInvertedHealAndHarm()) {
-                int damage = 80 + 40 * amplifier;
+                int damage = 30 + 20 * amplifier;
                 livingEntity.hurt(livingEntity.damageSources().magic(), damage);
             }
         } else {
@@ -68,7 +68,7 @@ public abstract class MobEffectMixin {
             if ((effect == MobEffects.HARM && !livingEntity.isInvertedHealAndHarm()) ||
                     (effect == MobEffects.HEAL && livingEntity.isInvertedHealAndHarm())) {
 
-                int damage = 80 + 40 * amplifier;
+                int damage = 30 + 20 * amplifier;
 
                 if (source == null) {
                     livingEntity.hurt(livingEntity.damageSources().magic(), damage);

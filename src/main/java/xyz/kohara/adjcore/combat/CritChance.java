@@ -33,7 +33,7 @@ public class CritChance {
             AttributeModifier modifier = new AttributeModifier(
                     CRIT_CHANCE_MODIFIER,
                     "Level based crit chance",
-                    scaleWithExperience(player, 3),
+                    scaleWithExperience(player, 5),
                     AttributeModifier.Operation.ADDITION
             );
             crChance.addTransientModifier(modifier);
