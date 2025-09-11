@@ -1,7 +1,15 @@
 package xyz.kohara.adjcore;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -14,6 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.confluence.mod.event.PlayerEvents;
 import xyz.kohara.adjcore.attributes.ModAttributes;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.critevent.ApothCritStrikeEvent;
@@ -72,5 +81,34 @@ public class ADJCore {
             CriticalHitEvent e = new CriticalHitEvent(player, event.victim, event.multiplier, false);
             MinecraftForge.EVENT_BUS.post(e);
         }
+    }
+
+    public static Component formatDeathMessage(Component deathMessage) {
+        return Component.empty()
+                .append(Component.literal("s").withStyle(Style.EMPTY.withFont(ResourceLocation.parse("adjcore:icons"))))
+                .append(Component.literal(" "))
+                .append(deathMessage.copy().withStyle(Style.EMPTY.withColor(TextColor.parseColor("#FF1919"))));
+    }
+
+    @SubscribeEvent
+    public void onServerChat(ServerChatEvent event) {
+        event.setCanceled(true);
+
+        Component message = event.getMessage();
+        ServerPlayer player = event.getPlayer();
+        MinecraftServer server = player.getServer();
+
+        Component newMessage = Component.empty()
+                .append(Component.literal("c").withStyle(Style.EMPTY.withFont(ResourceLocation.parse("adjcore:icons"))))
+                .append(Component.literal(" [").withStyle(Style.EMPTY.withColor(TextColor.parseColor("#8A8A8A"))))
+                .append(player.getName())
+                .append(Component.literal("] » ").withStyle(Style.EMPTY.withColor(TextColor.parseColor("#8A8A8A"))))
+                .append(message);
+
+        server.getPlayerList().getPlayers().forEach(serverPlayer -> {
+            if (serverPlayer.acceptsChatMessages()) {
+                serverPlayer.sendSystemMessage(newMessage);
+            }
+        });
     }
 }

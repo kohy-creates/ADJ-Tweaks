@@ -1,6 +1,7 @@
 package xyz.kohara.adjcore.mixins.music;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.BiomeAmbientSoundsHandler;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
@@ -106,8 +107,8 @@ public abstract class MusicManagerMixin {
         if (currentMusic != null && !MusicPlayer.isFadingOut) {
             ci.cancel();
             MusicPlayer.isFadingOut = true;
-            System.out.println(this.currentMusic);
-            //ADJCore.LOGGER.info("Cancelling stopPlaying and starting fade out.");
+//            System.out.println(this.currentMusic);
+//            ADJCore.LOGGER.info("Cancelling stopPlaying and starting fade out.");
         }
     }
 

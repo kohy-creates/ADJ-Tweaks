@@ -1,0 +1,31 @@
+{
+	"providers": [
+		{
+			"type": "bitmap",
+			"file": "adjcore:text/skull.png",
+			"ascent": 8,
+			"height": 8,
+			"chars": [
+				"s"
+			]
+		},
+		{
+			"type": "bitmap",
+			"file": "adjcore:text/chat.png",
+			"ascent": 8,
+			"height": 8,
+			"chars": [
+				"c"
+			]
+		},
+		{
+			"type": "bitmap",
+			"file": "adjcore:text/spawnpoint.png",
+			"ascent": 8,
+			"height": 8,
+			"chars": [
+				"p"
+			]
+		}
+	]
+}

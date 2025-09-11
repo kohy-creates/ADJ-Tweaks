@@ -54,12 +54,12 @@ public abstract class MusicMixin {
         return false;
     }
 
-    @Redirect(
-            method = "tick",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundManager;tick(Z)V")
-    )
-    private void alwaysTickSoundManager(SoundManager instance, boolean isGamePaused) {
-        Minecraft mc = (Minecraft) (Object) this;
-        instance.tick(mc.player == null);
-    }
+//    @Redirect(
+//            method = "tick",
+//            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundManager;tick(Z)V")
+//    )
+//    private void alwaysTickSoundManager(SoundManager instance, boolean isGamePaused) {
+//        Minecraft mc = (Minecraft) (Object) this;
+//        instance.tick(mc.player == null);
+//    }
 }

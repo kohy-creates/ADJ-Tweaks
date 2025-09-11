@@ -10,3 +10,4 @@ accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScr
 accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen imageWidth I
 accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraft/client/Minecraft;
 accessible method net/minecraft/client/sounds/SoundEngine getVolume (Lnet/minecraft/sounds/SoundSource;)F
+accessible method net/minecraft/server/level/ServerPlayer acceptsChatMessages ()Z

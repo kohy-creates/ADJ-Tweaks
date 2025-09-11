@@ -18,6 +18,8 @@
 		"blocks.FlowerPotPlantSoundMixin",
 		"blocks.JukeboxDiscSoundMixin",
 		"client.ArmorTrimMixin",
+		"death.DeathMessageTameableAnimal",
+		"effect.AbsorptionEffectMixin",
 		"effect.MobEffectAccessor",
 		"effect.MobEffectInstanceAccessor",
 		"effect.MobEffectMixin",
@@ -45,6 +47,7 @@
 		"items.ExtraFortune",
 		"items.ItemStackMixin",
 		"items.LeadAttachSoundMixin",
+		"items.MagicMirrorMixin",
 		"items.MinecartPlaceSoundMixin",
 		"items.ShieldSoundsMixin",
 		"items.SpawnEggUseSoundMixin",
@@ -53,6 +56,7 @@
 		"music.JukeboxHandler"
 	],
 	"client": [
+		"client.CloudHeightMixin",
 		"client.EffectInventoryScreenMixin",
 		"client.GuiMixin",
 		"items.buildtool.BuildToolOverlayMixin",
