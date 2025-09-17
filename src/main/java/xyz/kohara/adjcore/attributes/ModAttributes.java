@@ -3,6 +3,7 @@ package xyz.kohara.adjcore.attributes;
 import dev.shadowsoffire.attributeslib.impl.PercentBasedAttribute;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

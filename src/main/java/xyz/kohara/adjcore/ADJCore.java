@@ -7,9 +7,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -51,6 +55,7 @@ public class ADJCore {
         IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
         MOD_BUS.addListener(this::commonSetup);
         MOD_BUS.addListener(this::clientSetup);
+        MOD_BUS.addListener(this::addEntityAttributes);
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
@@ -110,5 +115,13 @@ public class ADJCore {
                 serverPlayer.sendSystemMessage(newMessage);
             }
         });
+    }
+
+    public void addEntityAttributes(EntityAttributeModificationEvent event) {
+        for (EntityType<? extends LivingEntity> type : event.getTypes()) {
+//            System.out.println("Parsing entity type " + type);
+            event.add(type, ModAttributes.DAMAGE_REDUCTION.get());
+            event.add(type, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+        }
     }
 }

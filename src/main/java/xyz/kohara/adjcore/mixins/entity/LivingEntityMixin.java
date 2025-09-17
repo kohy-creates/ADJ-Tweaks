@@ -85,13 +85,13 @@ public abstract class LivingEntityMixin implements KnockbackCooldown {
         }
     }
 
-    @ModifyExpressionValue(
-            method = "createLivingAttributes",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier;builder()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;")
-    )
-    private static AttributeSupplier.Builder modifyExpressionValueAtBuilder(AttributeSupplier.Builder original) {
-        return original
-                .add(ModAttributes.DAMAGE_REDUCTION.get())
-                .add(ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
-    }
+//    @ModifyExpressionValue(
+//            method = "createLivingAttributes",
+//            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier;builder()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;")
+//    )
+//    private static AttributeSupplier.Builder modifyExpressionValueAtBuilder(AttributeSupplier.Builder original) {
+//        return original
+//                .add(ModAttributes.DAMAGE_REDUCTION.get())
+//                .add(ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+//    }
 }

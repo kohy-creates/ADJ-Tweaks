@@ -45,7 +45,7 @@ public class EffectsEditor {
                     String[] entry = s.split(";");
                     Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(entry[0]));
 
-                    UUID uuid = UUID.nameUUIDFromBytes(attribute.toString().getBytes());
+                    UUID uuid = UUID.nameUUIDFromBytes(effect.getDescriptionId().getBytes());
                     AttributeModifier modifier = new AttributeModifier(
                             uuid,
                             effect.getDescriptionId(),
