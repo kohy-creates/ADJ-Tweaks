@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.kohara.adjcore.music.JukeboxTracker;
 
 @Mixin(JukeboxBlockEntity.class)
-public class JukeboxHandler {
+public class JukeboxHandlerClient {
 
-    @Inject(method = "stopPlaying", at = @At(value = "HEAD"))
-    private void onStopPlaying(CallbackInfo ci) {
+    @Inject(method = "setItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/JukeboxBlockEntity;startPlaying()V"))
+    private void onStartPlaying(int slot, ItemStack stack, CallbackInfo ci) {
         JukeboxBlockEntity jbe = (JukeboxBlockEntity) (Object) this;
-        JukeboxTracker.onJukeboxStop(jbe.getBlockPos());
+        JukeboxTracker.onJukeboxPlay(jbe.getLevel(), Minecraft.getInstance(), jbe.getBlockPos());
     }
 }

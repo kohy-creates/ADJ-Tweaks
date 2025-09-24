@@ -90,6 +90,9 @@ repositories {
     maven { url = "https://packages.aether-mod.net/Emissivity" }
     maven { url = "https://packages.aether-mod.net/Treasure-Reforging" }
     maven { url = "https://packages.aether-mod.net/Protect-Your-Moa" }
+
+    maven { url = "https://maven.bawnorton.com/releases" }
+
 }
 
 
@@ -127,6 +130,10 @@ dependencies {
 
     modImplementation("com.teamabnormals:blueprint:1.20.1-7.1.3")
     modImplementation("curse.maven:heart-crystals-947411:6811770")
+
+    compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.5-beta.2"))
+    implementation(include("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.5-beta.2"))
+
 
     //modImplementation "com.aetherteam.aether:aether:${project.aether_version}"
 }

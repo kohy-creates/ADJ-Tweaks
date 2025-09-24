@@ -1,7 +1,6 @@
 package xyz.kohara.adjcore.curio;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -9,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -37,6 +36,8 @@ public class CurioControl {
     public static void onCurioEquipEvent(CurioEquipEvent event) {
 
         LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) return;
+
         Optional<ICuriosItemHandler> curios = CuriosApi.getCuriosInventory(entity).resolve();
 
         if (curios.isEmpty()) return;
@@ -48,6 +49,8 @@ public class CurioControl {
         }
 
         // Exclusions
+        if (EXCLUSION_LIST == null) generateExclusions();
+
         for (ICurioStacksHandler curioStacksHandler : curios.get().getCurios().values()) {
             IDynamicStackHandler stackHandler = curioStacksHandler.getStacks();
             for (int i = 0; i < stackHandler.getSlots(); i++) {
@@ -58,6 +61,7 @@ public class CurioControl {
                         return;
                     }
                 }
+
             }
         }
     }
@@ -76,29 +80,28 @@ public class CurioControl {
     }
 
     @SubscribeEvent
-    public static void onServerStarted(ServerStartedEvent event) {
-        Registry<Item> itemRegistry = BuiltInRegistries.ITEM;
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        generateExclusions();
+    }
+
+//    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
+//            Config.SOULBOUND_FOR_CURIOS.get()
+//    ));
+
+    @SubscribeEvent
+    public static void keepCurios(DropRulesEvent event) {
+        event.addOverride(i -> true, ICurio.DropRule.ALWAYS_KEEP);
+    }
+
+
+    public static void generateExclusions() {
         List<TagKey<Item>> exclusionList = new ArrayList<>();
         // Loop through all tags and create an exclusion list
-        for (TagKey<Item> tagKey : itemRegistry.getTags().map(Pair::getFirst).collect(Collectors.toSet())) {
+        for (TagKey<Item> tagKey : BuiltInRegistries.ITEM.getTags().map(Pair::getFirst).collect(Collectors.toSet())) {
             if (tagKey.location().toString().indexOf(ADJCore.MOD_ID + ":curio_exclusions/") == 0) {
                 exclusionList.add(tagKey);
             }
         }
-        setExclusionList(exclusionList);
-    }
-
-    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
-            Config.SOULBOUND_FOR_CURIOS.get()
-    ));
-
-    @SubscribeEvent
-    public static void soulboundCurio(DropRulesEvent event) {
-        event.addOverride(i -> i.getEnchantmentLevel(CURIO_SOULBOUND) > 0, ICurio.DropRule.ALWAYS_KEEP);
-    }
-
-
-    public static void setExclusionList(List<TagKey<Item>> exclusionList) {
         EXCLUSION_LIST = exclusionList;
     }
 }

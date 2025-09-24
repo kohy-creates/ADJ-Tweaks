@@ -64,7 +64,8 @@
 		"music.MusicManagerAccessor",
 		"music.MusicManagerMixin",
 		"music.MusicMixin",
-		"music.SoundEngineMixin"
+		"music.SoundEngineMixin",
+		"music.JukeboxHandlerClient"
 	],
 	"injectors": {
 		"defaultRequire": 1

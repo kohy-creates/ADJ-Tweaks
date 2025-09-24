@@ -6,16 +6,11 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -26,10 +21,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.confluence.mod.event.PlayerEvents;
 import xyz.kohara.adjcore.attributes.ModAttributes;
 import xyz.kohara.adjcore.combat.DamageHandler;
-import xyz.kohara.adjcore.combat.critevent.ApothCritStrikeEvent;
 import xyz.kohara.adjcore.curio.CurioControl;
 import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
@@ -80,13 +73,13 @@ public class ADJCore {
     private void clientSetup(final FMLClientSetupEvent event) {
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onApothicCrit(ApothCritStrikeEvent event) {
-        if (event.attacker instanceof Player player) {
-            CriticalHitEvent e = new CriticalHitEvent(player, event.victim, event.multiplier, false);
-            MinecraftForge.EVENT_BUS.post(e);
-        }
-    }
+//    @SubscribeEvent(priority = EventPriority.HIGHEST)
+//    public void onApothicCrit(ADJHurtEvent event) {
+//        if (event.attacker instanceof Player player) {
+//            CriticalHitEvent e = new CriticalHitEvent(player, event.victim, event.multiplier, false);
+//            MinecraftForge.EVENT_BUS.post(e);
+//        }
+//    }
 
     public static Component formatDeathMessage(Component deathMessage) {
         return Component.empty()
