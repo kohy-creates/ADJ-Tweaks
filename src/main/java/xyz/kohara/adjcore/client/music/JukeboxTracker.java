@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.music;
+package xyz.kohara.adjcore.client.music;
 
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;

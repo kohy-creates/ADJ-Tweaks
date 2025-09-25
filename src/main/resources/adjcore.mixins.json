@@ -9,6 +9,7 @@
 		"HCEventsMixin",
 		"HeartCrystalItemMixin",
 		"InventoryMixin",
+		"KeyboardHandlerMixin",
 		"TerraCurioEntityMixinFix",
 		"TerraCurioNukeJEIDescriptions",
 		"blocks.BlockSoundsMixin",
@@ -61,11 +62,11 @@
 		"client.GuiMixin",
 		"items.buildtool.BuildToolOverlayMixin",
 		"items.buildtool.BuildToolRendererMixin",
+		"music.JukeboxHandlerClient",
 		"music.MusicManagerAccessor",
 		"music.MusicManagerMixin",
 		"music.MusicMixin",
-		"music.SoundEngineMixin",
-		"music.JukeboxHandlerClient"
+		"music.SoundEngineMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

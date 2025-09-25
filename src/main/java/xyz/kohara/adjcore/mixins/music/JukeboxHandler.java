@@ -1,13 +1,11 @@
 package xyz.kohara.adjcore.mixins.music;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.kohara.adjcore.music.JukeboxTracker;
+import xyz.kohara.adjcore.client.music.JukeboxTracker;
 
 @Mixin(JukeboxBlockEntity.class)
 public class JukeboxHandler {

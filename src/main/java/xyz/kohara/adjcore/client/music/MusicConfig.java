@@ -1,14 +1,12 @@
-package xyz.kohara.adjcore.music;
+package xyz.kohara.adjcore.client.music;
 
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
 
 import java.io.IOException;
@@ -20,7 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 public class MusicConfig {
 

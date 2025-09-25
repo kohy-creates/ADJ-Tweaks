@@ -7,6 +7,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.networking.packet.ChangeLoadOutC2SPacket;
 import xyz.kohara.adjcore.networking.packet.EmiReloadS2CPacket;
 
 public class ModMessages {
@@ -31,6 +32,12 @@ public class ModMessages {
                 .decoder(EmiReloadS2CPacket::new)
                 .encoder(EmiReloadS2CPacket::toBytes)
                 .consumerMainThread(EmiReloadS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(ChangeLoadOutC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ChangeLoadOutC2SPacket::new)
+                .encoder(ChangeLoadOutC2SPacket::toBytes)
+                .consumerMainThread(ChangeLoadOutC2SPacket::handle)
                 .add();
     }
 

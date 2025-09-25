@@ -1,13 +1,11 @@
 package xyz.kohara.adjcore.mixins.music;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.BiomeAmbientSoundsHandler;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.spongepowered.asm.mixin.Final;
@@ -17,8 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.music.MusicPlayer;
+import xyz.kohara.adjcore.client.music.MusicPlayer;
 
 import javax.annotation.Nullable;
 
