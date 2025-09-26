@@ -58,6 +58,7 @@
 	],
 	"client": [
 		"client.CloudHeightMixin",
+		"client.DeathScreenMixin",
 		"client.EffectInventoryScreenMixin",
 		"client.GuiMixin",
 		"items.buildtool.BuildToolOverlayMixin",

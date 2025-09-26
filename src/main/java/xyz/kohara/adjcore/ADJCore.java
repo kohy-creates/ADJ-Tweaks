@@ -28,12 +28,21 @@ import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
+import xyz.kohara.adjcore.misc.ModCapabilities;
 import xyz.kohara.adjcore.misc.biomemodifiers.ModBiomeModifiers;
 import xyz.kohara.adjcore.client.music.JukeboxTracker;
 import xyz.kohara.adjcore.client.music.MusicConfig;
+import xyz.kohara.adjcore.misc.capabilities.CapabilityEvents;
 import xyz.kohara.adjcore.networking.ModMessages;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.sounds.ModSoundEvents;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 @Mod(ADJCore.MOD_ID)
 public class ADJCore {
@@ -49,12 +58,14 @@ public class ADJCore {
         MOD_BUS.addListener(this::commonSetup);
         MOD_BUS.addListener(this::clientSetup);
         MOD_BUS.addListener(this::addEntityAttributes);
+        MOD_BUS.addListener(ModCapabilities::register);
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
         MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
         MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
         MinecraftForge.EVENT_BUS.register(CurioControl.class);
+        MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
@@ -112,9 +123,32 @@ public class ADJCore {
 
     public void addEntityAttributes(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> type : event.getTypes()) {
-//            System.out.println("Parsing entity type " + type);
             event.add(type, ModAttributes.DAMAGE_REDUCTION.get());
             event.add(type, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
         }
+    }
+
+    private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";
+    private static final List<String> deathTexts = new ArrayList<>();
+
+    static {
+        File config = new File(deathTextsFile);
+        try {
+            if (!config.exists()) {
+                config.createNewFile();
+            }
+            Scanner reader = new Scanner(config);
+            while (reader.hasNextLine()) {
+                String mixin = reader.nextLine();
+                deathTexts.add(mixin);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getRandomDeathText() {
+        Random rand = new Random();
+        return "\"" + deathTexts.get(rand.nextInt(deathTexts.size())) + "\"";
     }
 }

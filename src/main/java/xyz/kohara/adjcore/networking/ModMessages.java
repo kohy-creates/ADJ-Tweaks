@@ -9,6 +9,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.networking.packet.ChangeLoadOutC2SPacket;
 import xyz.kohara.adjcore.networking.packet.EmiReloadS2CPacket;
+import xyz.kohara.adjcore.networking.packet.ShowRainbowMessageS2CPacket;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -32,6 +33,12 @@ public class ModMessages {
                 .decoder(EmiReloadS2CPacket::new)
                 .encoder(EmiReloadS2CPacket::toBytes)
                 .consumerMainThread(EmiReloadS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(ShowRainbowMessageS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ShowRainbowMessageS2CPacket::new)
+                .encoder(ShowRainbowMessageS2CPacket::toBytes)
+                .consumerMainThread(ShowRainbowMessageS2CPacket::handle)
                 .add();
 
         net.messageBuilder(ChangeLoadOutC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)

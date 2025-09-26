@@ -1,9 +1,13 @@
 package xyz.kohara.adjcore.entity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -15,6 +19,10 @@ import net.minecraft.world.phys.AABB;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+import xyz.kohara.adjcore.misc.ModCapabilities;
+import xyz.kohara.adjcore.misc.capabilities.IPlayerLoadouts;
+import xyz.kohara.adjcore.networking.ModMessages;
+import xyz.kohara.adjcore.networking.packet.ShowRainbowMessageS2CPacket;
 
 import java.util.Map;
 import java.util.Optional;
@@ -29,29 +37,31 @@ public class PlayerLoadouts {
     );
 
     public static void changeLoadout(ServerPlayer player, int targetLoadout) {
-        CompoundTag pData = player.getPersistentData();
-        int currentLoadout = pData.getInt("adj.current_loadout");
-        if (currentLoadout == 0) {
-            pData.putInt("adj.current_loadout", 1);
-            currentLoadout = 1;
-        }
-        if (currentLoadout == targetLoadout) {
-            return;
-        }
+        player.getCapability(ModCapabilities.PLAYER_LOADOUTS).ifPresent(loadouts -> {
+            int currentLoadout = loadouts.getCurrentLoadout();
 
-        saveCurrentLoadout(pData, loadoutID(currentLoadout), player);
-        setPlayerEquipment(getOrCreateLoadout(pData, loadoutID(targetLoadout)), player);
-        pData.putInt("adj.current_loadout", targetLoadout);
-        playSFX(player);
+            if (currentLoadout == 0) {
+                loadouts.setCurrentLoadout(1);
+                currentLoadout = 1;
+            }
+            if (currentLoadout == targetLoadout) {
+                return;
+            }
 
+            saveCurrentLoadout(loadouts, loadoutID(currentLoadout), player);
+            setPlayerEquipment(getOrCreateLoadout(loadouts, loadoutID(targetLoadout)), player);
+            loadouts.setCurrentLoadout(targetLoadout);
+            playSFX(player, targetLoadout);
+        });
     }
 
     private static String loadoutID(int i) {
         return "adj.loadout_" + i;
     }
 
-    private static CompoundTag getOrCreateLoadout(CompoundTag parent, String key) {
-        if (!parent.contains(key, Tag.TAG_COMPOUND)) {
+    private static CompoundTag getOrCreateLoadout(IPlayerLoadouts loadouts, String key) {
+        CompoundTag existing = loadouts.getLoadout(key);
+        if (existing.isEmpty()) {
             CompoundTag loadout = new CompoundTag();
 
             CompoundTag emptyItem = ItemStack.EMPTY.save(new CompoundTag());
@@ -63,13 +73,13 @@ public class PlayerLoadouts {
 
             loadout.put("curios", new ListTag());
 
-            parent.put(key, loadout);
+            loadouts.setLoadout(key, loadout);
             return loadout;
         }
-        return parent.getCompound(key);
+        return existing;
     }
 
-    private static void saveCurrentLoadout(CompoundTag parent, String key, ServerPlayer player) {
+    private static void saveCurrentLoadout(IPlayerLoadouts parent, String key, ServerPlayer player) {
         CompoundTag loadout = new CompoundTag();
 
 
@@ -99,7 +109,7 @@ public class PlayerLoadouts {
         }));
         loadout.put("curios", curiosList);
 
-        parent.put(key, loadout);
+        parent.setLoadout(key, loadout);
     }
 
     private static void setPlayerEquipment(CompoundTag loadoutData, ServerPlayer player) {
@@ -136,11 +146,13 @@ public class PlayerLoadouts {
         }
     }
 
-    private static void playSFX(ServerPlayer player) {
+    private static void playSFX(ServerPlayer player, int loadout) {
         RandomSource random = player.level().random;
 
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.HORSE_ARMOR, SoundSource.PLAYERS, 0.8F, 0.8f + random.nextFloat() * 0.4F);
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEASH_KNOT_PLACE, SoundSource.PLAYERS, 0.5F, 0.8f + random.nextFloat() * 0.4F);
+
+        ModMessages.sendToPlayer(new ShowRainbowMessageS2CPacket(Component.literal("Switched active loadout to Loadout " + loadout)), player);
 
         AABB box = player.getBoundingBox();
 
