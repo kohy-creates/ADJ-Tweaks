@@ -1,0 +1,10 @@
+{
+	"death_screen": {
+		"sounds": [
+			{
+				"name": "adjcore:death_screen",
+				"volume": 0.5
+			}
+		]
+	}
+}

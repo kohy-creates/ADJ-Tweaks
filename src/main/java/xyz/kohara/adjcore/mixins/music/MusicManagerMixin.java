@@ -29,10 +29,14 @@ public abstract class MusicManagerMixin {
     @Nullable
     private SoundInstance currentMusic;
 
-    @Shadow private int nextSongDelay;
-    @Shadow @Final private RandomSource random;
+    @Shadow
+    private int nextSongDelay;
+    @Shadow
+    @Final
+    private RandomSource random;
 
-    @Shadow public abstract void startPlaying(Music selector);
+    @Shadow
+    public abstract void startPlaying(Music selector);
 
     // Custom field to track volume from 1.0 down to 0 and back
     @Unique
@@ -82,7 +86,9 @@ public abstract class MusicManagerMixin {
 
         Music music = this.minecraft.getSituationalMusic();
         if (this.currentMusic != null) {
-            if (!music.getEvent().value().getLocation().equals(this.currentMusic.getLocation()) && music.replaceCurrentMusic()) {
+            if (music != null
+                    && !music.getEvent().value().getLocation().equals(this.currentMusic.getLocation())
+                    && music.replaceCurrentMusic()) {
                 this.minecraft.getSoundManager().stop(this.currentMusic);
                 this.nextSongDelay = Mth.nextInt(this.random, 0, music.getMinDelay() / 2);
             }

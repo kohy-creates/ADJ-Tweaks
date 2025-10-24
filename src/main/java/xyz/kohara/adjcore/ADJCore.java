@@ -13,6 +13,7 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -33,19 +34,22 @@ import xyz.kohara.adjcore.misc.biomemodifiers.ModBiomeModifiers;
 import xyz.kohara.adjcore.client.music.JukeboxTracker;
 import xyz.kohara.adjcore.client.music.MusicConfig;
 import xyz.kohara.adjcore.misc.capabilities.CapabilityEvents;
+import xyz.kohara.adjcore.misc.credits.LoaderInfo;
+import xyz.kohara.adjcore.misc.credits.ModCreditsBase;
+import xyz.kohara.adjcore.misc.credits.ModInfo;
+import xyz.kohara.adjcore.misc.placementmodifiertypes.ModPlacementModifierTypes;
 import xyz.kohara.adjcore.networking.ModMessages;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.sounds.ModSoundEvents;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 @Mod(ADJCore.MOD_ID)
 public class ADJCore {
+
+    public static ModCreditsBase impl = initModCredits();
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "adjcore";
@@ -71,6 +75,7 @@ public class ADJCore {
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
         ModAttributes.register(MOD_BUS);
         MusicConfig.load(MOD_BUS);
+        ModPlacementModifierTypes.register(MOD_BUS);
         JukeboxTracker.init();
         ModBiomeModifiers.register(MOD_BUS);
     }
@@ -84,13 +89,40 @@ public class ADJCore {
     private void clientSetup(final FMLClientSetupEvent event) {
     }
 
-//    @SubscribeEvent(priority = EventPriority.HIGHEST)
-//    public void onApothicCrit(ADJHurtEvent event) {
-//        if (event.attacker instanceof Player player) {
-//            CriticalHitEvent e = new CriticalHitEvent(player, event.victim, event.multiplier, false);
-//            MinecraftForge.EVENT_BUS.post(e);
-//        }
-//    }
+    private static ModCreditsBase initModCredits() {
+        return new ModCreditsBase() {
+            @Override
+            public List<ModInfo> getMods() {
+                List<ModInfo> mods = new ArrayList<>();
+
+                ModList.get().forEachModContainer((id, container) -> {
+                    if (!(id.equals("minecraft")
+                            || id.equals("forge")
+                            || id.startsWith("generated_"))) {
+                        String[] authors = new String[]{};
+                        Optional<Object> modAuthors = container.getModInfo().getConfig().getConfigElement("authors");
+                        if (modAuthors.isPresent())
+                            authors = modAuthors.get().toString().split("[,\\s]+");
+                        mods.add(new ModInfo(
+                                container.getModInfo().getDisplayName(),
+                                List.of(authors),
+                                container.getModId()
+                        ));
+                    }
+                });
+
+                return mods;
+            }
+
+            @Override
+            public LoaderInfo getLoaderInfo() {
+                return new LoaderInfo(
+                        "Forge Loader",
+                        "Forge",
+                        List.of("Forge Team"));
+            }
+        };
+    }
 
     public static Component formatDeathMessage(Component deathMessage) {
         return Component.empty()
@@ -150,5 +182,18 @@ public class ADJCore {
     public static String getRandomDeathText() {
         Random rand = new Random();
         return "\"" + deathTexts.get(rand.nextInt(deathTexts.size())) + "\"";
+    }
+
+    public static String toSmallUnicode(String s) {
+        Map<Character, Character> map = new HashMap<>();
+        String[] mappings = {"aᴀ", "bʙ", "cᴄ", "dᴅ", "eᴇ", "fꜰ", "gɢ", "hʜ", "iɪ", "jᴊ", "kᴋ", "lʟ", "mᴍ", "nɴ", "oᴏ", "pᴘ", "rʀ", "sѕ", "tᴛ", "uᴜ", "wᴡ", "xх", "yʏ", "zᴢ"};
+        for (String pair : mappings) {
+            map.put(pair.charAt(0), pair.charAt(1));
+        }
+        StringBuilder result = new StringBuilder();
+        for (char c : s.toLowerCase().toCharArray()) {
+            result.append(map.getOrDefault(c, c));
+        }
+        return result.toString();
     }
 }

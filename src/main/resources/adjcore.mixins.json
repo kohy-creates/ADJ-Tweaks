@@ -12,6 +12,7 @@
 		"KeyboardHandlerMixin",
 		"TerraCurioEntityMixinFix",
 		"TerraCurioNukeJEIDescriptions",
+		"ZombieAwarenessHardcoreMixin",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
@@ -57,10 +58,13 @@
 		"music.JukeboxHandler"
 	],
 	"client": [
+		"ars.GlyphCostMixin",
 		"client.CloudHeightMixin",
+		"client.CreditScreenMixin",
 		"client.DeathScreenMixin",
 		"client.EffectInventoryScreenMixin",
 		"client.GuiMixin",
+		"client.LogoRendererMixin",
 		"items.buildtool.BuildToolOverlayMixin",
 		"items.buildtool.BuildToolRendererMixin",
 		"music.JukeboxHandlerClient",

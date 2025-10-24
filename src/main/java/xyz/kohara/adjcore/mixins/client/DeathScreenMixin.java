@@ -1,17 +1,16 @@
 package xyz.kohara.adjcore.mixins.client;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.Level;
+import net.minecraft.sounds.SoundSource;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.sounds.ModSoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -70,9 +70,6 @@ public abstract class DeathScreenMixin extends Screen {
     private boolean adj$wasInFirstPerson = false;
 
     @Unique
-    private int adj$fadeTicks = 0;
-
-    @Unique
     private String adj$deathText;
 
     @Unique
@@ -102,7 +99,6 @@ public abstract class DeathScreenMixin extends Screen {
             }
         }
         adj$respawnTimer--;
-        adj$fadeTicks++;
     }
 
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
@@ -129,17 +125,22 @@ public abstract class DeathScreenMixin extends Screen {
         if (adj$wasInit) return;
         adj$wasInit = true;
 
-        adj$fadeTicks = 0;
-
         if (minecraft.options.getCameraType() == CameraType.FIRST_PERSON) {
             adj$wasInFirstPerson = true;
             minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK);
         }
 
         this.delayTicker = 0;
-        adj$respawnTimer = hardcore ? 1 : (minecraft.isSingleplayer()) ? 150 : 300;
+        adj$respawnTimer = hardcore ? 1 : (minecraft.isSingleplayer()) ? 140 : 300;
 
         adj$deathText = ADJCore.getRandomDeathText();
+        minecraft.getSoundManager().play(
+                SimpleSoundInstance.forUI(
+                        ModSoundEvents.DEATH_SCREEN.get(),
+                        1F,
+                        1F
+                )
+        );
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
@@ -175,6 +176,7 @@ public abstract class DeathScreenMixin extends Screen {
 //        }
 
         if (adj$respawnTimer > -1) {
+            guiGraphics.pose().pushPose();
             guiGraphics.pose().scale(2.0F, 2.0F, 2.0F);
 
             String timerString = String.valueOf((adj$respawnTimer / 20) + 1);

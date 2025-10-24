@@ -9,6 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
 
 public class ModBiomeModifiers {
+
     public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, ADJCore.MOD_ID);
 

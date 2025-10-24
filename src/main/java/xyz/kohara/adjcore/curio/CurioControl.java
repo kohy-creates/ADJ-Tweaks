@@ -73,7 +73,10 @@ public class CurioControl {
         Map<String, ISlotType> slots = CuriosApi.getPlayerSlots(event.getEntity());
         for (ISlotType slot : slots.values()) {
             String id = slot.getIdentifier();
-            if (!Objects.equals(id, ACCESSORY_SLOT) && !Objects.equals(id, "back")) { //why the fuck does that crash Backpacked
+            if (!Objects.equals(id, ACCESSORY_SLOT)
+                    && !Objects.equals(id, "back") //why the fuck does that crash Backpacked
+                    && !Objects.equals(id, "spellbook") //whoever wanted to use Iron's Spells you should thank me for actually doing this
+            ) {
                 CuriosApi.getSlotHelper().setSlotsForType(id, event.getEntity(), 0);
             }
         }
