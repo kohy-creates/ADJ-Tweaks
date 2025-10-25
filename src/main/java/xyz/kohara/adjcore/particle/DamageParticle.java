@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.FastColor;
+import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,10 +23,9 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
 
 import java.awt.*;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,39 +33,24 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DamageParticle extends Particle {
 
-    static {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        DF1 = new DecimalFormat("#.##", symbols);
-        DF2 = new DecimalFormat("#.#", symbols);
-    }
-
-    public static final DecimalFormat DF2;
-    public static final DecimalFormat DF1;
-
     private static final List<Float> POSITIONS = new ArrayList<>(Arrays.asList(0f, -0.25f, 0.12f, -0.12f, 0.25f));
 
     private final Font fontRenderer = Minecraft.getInstance().font;
 
     private final Component text;
     private final List<Color> color;
-    private float fadeout = -1;
-    private float prevFadeout = -1;
+    private float fadeout = 0;
+    private float prevFadeout = 0;
 
     //visual offset
     private float visualDY = 0;
-    private float prevVisualDY = 0;
     private float visualDX = 0;
-    private float prevVisualDX = 0;
 
     private final int type;
 
-    private final List<List<Color>> COLORS = List.of(
-            List.of(Color.decode("#F58E27"), Color.decode("#FAAE64")),
-            List.of(Color.decode("#9C0909"), Color.decode("#E33B3B")),
-            List.of(Color.decode("#3BE346"), Color.decode("#7EE686")),
-            List.of(Color.decode("#FF3300"), Color.decode("#FF7E42"))
-    );
+    private float maxRotation;
+    private float rotationSpeed;  // how fast it swings
+    private float rotation;
 
     public DamageParticle(ClientLevel clientLevel,
                           double x,
@@ -77,25 +61,46 @@ public class DamageParticle extends Particle {
                           double unused
     ) {
         super(clientLevel, x, y, z);
-        this.lifetime = 45;
-        this.type = (int) type;
 
+        this.lifetime = 45;
+
+        this.type = (int) type;
+        List<List<Color>> COLORS = List.of(
+                List.of(Color.decode("#F58E27"), Color.decode("#FAAE64")),
+                List.of(Color.decode("#9C0909"), Color.decode("#E33B3B")),
+                List.of(Color.decode("#3BE346"), Color.decode("#7EE686")),
+                List.of(Color.decode("#FF3300"), Color.decode("#FF7E42"))
+        );
         this.color = COLORS.get(this.type);
 
-        double number = Math.abs(amount);
         this.yd = 1;
 
+        int number = (int) Math.abs(amount);
         MutableComponent text = Component.literal(String.valueOf(number));
-        if (this.type == 4) {
+        if (this.type == 3) {
             text.append("!");
+            text.withStyle(Style.EMPTY.withBold(true));
         }
         this.text = text;
 
         this.xd = POSITIONS.get(ThreadLocalRandom.current().nextInt(POSITIONS.size()));
+
+        // speed of oscillation
+        this.rotationSpeed = 0.1f;
+
+        // Larger angles for crit hits
+        if (this.type == 3) {
+            this.maxRotation = 22.5f;
+            this.rotationSpeed *= 1.5f;
+        } else {
+            this.maxRotation = 15f;
+        }
     }
 
     @Override
     public void render(@NotNull VertexConsumer consumer, Camera camera, float partialTicks) {
+
+        RenderSystem.disableDepthTest();
 
         Vec3 cameraPos = camera.getPosition();
         float particleX = (float) (Mth.lerp(partialTicks, this.xo, this.x) - cameraPos.x());
@@ -115,18 +120,18 @@ public class DamageParticle extends Particle {
 
         double inc = Mth.clamp(distanceFromCam / 32f, 0, 5f);
 
-        // animation
-//        poseStack.translate(0, (1 + inc / 4f) * Mth.lerp(partialTicks, this.prevVisualDY, this.visualDY), 0);
         // rotate towards camera
 
         float fadeout = Mth.lerp(partialTicks, this.prevFadeout, this.fadeout);
 
-        float defScale = (this.type != 4) ? 0.0125f : 0.01f;
+        float defScale = (this.type == 3) ? 0.0125f : 0.01f;
         float scale = (float) (defScale * distanceFromCam);
         poseStack.mulPose(camera.rotation());
 
-        // animation
-//        poseStack.translate((1 + inc) * Mth.lerp(partialTicks, this.prevVisualDX, this.visualDX), 0, 0);
+        poseStack.translate(0, this.bbHeight / 2, 0); // move pivot to center
+        poseStack.mulPose(new Quaternionf().rotateZ((float) Math.toRadians(this.rotation)));
+        poseStack.translate(0, -this.bbHeight / 2, 0); // move back pivo
+
         // scale depending on distance so size remains the same
         poseStack.scale(-scale, -scale, scale);
         poseStack.translate(0, (4d * (1 - fadeout)), 0);
@@ -135,19 +140,17 @@ public class DamageParticle extends Particle {
 
         var buffer = Minecraft.getInstance().renderBuffers().bufferSource();
 
-        RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(770, 771, 1, 0);
 
         float x1 = 0.5f - fontRenderer.width(text) / 2f;
+        float y1 = 0.5f - fontRenderer.lineHeight;
 
         int color = flashColor(this.color.get(0), this.color.get(1));
-        fontRenderer.drawInBatch(text, x1,
-                0, color, false,
+        fontRenderer.drawInBatch(this.text, x1, y1, color, false,
                 poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
         poseStack.translate(1, 1, +0.03);
-        fontRenderer.drawInBatch(text, x1,
-                0, darken(color, 0.75d), false,
+        fontRenderer.drawInBatch(this.text, x1, y1, darken(color, 0.75d), false,
                 poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
 
         buffer.endBatch();
@@ -162,21 +165,33 @@ public class DamageParticle extends Particle {
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
+
+
+
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            float length = 6;
+            // save previous fadeout for smooth interpolation
             this.prevFadeout = this.fadeout;
-            this.fadeout = this.age > (lifetime - length) ? ((float) lifetime - this.age) / length : 1;
 
-            this.prevVisualDY = this.visualDY;
+            // symmetrical fade-in/out
+            float fadeOutLength = 6f; // how many ticks for fade-in and fade-out
+            float fadeInLength = 2f;
+            float fadeIn = Math.min(1f, this.age / fadeInLength);
+            float fadeOut = (this.age > (lifetime - fadeOutLength)) ? ((lifetime - this.age) / fadeOutLength) : 1f;
+
+            this.fadeout = fadeIn * fadeOut;
+
+            float oscillation = (float) Math.sin(this.age * this.rotationSpeed);
+            this.rotation = oscillation * maxRotation;
+
+            // movement update
             this.visualDY += (float) this.yd;
-            this.prevVisualDX = this.visualDX;
             this.visualDX += (float) this.xd;
 
-            if (Math.sqrt(Mth.square(this.visualDX * 1.5) + Mth.square(this.visualDY - 1)) < 1.9 - 1) {
-
-                this.yd = this.yd / 2;
+            // slow down movement near target
+            if (Math.sqrt(Mth.square(this.visualDX * 1.5) + Mth.square(this.visualDY - 1)) < 0.9) {
+                this.yd /= 2;
             } else {
                 this.yd = 0;
                 this.xd = 0;
@@ -184,30 +199,8 @@ public class DamageParticle extends Particle {
         }
     }
 
-    @Override
-    public @NotNull ParticleRenderType getRenderType() {
-        return ParticleRenderType.CUSTOM;
-    }
-
-
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class Factory implements ParticleProvider<SimpleParticleType> {
-        public Factory(SpriteSet spriteSet) {
-        }
-
-        @SubscribeEvent
-        public static void register(final RegisterParticleProvidersEvent event) {
-            event.registerSpriteSet(ModParticles.DAMAGE_PARTICLE.get(), Factory::new);
-        }
-
-        @Override
-        public Particle createParticle(@NotNull SimpleParticleType typeIn, @NotNull ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            return new DamageParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
-        }
-    }
-
     public int flashColor(Color c1, Color c2) {
-        float speed = 0.33f;
+        float speed = 0.56666f;
         float t = (float) ((Math.sin(this.age * speed) * 0.5f) + 0.5f);
 
         int r = (int) (c1.getRed()   + (c2.getRed()   - c1.getRed())   * t);
@@ -234,5 +227,27 @@ public class DamageParticle extends Particle {
         blue  = Math.max(0, Math.min(255, blue));
 
         return (alpha << 24) | (red << 16) | (green << 8) | blue;
+    }
+
+    @Override
+    public @NotNull ParticleRenderType getRenderType() {
+        return ParticleRenderType.CUSTOM;
+    }
+
+
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
+        public Factory(SpriteSet spriteSet) {
+        }
+
+        @SubscribeEvent
+        public static void register(final RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(ModParticles.DAMAGE_PARTICLE.get(), Factory::new);
+        }
+
+        @Override
+        public Particle createParticle(@NotNull SimpleParticleType typeIn, @NotNull ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new DamageParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
+        }
     }
 }

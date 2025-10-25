@@ -18,10 +18,15 @@ public class DamageIndicators {
                                float amount,
                                int type
     ) {
-        entity.level().getServer().getPlayerList().getPlayers().forEach(serverPlayer ->
-                ModMessages.sendToPlayer(new DamageIndicatorS2CPacket(x, y, z, amount, type), serverPlayer)
-        );
+        double maxDistance = 48;
+
+        entity.level().getServer().getPlayerList().getPlayers().forEach(serverPlayer -> {
+            if (serverPlayer.distanceToSqr(entity) <= Math.pow(maxDistance, 2)) {
+                ModMessages.sendToPlayer(new DamageIndicatorS2CPacket(x, y, z, amount, type), serverPlayer);
+            }
+        });
     }
+
 
     private double particleOffset(double base) {
         double offset = 0.5d;
@@ -30,8 +35,6 @@ public class DamageIndicators {
 
     @SubscribeEvent
     public void showDamageParticle(ADJHurtEvent event) {
-
-        System.out.println(event.getDamage());
 
         Entity victim = event.getVictim();
         LivingEntity attacker = event.getAttacker();

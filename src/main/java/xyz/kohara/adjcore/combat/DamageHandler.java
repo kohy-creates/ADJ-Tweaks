@@ -2,31 +2,34 @@ package xyz.kohara.adjcore.combat;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import dev.shadowsoffire.attributeslib.AttributesLib;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
+import dev.shadowsoffire.attributeslib.packet.CritParticleMessage;
+import dev.shadowsoffire.placebo.network.PacketDistro;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -174,15 +177,15 @@ public class DamageHandler {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public void handleLivingHurt(LivingHurtEvent event) {
+//    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void handleLivingHurt(LivingHurtEvent event) {
         DamageSource source = event.getSource();
         LivingEntity entity = event.getEntity();
         Entity attackerEntity = source.getEntity();
-        float amount = event.getAmount();
+        float baseAmount = event.getAmount();
 
         // 1. Apply damage multipliers from config
-        float finalAmount = amount;
+        float finalAmount = baseAmount;
         for (String id : MULTIPLIERS.keySet()) {
             if (id.startsWith("#")) {
                 TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
@@ -191,7 +194,7 @@ public class DamageHandler {
                 }
             } else {
                 if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
-                    finalAmount = amount;
+                    finalAmount = baseAmount;
                     finalAmount *= MULTIPLIERS.get(id);
                     break;
                 }
@@ -218,7 +221,43 @@ public class DamageHandler {
             finalAmount *= (float) multiplier;
         }
 
-        // 3. Apply combat rules
+        // 3. Handle crits
+        //    Logic adapted from AttributesLib
+
+        boolean isCrit = false;
+        double critChance = 0d;
+        float critDmg = 0f;
+        float critMult = 1.0F;
+
+        LivingEntity livingAttacker = (attackerEntity instanceof LivingEntity le) ? le : null;
+
+        if (livingAttacker != null) {
+
+            critChance = livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
+            critDmg = (float) livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
+
+            RandomSource rand = event.getEntity().getRandom();
+
+            // Roll for crits. Each overcrit reduces the effectiveness by 15%
+            // We stop rolling when crit chance fails or the crit damage would reduce the total damage dealt.
+            while (rand.nextFloat() <= critChance && critDmg > 1.0F) {
+                critChance--;
+                critMult *= critDmg;
+                critDmg *= 0.85F;
+            }
+
+            finalAmount *= critMult;
+            event.setAmount(finalAmount);
+
+            if (critMult > 1) {
+                isCrit = true;
+                if (!livingAttacker.level().isClientSide) {
+                    PacketDistro.sendToTracking(AttributesLib.CHANNEL, new CritParticleMessage(event.getEntity().getId()), (ServerLevel) livingAttacker.level(), event.getEntity().blockPosition());
+                }
+            }
+        }
+
+        // 4. Apply combat rules
         if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
             finalAmount *= 1 - getValue(entity, ModAttributes.DAMAGE_REDUCTION.get());
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
@@ -240,8 +279,25 @@ public class DamageHandler {
             finalAmount = Math.max(MIN_DAMAGE.get(), finalAmount - (armorPoints / factor));
         }
 
-        // 4. Ensure minimum damage for bypass types
-        event.setAmount(Math.max(Math.round(finalAmount), MIN_DAMAGE.get()));
+        // 4. Ensure minimum damage
+        finalAmount = Math.max(
+                (isCrit) ? (float) Math.ceil(finalAmount)
+                : Math.round(finalAmount), MIN_DAMAGE.get());
+
+        // 5. Fire event and edit amount
+        event.setAmount(finalAmount);
+
+        ADJHurtEvent eventHook = new ADJHurtEvent(
+                livingAttacker,
+                event.getEntity(),
+                baseAmount,
+                finalAmount,
+                isCrit,
+                (float) critChance,
+                critMult
+        );
+        MinecraftForge.EVENT_BUS.post(eventHook);
+
     }
 
     public static class IFrameConfig {

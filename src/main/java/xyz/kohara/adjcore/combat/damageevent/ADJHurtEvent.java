@@ -5,6 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Event;
 import xyz.kohara.adjcore.kubejs.ServerEvents;
 
+import javax.annotation.Nullable;
+
 public class ADJHurtEvent extends Event {
     private final LivingEntity attacker;
     private final Entity victim;
@@ -14,7 +16,7 @@ public class ADJHurtEvent extends Event {
             multiplier;
     private final boolean critical;
 
-    public ADJHurtEvent(LivingEntity attacker,
+    public ADJHurtEvent(@Nullable LivingEntity attacker,
                         Entity victim,
                         float baseDamage,
                         float finalDamage,
