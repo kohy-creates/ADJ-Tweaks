@@ -62,7 +62,7 @@ public class DamageParticle extends Particle {
     ) {
         super(clientLevel, x, y, z);
 
-        this.lifetime = 45;
+        this.lifetime = 60;
 
         this.type = (int) type;
         List<List<Color>> COLORS = List.of(

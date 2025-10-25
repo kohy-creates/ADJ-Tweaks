@@ -3,6 +3,7 @@ package xyz.kohara.adjcore.combat;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
@@ -20,17 +21,23 @@ public class DamageIndicators {
     ) {
         double maxDistance = 48;
 
-        entity.level().getServer().getPlayerList().getPlayers().forEach(serverPlayer -> {
-            if (serverPlayer.distanceToSqr(entity) <= Math.pow(maxDistance, 2)) {
-                ModMessages.sendToPlayer(new DamageIndicatorS2CPacket(x, y, z, amount, type), serverPlayer);
+        entity.level().getServer().getPlayerList().getPlayers().forEach(player -> {
+            if (player.distanceToSqr(entity) <= Math.pow(maxDistance, 2)) {
+                Vec3 pos = offsetTowardsViewer(entity, player, 0.66);
+                ModMessages.sendToPlayer(new DamageIndicatorS2CPacket(pos.x, pos.y, pos.z, amount, type), player);
             }
         });
     }
 
+    private Vec3 offsetTowardsViewer(Entity entity, Entity viewer, double forwardDistance) {
+        Vec3 direction = entity.position().subtract(viewer.position()).normalize().scale(-1);
+        Vec3 base = new Vec3(entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ());
+        double spread = 0.33d;
+        double dx = direction.x * forwardDistance + (Math.random() * (spread * 2d) - spread);
+        double dy = direction.y * forwardDistance + (Math.random() * (spread * 2d) - spread);
+        double dz = direction.z * forwardDistance + (Math.random() * (spread * 2d) - spread);
 
-    private double particleOffset(double base) {
-        double offset = 0.5d;
-        return base + (Math.random() * (offset * 2d) - offset);
+        return base.add(dx, dy, dz);
     }
 
     @SubscribeEvent
@@ -47,9 +54,9 @@ public class DamageIndicators {
             type = Type.CRIT.get();
         }
 
-        double x = particleOffset(victim.getX());
-        double y = particleOffset(victim.getY() + victim.getEyeHeight());
-        double z = particleOffset(victim.getZ());
+        double x = victim.getX();
+        double y = victim.getY() + victim.getEyeHeight();
+        double z = victim.getZ();
 
         showIndicator(victim, x, y, z, event.getDamage(), type);
     }
@@ -62,9 +69,9 @@ public class DamageIndicators {
                 && entity.getHealth() != entity.getMaxHealth()
                 && event.getAmount() > 2) {
 
-            double x = particleOffset(entity.getX());
-            double y = particleOffset(entity.getY() + entity.getEyeHeight());
-            double z = particleOffset(entity.getZ());
+            double x = entity.getX();
+            double y = entity.getY() + entity.getEyeHeight();
+            double z = entity.getZ();
 
             showIndicator(entity, x, y, z, event.getAmount(), Type.HEAL.get());
         }
