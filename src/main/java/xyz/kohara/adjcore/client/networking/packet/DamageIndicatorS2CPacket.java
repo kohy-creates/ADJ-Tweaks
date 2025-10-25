@@ -1,10 +1,10 @@
-package xyz.kohara.adjcore.networking.packet;
+package xyz.kohara.adjcore.client.networking.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import xyz.kohara.adjcore.particle.ModParticles;
+import xyz.kohara.adjcore.client.particle.ModParticles;
 
 import java.util.function.Supplier;
 

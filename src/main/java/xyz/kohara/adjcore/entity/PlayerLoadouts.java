@@ -1,13 +1,10 @@
 package xyz.kohara.adjcore.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -21,8 +18,8 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import xyz.kohara.adjcore.misc.ModCapabilities;
 import xyz.kohara.adjcore.misc.capabilities.IPlayerLoadouts;
-import xyz.kohara.adjcore.networking.ModMessages;
-import xyz.kohara.adjcore.networking.packet.ShowRainbowMessageS2CPacket;
+import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.packet.ShowRainbowMessageS2CPacket;
 
 import java.util.Map;
 import java.util.Optional;

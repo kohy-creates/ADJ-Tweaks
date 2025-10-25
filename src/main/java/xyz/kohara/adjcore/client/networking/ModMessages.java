@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.networking;
+package xyz.kohara.adjcore.client.networking;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -7,10 +7,10 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.networking.packet.ChangeLoadOutC2SPacket;
-import xyz.kohara.adjcore.networking.packet.DamageIndicatorS2CPacket;
-import xyz.kohara.adjcore.networking.packet.EmiReloadS2CPacket;
-import xyz.kohara.adjcore.networking.packet.ShowRainbowMessageS2CPacket;
+import xyz.kohara.adjcore.client.networking.packet.ChangeLoadOutC2SPacket;
+import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
+import xyz.kohara.adjcore.client.networking.packet.EmiReloadS2CPacket;
+import xyz.kohara.adjcore.client.networking.packet.ShowRainbowMessageS2CPacket;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;

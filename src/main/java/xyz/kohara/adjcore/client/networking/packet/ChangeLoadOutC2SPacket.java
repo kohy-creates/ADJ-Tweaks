@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.networking.packet;
+package xyz.kohara.adjcore.client.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

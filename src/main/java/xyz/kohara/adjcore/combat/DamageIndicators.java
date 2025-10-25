@@ -6,8 +6,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
-import xyz.kohara.adjcore.networking.ModMessages;
-import xyz.kohara.adjcore.networking.packet.DamageIndicatorS2CPacket;
+import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 
 public class DamageIndicators {
 

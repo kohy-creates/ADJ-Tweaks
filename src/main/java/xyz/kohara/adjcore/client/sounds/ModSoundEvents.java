@@ -1,5 +1,5 @@
 // Auditory
-package xyz.kohara.adjcore.sounds;
+package xyz.kohara.adjcore.client.sounds;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;

@@ -1,6 +1,5 @@
-package xyz.kohara.adjcore.particle;
+package xyz.kohara.adjcore.client.particle;
 
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.eventbus.api.IEventBus;

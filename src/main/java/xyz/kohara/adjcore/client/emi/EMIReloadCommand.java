@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.emi;
+package xyz.kohara.adjcore.client.emi;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,8 +11,8 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.networking.ModMessages;
-import xyz.kohara.adjcore.networking.packet.EmiReloadS2CPacket;
+import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.packet.EmiReloadS2CPacket;
 
 import java.util.Collection;
 

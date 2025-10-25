@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
 
 @Mixin(ShieldItem.class)
 public abstract class ShieldSoundsMixin extends Item implements Equipable {

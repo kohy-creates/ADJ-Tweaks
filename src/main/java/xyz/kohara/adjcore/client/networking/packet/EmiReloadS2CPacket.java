@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.networking.packet;
+package xyz.kohara.adjcore.client.networking.packet;
 
 import dev.emi.emi.runtime.EmiReloadManager;
 import net.minecraft.network.FriendlyByteBuf;

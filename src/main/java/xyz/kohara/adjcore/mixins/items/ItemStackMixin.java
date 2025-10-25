@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.misc.AuditoryTags;
-import xyz.kohara.adjcore.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
 
 @Mixin(ItemStack.class)
 abstract class ItemStackMixin {

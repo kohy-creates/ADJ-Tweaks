@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
 
 @Mixin(BowItem.class)
 public class BowMixin {

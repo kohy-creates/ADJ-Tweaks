@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.particle;
+package xyz.kohara.adjcore.client.particle;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
