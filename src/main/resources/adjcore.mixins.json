@@ -51,8 +51,6 @@
 		"items.LeadAttachSoundMixin",
 		"items.MagicMirrorMixin",
 		"items.MinecartPlaceSoundMixin",
-		"items.MutantMonstersRemoveMutantSkeleArmorEffectsMixin",
-		"items.MutantMonstersRemoveSkeleArmorPotionsMixin",
 		"items.ShieldSoundsMixin",
 		"items.SpawnEggUseSoundMixin",
 		"items.TridentPullbackSound",
