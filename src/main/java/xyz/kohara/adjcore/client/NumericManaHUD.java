@@ -28,7 +28,7 @@ import static com.hollingsworth.arsnouveau.client.gui.GuiManaHUD.shouldDisplayBa
 public class NumericManaHUD {
     private static final Minecraft minecraft = Minecraft.getInstance();
 
-    private static final ResourceLocation hudLoc = new ResourceLocation(ArsNouveau.MODID, "mana_hud");
+    private static final ResourceLocation hudLoc = ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "mana_hud");
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void renderSpellHUD(final RenderGuiOverlayEvent.Post event) {
@@ -72,7 +72,7 @@ public class NumericManaHUD {
 
         gg.drawString(minecraft.font, text, offsetLeft, height, 0xFFFFFF, false);
         if (!renderOnTop) {
-            gg.blit(new ResourceLocation(ArsNouveau.MODID, "textures/gui/manabar_gui_border" + ".png"), 10, height - 8, 0, 18, 108, 20, 256, 256);
+            gg.blit(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "textures/gui/manabar_gui_border" + ".png"), 10, height - 8, 0, 18, 108, 20, 256, 256);
         }
 
     }

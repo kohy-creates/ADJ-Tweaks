@@ -19,7 +19,8 @@ public class ZombieAwarenessHardcoreMixin {
     )
     private static void isZombieAwarenessActive(Level world, CallbackInfoReturnable<Boolean> cir) {
         cir.cancel();
-        if (world == null || !world.getLevelData().isHardcore()) cir.setReturnValue(false);
+        if (world == null) cir.setReturnValue(false);
+        if (!world.getLevelData().isHardcore()) cir.setReturnValue(false);
         if (ZAConfigGeneral.daysBeforeFeaturesActivate <= 0) cir.setReturnValue(true);
         double day = ((double) world.getDayTime() / CoroUtilWorldTime.getDayLength());
         if (day >= ZAConfigGeneral.daysBeforeFeaturesActivate) {

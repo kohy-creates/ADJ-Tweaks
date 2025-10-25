@@ -73,7 +73,7 @@ public class MusicConfig {
             // Helper to check and add sound string
             java.util.function.Consumer<String> addIfAdjMusic = str -> {
                 if (str != null && str.startsWith("adj:music.")) {
-                    toRegister.add(new ResourceLocation(str));
+                    toRegister.add(ResourceLocation.parse(str));
                 }
             };
 

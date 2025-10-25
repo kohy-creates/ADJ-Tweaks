@@ -38,16 +38,16 @@ public class AttributesLibEventsMixin {
     }
 
     @Inject(method = "apothCriticalStrike", at = @At(value = "HEAD"), cancellable = true)
-    private void critStrikeHook(LivingHurtEvent e, CallbackInfo ci) {
+    private void critStrikeHook(LivingHurtEvent event, CallbackInfo ci) {
         ci.cancel();
 
-        LivingEntity attacker = e.getSource().getEntity() instanceof LivingEntity le ? le : null;
+        LivingEntity attacker = event.getSource().getEntity() instanceof LivingEntity le ? le : null;
         if (attacker == null) return;
 
         double critChance = attacker.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
         float critDmg = (float) attacker.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
 
-        RandomSource rand = e.getEntity().getRandom();
+        RandomSource rand = event.getEntity().getRandom();
 
         float critMult = 1.0F;
 
@@ -59,7 +59,9 @@ public class AttributesLibEventsMixin {
             critDmg *= 0.85F;
         }
 
-        e.setAmount(e.getAmount() * critMult);
+        float baseAmount = event.getAmount();
+        float finalAmount = baseAmount * critMult;
+        event.setAmount(finalAmount);
 
         boolean isCrit = false;
 
@@ -72,9 +74,9 @@ public class AttributesLibEventsMixin {
 
         ADJHurtEvent eventHook = new ADJHurtEvent(
                 attacker,
-                e.getEntity(),
-                e.getAmount(),
-                critDmg,
+                event.getEntity(),
+                baseAmount,
+                finalAmount,
                 isCrit,
                 (float) critChance,
                 critMult

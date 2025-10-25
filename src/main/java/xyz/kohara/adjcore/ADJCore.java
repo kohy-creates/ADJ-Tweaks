@@ -1,13 +1,16 @@
 package xyz.kohara.adjcore;
 
+import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -22,8 +25,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.jmx.Server;
 import xyz.kohara.adjcore.attributes.ModAttributes;
 import xyz.kohara.adjcore.combat.DamageHandler;
+import xyz.kohara.adjcore.combat.DamageIndicators;
+import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
 import xyz.kohara.adjcore.curio.CurioControl;
 import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
@@ -39,6 +45,8 @@ import xyz.kohara.adjcore.misc.credits.ModCreditsBase;
 import xyz.kohara.adjcore.misc.credits.ModInfo;
 import xyz.kohara.adjcore.misc.placementmodifiertypes.ModPlacementModifierTypes;
 import xyz.kohara.adjcore.networking.ModMessages;
+import xyz.kohara.adjcore.networking.packet.DamageIndicatorS2CPacket;
+import xyz.kohara.adjcore.particle.ModParticles;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.sounds.ModSoundEvents;
 
@@ -70,12 +78,14 @@ public class ADJCore {
         MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
         MinecraftForge.EVENT_BUS.register(CurioControl.class);
         MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
+        MinecraftForge.EVENT_BUS.register(new DamageIndicators());
 
         ModEffects.register(MOD_BUS);
         ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
         ModAttributes.register(MOD_BUS);
         MusicConfig.load(MOD_BUS);
         ModPlacementModifierTypes.register(MOD_BUS);
+        ModParticles.register(MOD_BUS);
         JukeboxTracker.init();
         ModBiomeModifiers.register(MOD_BUS);
     }

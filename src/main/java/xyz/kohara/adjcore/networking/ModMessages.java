@@ -8,6 +8,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.networking.packet.ChangeLoadOutC2SPacket;
+import xyz.kohara.adjcore.networking.packet.DamageIndicatorS2CPacket;
 import xyz.kohara.adjcore.networking.packet.EmiReloadS2CPacket;
 import xyz.kohara.adjcore.networking.packet.ShowRainbowMessageS2CPacket;
 
@@ -45,6 +46,12 @@ public class ModMessages {
                 .decoder(ChangeLoadOutC2SPacket::new)
                 .encoder(ChangeLoadOutC2SPacket::toBytes)
                 .consumerMainThread(ChangeLoadOutC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(DamageIndicatorS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DamageIndicatorS2CPacket::new)
+                .encoder(DamageIndicatorS2CPacket::toBytes)
+                .consumerMainThread(DamageIndicatorS2CPacket::handle)
                 .add();
     }
 
