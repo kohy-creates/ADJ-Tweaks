@@ -11,8 +11,6 @@ import net.minecraft.world.item.*;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
-import java.util.Arrays;
-
 @Mixin(PotionItem.class)
 public class PotionNameMixin extends Item {
 

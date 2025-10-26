@@ -23,6 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.client.handler.PotionsDecorationHandler;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.DamageIndicators;
 import xyz.kohara.adjcore.curio.CurioControl;
