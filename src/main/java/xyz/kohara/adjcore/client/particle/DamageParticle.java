@@ -12,6 +12,7 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,6 +24,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import java.awt.*;
@@ -107,18 +109,11 @@ public class DamageParticle extends Particle {
         float particleY = (float) (Mth.lerp(partialTicks, this.yo, this.y) - cameraPos.y());
         float particleZ = (float) (Mth.lerp(partialTicks, this.zo, this.z) - cameraPos.z());
 
-
-        int light = LightTexture.FULL_BRIGHT;
-
-
         PoseStack poseStack = new PoseStack();
         poseStack.pushPose();
         poseStack.translate(particleX, particleY, particleZ);
 
-
         double distanceFromCam = new Vec3(particleX, particleY, particleZ).length();
-
-        double inc = Mth.clamp(distanceFromCam / 32f, 0, 5f);
 
         // rotate towards camera
 
@@ -138,7 +133,7 @@ public class DamageParticle extends Particle {
         poseStack.scale(fadeout, fadeout, fadeout);
         poseStack.translate(0, -distanceFromCam / 10d, 0);
 
-        var buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
 
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(770, 771, 1, 0);
@@ -147,16 +142,34 @@ public class DamageParticle extends Particle {
         float y1 = 0.5f - fontRenderer.lineHeight;
 
         int color = flashColor(this.color.get(0), this.color.get(1));
-        fontRenderer.drawInBatch(this.text, x1, y1, color, false,
-                poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
-        poseStack.translate(1, 1, +0.03);
-        fontRenderer.drawInBatch(this.text, x1, y1, darken(color, 0.75d), false,
-                poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
+
+        renderNumber(this.text, poseStack, x1, y1, color, buffer);
 
         buffer.endBatch();
 
         poseStack.popPose();
     }
+
+    private void renderNumber(Component text, PoseStack poseStack, float x, float y, int color, MultiBufferSource.BufferSource buffer) {
+        int light = LightTexture.FULL_BRIGHT;
+        Matrix4f matrix = poseStack.last().pose();
+
+        // Main bright text
+        fontRenderer.drawInBatch(text, x, y, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, light);
+
+        // Dark outline
+        int darkColor = darken(color, 0.75d);
+        float[][] offsets = {
+                { 1, 0 }, {-1, 0}, {0, 1}, {0, -1}
+        };
+
+        poseStack.translate(0, 0, 0.03);
+        for (float[] o : offsets) {
+            fontRenderer.drawInBatch(text, x + o[0], y + o[1], darkColor, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, light);
+        }
+        poseStack.translate(0, 0, -0.03);
+    }
+
 
 
     @Override
