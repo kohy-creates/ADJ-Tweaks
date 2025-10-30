@@ -10,6 +10,8 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,21 +44,11 @@ public abstract class DeathScreenMixin extends Screen {
 
     @Shadow
     @Final
-    private boolean hardcore;
-
-    @Shadow
-    protected abstract void handleExitToTitleScreen();
-
-    @Shadow
-    private Component deathScore;
-
-    @Shadow
-    @Final
     private Component causeOfDeath;
 
     @Shadow
-    @Nullable
-    protected abstract Style getClickedComponentStyleAt(int i);
+    @Final
+    private boolean hardcore;
 
     protected DeathScreenMixin(Component title) {
         super(title);
@@ -85,7 +77,7 @@ public abstract class DeathScreenMixin extends Screen {
         }
 
         if (adj$respawnTimer < 0) {
-            Component component = this.hardcore ? Component.translatable("deathScreen.spectate") : Component.translatable("deathScreen.respawn");
+            Component component = Component.literal((hardcore) ? "Cancel this moratory" : "Respawn");
 
             if (this.exitButtons.size() < 2) {
                 this.exitButtons.add(this.addRenderableWidget(Button.builder(component, arg -> {
@@ -104,23 +96,8 @@ public abstract class DeathScreenMixin extends Screen {
     protected void init(CallbackInfo ci) {
         ci.cancel();
         this.exitButtons.clear();
-
-        // Exit to title is disabled outside of Hardcore
-        if (hardcore) {
-            this.exitToTitleButton = this.addRenderableWidget(
-                    Button.builder(
-                                    Component.translatable("deathScreen.titleScreen"),
-                                    arg -> this.minecraft.getReportingContext().draftReportHandled(this.minecraft, this, this::handleExitToTitleScreen, true)
-                            )
-                            .bounds(this.width / 2 - 100, this.height / 4 + 180, 200, 25)
-                            .build()
-            );
-            this.exitButtons.add(this.exitToTitleButton);
-        }
         this.setButtonsActive(false);
-//        this.deathScore = Component.translatable("deathScreen.score")
-//                .append(": ")
-//                .append(Component.literal(Integer.toString(this.minecraft.player.getScore())).withStyle(ChatFormatting.YELLOW));
+
         if (adj$wasInit) return;
         adj$wasInit = true;
 
@@ -130,7 +107,10 @@ public abstract class DeathScreenMixin extends Screen {
         }
 
         this.delayTicker = 0;
-        adj$respawnTimer = hardcore ? 1 : (minecraft.isSingleplayer()) ? 140 : 300;
+
+        // Default respawn time = 7 seconds
+        // x2 in hardcore, x1.5 in multiplayer
+        adj$respawnTimer = (int) (140 * ((hardcore) ? 2 : 1) * (!minecraft.isSingleplayer() ? 1.5 : 1));
 
         adj$deathText = ADJCore.getRandomDeathText();
         minecraft.getSoundManager().play(
@@ -153,7 +133,7 @@ public abstract class DeathScreenMixin extends Screen {
         guiGraphics.pose().pushPose();
 
         guiGraphics.pose().scale(4.0F, 4.0F, 4.0F);
-        String title = Component.translatable(hardcore ? "deathScreen.title.hardcore" : "deathScreen.title").getString().toUpperCase();
+        String title = Component.translatable("deathScreen.title").getString().toUpperCase();
         Component screenTitle = Component.translatable(title).withStyle(Style.EMPTY.withBold(true));
         guiGraphics.drawCenteredString(this.font, screenTitle, width / 8, 60 / 4, 0xFFFFFFFF);
         guiGraphics.pose().popPose();
@@ -168,12 +148,6 @@ public abstract class DeathScreenMixin extends Screen {
         Component deathText = Component.literal(adj$deathText).withStyle(Style.EMPTY.withItalic(true).withColor(TextColor.parseColor("#7D7D7D")));
         guiGraphics.drawCenteredString(this.font, deathText, width / 2, 150, 0xFFFFFFFF);
 
-//        guiGraphics.drawCenteredString(this.font, this.deathScore, this.width / 2, 100, 0xFFFFFFFF);
-//        if (this.causeOfDeath != null && mouseY > 85 && mouseY < 85 + 9) {
-//            Style style = this.getClickedComponentStyleAt(mouseX);
-//            guiGraphics.renderComponentHoverEffect(this.font, style, mouseX, mouseY);
-//        }
-
         if (adj$respawnTimer > -1) {
             guiGraphics.pose().pushPose();
             guiGraphics.pose().scale(2.0F, 2.0F, 2.0F);
@@ -186,11 +160,6 @@ public abstract class DeathScreenMixin extends Screen {
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-        if (this.exitToTitleButton != null && this.minecraft.getReportingContext().hasDraftReport()) {
-            guiGraphics.blit(
-                    AbstractWidget.WIDGETS_LOCATION, this.exitToTitleButton.getX() + this.exitToTitleButton.getWidth() - 17, this.exitToTitleButton.getY() + 3, 182, 24, 15, 15
-            );
-        }
     }
 
 }

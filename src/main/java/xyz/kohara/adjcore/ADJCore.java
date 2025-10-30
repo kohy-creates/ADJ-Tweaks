@@ -23,7 +23,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.kohara.adjcore.attributes.ModAttributes;
-import xyz.kohara.adjcore.client.handler.PotionsDecorationHandler;
+import xyz.kohara.adjcore.client.music.JukeboxTracker;
+import xyz.kohara.adjcore.client.music.MusicConfig;
+import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.particle.ModParticles;
+import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.DamageIndicators;
 import xyz.kohara.adjcore.curio.CurioControl;
@@ -33,17 +37,12 @@ import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
 import xyz.kohara.adjcore.misc.ModCapabilities;
 import xyz.kohara.adjcore.misc.biomemodifiers.ModBiomeModifiers;
-import xyz.kohara.adjcore.client.music.JukeboxTracker;
-import xyz.kohara.adjcore.client.music.MusicConfig;
 import xyz.kohara.adjcore.misc.capabilities.CapabilityEvents;
 import xyz.kohara.adjcore.misc.credits.LoaderInfo;
 import xyz.kohara.adjcore.misc.credits.ModCreditsBase;
 import xyz.kohara.adjcore.misc.credits.ModInfo;
 import xyz.kohara.adjcore.misc.placementmodifiertypes.ModPlacementModifierTypes;
-import xyz.kohara.adjcore.client.networking.ModMessages;
-import xyz.kohara.adjcore.client.particle.ModParticles;
 import xyz.kohara.adjcore.potions.PotionsEditor;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
 
 import java.io.File;
 import java.io.IOException;
@@ -168,6 +167,9 @@ public class ADJCore {
     private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";
     private static final List<String> deathTexts = new ArrayList<>();
 
+    private static final String potionNameOverridesFile = "config/" + ADJCore.MOD_ID + "/potion_name_overrides.txt";
+    public static final Map<String, String> potionNameOverrides = new HashMap<>();
+
     static {
         File config = new File(deathTextsFile);
         try {
@@ -178,6 +180,20 @@ public class ADJCore {
             while (reader.hasNextLine()) {
                 String mixin = reader.nextLine();
                 deathTexts.add(mixin);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        config = new File(potionNameOverridesFile);
+        try {
+            if (!config.exists()) {
+                config.createNewFile();
+            }
+            Scanner reader = new Scanner(config);
+            while (reader.hasNext()) {
+                String[] line = reader.nextLine().split(":");
+                potionNameOverrides.put(line[0], line[1]);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -1,15 +1,19 @@
 package xyz.kohara.adjcore.mixins.client;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import xyz.kohara.adjcore.ADJCore;
 
 @Mixin(PotionItem.class)
 public class PotionNameMixin extends Item {
@@ -34,23 +38,27 @@ public class PotionNameMixin extends Item {
         if (inst instanceof SplashPotionItem) {
             type = "Throwable";
             color = TextColor.fromLegacyFormat(ChatFormatting.GOLD);
-        }
-        else if (inst instanceof LingeringPotionItem) {
+        } else if (inst instanceof LingeringPotionItem) {
             type = "Lingering";
             color = TextColor.fromLegacyFormat(ChatFormatting.LIGHT_PURPLE);
         }
 
-
         MutableComponent newName = Component.empty();
 
-        if (split.length > 1) {
-            newName.append(split[1])
-                    .append(" ")
-                    .append(split[0]);
+        if (split.length >= 2) {
+            String key = split[1];
+            if (ADJCore.potionNameOverrides.containsKey(key)) {
+                newName.append(ADJCore.potionNameOverrides.get(key));
+            } else {
+                newName.append(split[1])
+                        .append(" ")
+                        .append(split[0]);
+            }
+        } else if (split.length == 1) {
+            String key = split[0];
+            newName.append(ADJCore.potionNameOverrides.getOrDefault(key, key));
         }
-        else {
-            newName.append(split[0]);
-        }
+
 
         if (type != null) {
             newName
@@ -60,6 +68,5 @@ public class PotionNameMixin extends Item {
         }
 
         return newName;
-//        return super.getName(stack);
     }
 }
