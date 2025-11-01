@@ -1,8 +1,9 @@
-package xyz.kohara.adjcore.combat.damageevent;
+package xyz.kohara.adjcore.kubejs.serverevents;
 
 import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import xyz.kohara.adjcore.events.ADJHurtEvent;
 
 public class ADJHurtEventJS extends EventJS {
     private final ADJHurtEvent event;
