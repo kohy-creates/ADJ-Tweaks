@@ -20,10 +20,11 @@ public class ADJMixinCanceller implements MixinCanceller {
             if (!config.exists()) {
                 config.createNewFile();
             }
-            Scanner reader = new Scanner(config);
-            while (reader.hasNextLine()) {
-                String mixin = reader.nextLine();
-                disabledMixins.add(mixin);
+            try (Scanner reader = new Scanner(config)) {
+	            while (reader.hasNextLine()) {
+		            String mixin = reader.nextLine();
+		            disabledMixins.add(mixin);
+	            }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

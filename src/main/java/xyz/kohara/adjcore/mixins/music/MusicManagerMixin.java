@@ -19,7 +19,7 @@ import xyz.kohara.adjcore.client.music.MusicPlayer;
 
 import javax.annotation.Nullable;
 
-@Mixin(value = MusicManager.class, priority = 90000)
+@Mixin(value = MusicManager.class, priority = Integer.MAX_VALUE)//max value is way more like it heh
 public abstract class MusicManagerMixin {
 
     @Shadow
@@ -85,13 +85,14 @@ public abstract class MusicManagerMixin {
         // Copy so that other mods don't interfere
 
         Music music = this.minecraft.getSituationalMusic();
-        if (this.currentMusic != null) {
-            if (music != null
-                    && !music.getEvent().value().getLocation().equals(this.currentMusic.getLocation())
-                    && music.replaceCurrentMusic()) {
-                this.minecraft.getSoundManager().stop(this.currentMusic);
-                this.nextSongDelay = Mth.nextInt(this.random, 0, music.getMinDelay() / 2);
-            }
+        if (this.currentMusic != null) music_label: {
+            if (music == null) break music_label;
+			if (!music.getEvent().value().getLocation().equals(this.currentMusic.getLocation())
+		        && music.replaceCurrentMusic()) {
+				this.minecraft.getSoundManager().stop(this.currentMusic);
+				this.nextSongDelay = Mth.nextInt(this.random, 0, music.getMinDelay() / 2);
+			}
+            
 
             if (!this.minecraft.getSoundManager().isActive(this.currentMusic)) {
                 this.currentMusic = null;
