@@ -17,7 +17,11 @@ public class ADJHurtEventJS extends EventJS {
     }
 
     public float getDamage() {
-        return this.event.getDamage();
+        return this.event.getAmount();
+    }
+
+    public void setDamage(float amount) {
+        event.setAmount(amount);
     }
 
     public float getCritChance() {
