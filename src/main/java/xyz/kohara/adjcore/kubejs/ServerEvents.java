@@ -2,7 +2,7 @@ package xyz.kohara.adjcore.kubejs;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
-import xyz.kohara.adjcore.kubejs.serverevents.ADJHurtEventJS;
+import xyz.kohara.adjcore.combat.damageevent.ADJHurtEventJS;
 
 public interface ServerEvents {
     EventGroup GROUP = EventGroup.of("ADJServerEvents");

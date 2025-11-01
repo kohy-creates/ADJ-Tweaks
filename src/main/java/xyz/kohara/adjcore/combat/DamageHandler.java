@@ -29,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.attributes.ModAttributes;
-import xyz.kohara.adjcore.events.ADJHurtEvent;
+import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -290,7 +290,6 @@ public class DamageHandler {
         ADJHurtEvent eventHook = new ADJHurtEvent(
                 livingAttacker,
                 event.getEntity(),
-                event.getSource(),
                 baseAmount,
                 finalAmount,
                 isCrit,

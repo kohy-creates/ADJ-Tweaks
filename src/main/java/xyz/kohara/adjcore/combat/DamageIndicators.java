@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import xyz.kohara.adjcore.events.ADJHurtEvent;
+import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
 import xyz.kohara.adjcore.client.networking.ModMessages;
 import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 
@@ -58,7 +58,7 @@ public class DamageIndicators {
         double y = victim.getY() + victim.getEyeHeight();
         double z = victim.getZ();
 
-        showIndicator(victim, x, y, z, event.getAmount(), type);
+        showIndicator(victim, x, y, z, event.getDamage(), type);
     }
 
     @SubscribeEvent
