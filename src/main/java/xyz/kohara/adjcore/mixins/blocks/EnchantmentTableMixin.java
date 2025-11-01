@@ -1,0 +1,30 @@
+package xyz.kohara.adjcore.mixins.blocks;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.EnchantmentTableBlock;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
+
+@Mixin(EnchantmentTableBlock.class)
+public class EnchantmentTableMixin {
+
+    @Shadow
+    @Final
+    @Mutable
+    public static List<BlockPos> BOOKSHELF_OFFSETS;
+
+    @Inject(method = "<clinit>", at = @At("TAIL"))
+    private static void replaceBookshelfOffsets(CallbackInfo ci) {
+        BOOKSHELF_OFFSETS = BlockPos.betweenClosedStream(-2, 0, -2, 2, 2, 2)
+                .filter(pos -> Math.abs(pos.getX()) == 2 || Math.abs(pos.getZ()) == 2)
+                .map(BlockPos::immutable)
+                .toList();
+    }
+}
