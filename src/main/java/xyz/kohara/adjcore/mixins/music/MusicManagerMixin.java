@@ -85,8 +85,8 @@ public abstract class MusicManagerMixin {
         // Copy so that other mods don't interfere
 
         Music music = this.minecraft.getSituationalMusic();
-        if (this.currentMusic != null) music_label: {
-            if (music == null) break music_label;
+		if (music == null) return;
+        if (this.currentMusic != null) {
 			if (!music.getEvent().value().getLocation().equals(this.currentMusic.getLocation())
 		        && music.replaceCurrentMusic()) {
 				this.minecraft.getSoundManager().stop(this.currentMusic);
