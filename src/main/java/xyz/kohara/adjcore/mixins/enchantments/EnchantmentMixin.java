@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // Currently unusued
-@Mixin(value = Enchantment.class, priority = 900000)
+@Mixin(value = Enchantment.class, priority = Integer.MAX_VALUE)
 public abstract class EnchantmentMixin {
 
     @Inject(

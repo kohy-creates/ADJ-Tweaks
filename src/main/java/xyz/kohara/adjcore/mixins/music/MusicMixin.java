@@ -29,9 +29,11 @@ public abstract class MusicMixin {
             cancellable = true
     )
     private void getSituationalMusic(CallbackInfoReturnable<Music> cir) {
-        cir.cancel();
         if (MusicPlayer.shouldPlayMusic(this.musicManager)) {
             cir.setReturnValue(MusicPlayer.findMusic(this.musicManager));
+        } else {
+//	        cir.cancel();//why
+	        cir.setReturnValue(null);//this is more concise
         }
     }
 
