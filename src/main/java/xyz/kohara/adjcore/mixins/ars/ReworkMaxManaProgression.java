@@ -8,7 +8,6 @@ import com.hollingsworth.arsnouveau.api.util.ManaUtil;
 import com.hollingsworth.arsnouveau.setup.config.ServerConfig;
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
