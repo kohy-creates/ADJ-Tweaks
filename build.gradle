@@ -3,6 +3,8 @@ plugins {
     id "maven-publish"
 }
 
+def generatedResources = file("src/generated")
+
 base {
     archivesName = project.mod_group_id
 }
@@ -23,6 +25,15 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
+
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", mod_id
+            programArgs "--output", generatedResources.absolutePath
+        }
+    }
+
 }
 
 repositories {
@@ -176,6 +187,12 @@ processResources {
 
     filesMatching(resourceTargets) {
         expand replaceProperties
+    }
+}
+
+sourceSets {
+    main {
+        resources.srcDir generatedResources
     }
 }
 

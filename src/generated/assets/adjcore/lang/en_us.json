@@ -1,0 +1,11 @@
+{
+  "attribute.name.generic.damage_reduction": "Damage Reduction",
+  "attribute.name.generic.damage_reduction.desc": "Reduces incoming damage",
+  "attribute.name.generic.projectile_damage_reduction": "Projectile Damage Reduction",
+  "attribute.name.generic.projectile_damage_reduction.desc": "Reduces incoming damage from projectiles",
+  "attribute.name.player.mana_cost_reduction": "Mana Cost Reduction",
+  "attribute.name.player.mana_cost_reduction.desc": "Reduces casting cost of spells",
+  "effect.adjcore.cozy_campfire": "Cozy Campfire",
+  "effect.adjcore.cozy_campfire.desc": "Slowly regenerates lost life",
+  "effect.adjcore.cozy_campfire.description": "Slowly regenerates lost life"
+}

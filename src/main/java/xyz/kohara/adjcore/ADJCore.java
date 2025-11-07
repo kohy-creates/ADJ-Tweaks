@@ -36,6 +36,7 @@ import xyz.kohara.adjcore.effects.ModEffects;
 import xyz.kohara.adjcore.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
+import xyz.kohara.adjcore.misc.LangGenerator;
 import xyz.kohara.adjcore.misc.ModCapabilities;
 import xyz.kohara.adjcore.misc.biomemodifiers.ModBiomeModifiers;
 import xyz.kohara.adjcore.misc.capabilities.CapabilityEvents;
@@ -66,6 +67,7 @@ public class ADJCore {
         MOD_BUS.addListener(this::clientSetup);
         MOD_BUS.addListener(this::addEntityAttributes);
         MOD_BUS.addListener(ModCapabilities::register);
+        MOD_BUS.addListener(LangGenerator::gatherData);
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new DamageHandler());

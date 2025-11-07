@@ -9,25 +9,44 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.misc.LangGenerator;
 
 public class ModAttributes {
 
     private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, ADJCore.MOD_ID);
 
     public static final RegistryObject<Attribute> DAMAGE_REDUCTION = register(
-            "generic.damage_reduction", new PercentBasedAttribute("attribute.name.generic.damage_reduction", 0.0, -1.0, 1.0).setSyncable(true)
+            new PercentBasedAttribute(id("generic", "damage_reduction"), 0.0, -1.0, 1.0).setSyncable(true),
+            "Damage Reduction",
+            "Reduces incoming damage"
     );
 
     public static final RegistryObject<Attribute> PROJECTILE_DAMAGE_REDUCTION = register(
-            "generic.projectile_damage_reduction", new PercentBasedAttribute("attribute.name.generic.projectile_damage_reduction", 0.0, 0.0, 1.0).setSyncable(true)
+            new PercentBasedAttribute(id("generic", "projectile_damage_reduction"), 0.0, 0.0, 1.0).setSyncable(true),
+            "Projectile Damage Reduction",
+            "Reduces incoming damage from projectiles"
     );
 
     public static final RegistryObject<Attribute> MANA_COST_REDUCTION = register(
-            "player.mana_cost_reduction", new PercentBasedAttribute("attribute.name.player.mana_cost_reduction", 0.0, -1.0, 1.0).setSyncable(true)
+            new PercentBasedAttribute(id("player", "mana_cost_reduction"), 0.0, -1.0, 1.0).setSyncable(true),
+            "Mana Cost Reduction",
+            "Reduces casting cost of spells"
     );
 
-    private static RegistryObject<Attribute> register(String id, Attribute attribute) {
-        return ATTRIBUTES.register(id, () -> attribute);
+    public static final RegistryObject<Attribute> SAFE_FALL_DISTANCE = register(
+            new RangedAttribute(id("generic", "safe_fall_distance"), 0.0, 0.0, 2048.0).setSyncable(true),
+            "Safe Fall Distance",
+            "Distance you can fall before fall damage calculations start"
+    );
+
+    private static RegistryObject<Attribute> register(Attribute attribute, String name, String description) {
+        String descriptionID = attribute.getDescriptionId();
+        LangGenerator.addAttributeTranslation(descriptionID, name, description);
+        return ATTRIBUTES.register(descriptionID.replace("attribute.name.", ""), () -> attribute);
+    }
+
+    private static String id(String category, String name) {
+        return "attribute.name." + category + "." + name;
     }
 
     public static void register(IEventBus eventBus) {
