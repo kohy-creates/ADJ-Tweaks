@@ -2,6 +2,9 @@
 	"injected_interfaces": {
 		"net/minecraft/class_1309": [
 			"xyz/kohara/adjcore/combat/KnockbackCooldown"
+		],
+		"net/minecraft/class_1657": [
+			"xyz/kohara/adjcore/misc/ArsManaShenanigans"
 		]
 	},
 	"accessWidener": "adjcore.accesswidener"

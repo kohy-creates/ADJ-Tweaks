@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -162,6 +163,8 @@ public class ADJCore {
             event.add(type, ModAttributes.DAMAGE_REDUCTION.get());
             event.add(type, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
         }
+
+        event.add(EntityType.PLAYER, ModAttributes.MANA_COST_REDUCTION.get());
     }
 
     private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";
