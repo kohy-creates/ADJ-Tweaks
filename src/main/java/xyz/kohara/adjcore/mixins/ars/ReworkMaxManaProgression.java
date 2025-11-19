@@ -2,8 +2,10 @@ package xyz.kohara.adjcore.mixins.ars;
 
 import com.hollingsworth.arsnouveau.api.event.MaxManaCalcEvent;
 import com.hollingsworth.arsnouveau.api.mana.IManaCap;
+import com.hollingsworth.arsnouveau.api.mana.IManaDiscountEquipment;
 import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
 import com.hollingsworth.arsnouveau.api.spell.Spell;
+import com.hollingsworth.arsnouveau.api.util.CuriosUtil;
 import com.hollingsworth.arsnouveau.api.util.ManaUtil;
 import com.hollingsworth.arsnouveau.setup.config.ServerConfig;
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
@@ -13,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -123,5 +126,24 @@ public class ReworkMaxManaProgression {
         double cost = spell.getCost();
 
         return (int) (original + (cost * reduction));
+    }
+
+    @Inject(method = "getPlayerDiscounts", at = @At("HEAD"), cancellable = true)
+    private static void getPlayerDiscounts(LivingEntity e, Spell spell, ItemStack casterStack, CallbackInfoReturnable<Integer> cir) {
+        if (e == null) {
+            cir.setReturnValue(0);
+            return;
+        }
+
+        double reduction = 0d;
+
+        AttributeInstance costReduction = e.getAttribute(ModAttributes.MANA_COST_REDUCTION.get());
+        if (costReduction != null) {
+            reduction = costReduction.getValue();
+        }
+
+        double cost = spell.getCost();
+
+        cir.setReturnValue((int) (cost * reduction));
     }
 }

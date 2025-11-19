@@ -1,9 +1,10 @@
-package xyz.kohara.adjcore.combat.damageevent;
+package xyz.kohara.adjcore.misc.events;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Event;
 import xyz.kohara.adjcore.kubejs.ServerEvents;
+import xyz.kohara.adjcore.kubejs.serverevents.ADJHurtEventJS;
 
 import javax.annotation.Nullable;
 

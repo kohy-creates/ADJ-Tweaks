@@ -24,6 +24,7 @@ import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
+import xyz.kohara.adjcore.misc.ModTags;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,7 +68,6 @@ public class CurioControl {
         }
     }
 
-
     // Only keep one type of curio slots
     @SubscribeEvent
     public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
@@ -92,9 +92,13 @@ public class CurioControl {
 //            Config.SOULBOUND_FOR_CURIOS.get()
 //    ));
 
+    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
+            Config.SOULBOUND_FOR_CURIOS.get()
+    ));
+
     @SubscribeEvent
     public static void keepCurios(DropRulesEvent event) {
-        event.addOverride(i -> true, ICurio.DropRule.ALWAYS_KEEP);
+        event.addOverride(i -> !i.is(ModTags.CURIOS_DROPPED_ON_DEATH) || i.getEnchantmentLevel(CURIO_SOULBOUND) > 0, ICurio.DropRule.ALWAYS_KEEP);
     }
 
 
