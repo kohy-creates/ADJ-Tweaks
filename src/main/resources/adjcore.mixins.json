@@ -10,12 +10,14 @@
 		"HeartCrystalItemMixin",
 		"InventoryMixin",
 		"KeyboardHandlerMixin",
+		"RecipeManagerMixin",
 		"TerraCurioEntityMixinFix",
 		"TerraCurioNukeJEIDescriptions",
 		"ZombieAwarenessHardcoreMixin",
 		"ars.ManaCapEventsMixin",
 		"ars.ReworkMaxManaProgression",
 		"ars.SpellCooldownMixin",
+		"ars.SpellParticleMixin",
 		"blocks.BlockSoundsMixin",
 		"blocks.CakeEatingSoundMixin",
 		"blocks.CampfireBlockEntityMixin",
@@ -63,6 +65,7 @@
 		"music.JukeboxHandler"
 	],
 	"client": [
+		"DebugRendererMixin",
 		"ars.GlyphCostMixin",
 		"client.CloudHeightMixin",
 		"client.CreditScreenMixin",

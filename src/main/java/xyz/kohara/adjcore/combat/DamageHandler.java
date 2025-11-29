@@ -29,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.attributes.ModAttributes;
-import xyz.kohara.adjcore.combat.damageevent.ADJHurtEvent;
+import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
 
 import java.io.FileReader;
 import java.io.IOException;

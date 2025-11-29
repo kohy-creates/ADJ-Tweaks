@@ -60,26 +60,9 @@ public class PotionsDecorationHandler {
         }
     }
 
-    public static void renderPotionStackSize(GuiGraphics guiGraphics, Font font, ItemStack stack, int itemPosX, int itemPosY) {
-        if (stack.getCount() != 1) {
-            PoseStack poseStack = guiGraphics.pose();
-            poseStack.pushPose();
-            String string = String.valueOf(stack.getCount());
-            poseStack.translate(0.0, 0.0, 200.0F);
-            guiGraphics.drawString(font, string, itemPosX + 19 - 2 - font.width(string), itemPosY + 6 + 3, 0xFFFFFF, true);
-            poseStack.popPose();
-        }
-    }
-
     @SubscribeEvent
     public static void onRegisterItemDecorator(RegisterItemDecorationsEvent event) {
-        IItemDecorator decorator = (guiGraphics, font, stack, x, y) -> {
-            if (renderPotionDecorations(guiGraphics, stack, x, y)) {
-                renderPotionStackSize(guiGraphics, font, stack, x, y);
-                return true;
-            }
-            return false;
-        };
+        IItemDecorator decorator = (guiGraphics, font, stack, x, y) -> renderPotionDecorations(guiGraphics, stack, x, y);
         List<Item> potions = List.of(
                 Items.POTION,
                 Items.LINGERING_POTION,
