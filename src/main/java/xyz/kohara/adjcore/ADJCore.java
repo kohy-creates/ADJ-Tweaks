@@ -1,7 +1,5 @@
 package xyz.kohara.adjcore;
 
-import com.hollingsworth.arsnouveau.setup.registry.EnchantmentRegistry;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -10,13 +8,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.CraftingTableBlock;
-import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -177,6 +171,9 @@ public class ADJCore {
     private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";
     private static final List<String> deathTexts = new ArrayList<>();
 
+    private static final String structuresIgnoreMinDistanceFile = "config/" + ADJCore.MOD_ID + "/structures_ignore_min_distance.txt";
+    public static final List<String> structuresIgnoreMinDistance = new ArrayList<>();
+
     private static final String potionNameOverridesFile = "config/" + ADJCore.MOD_ID + "/potion_name_overrides.txt";
     public static final Map<String, String> potionNameOverrides = new HashMap<>();
 
@@ -188,8 +185,8 @@ public class ADJCore {
             }
             Scanner reader = new Scanner(config);
             while (reader.hasNextLine()) {
-                String mixin = reader.nextLine();
-                deathTexts.add(mixin);
+                String deathMessage = reader.nextLine();
+                deathTexts.add(deathMessage);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -204,6 +201,20 @@ public class ADJCore {
             while (reader.hasNext()) {
                 String[] line = reader.nextLine().split(":");
                 potionNameOverrides.put(line[0], line[1]);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        config = new File(structuresIgnoreMinDistanceFile);
+        try {
+            if (!config.exists()) {
+                config.createNewFile();
+            }
+            Scanner reader = new Scanner(config);
+            while (reader.hasNextLine()) {
+                String structureID = reader.nextLine();
+                structuresIgnoreMinDistance.add(structureID);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

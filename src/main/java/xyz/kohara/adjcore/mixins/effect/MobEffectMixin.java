@@ -27,20 +27,20 @@ public abstract class MobEffectMixin {
                 livingEntity.heal(1.0F);
             }
         } else if (effect == MobEffects.POISON) {
-            // 6 damage per tick on entities
-            // and 4 on players
-            float amount = (livingEntity instanceof Player) ? 4f : 6f;
+            // 5 damage per tick on entities
+            // and 3 on players
+            float amount = (livingEntity instanceof Player) ? 3f : 5f;
             if (livingEntity.getHealth() > amount * 2) {
                 livingEntity.hurt(livingEntity.damageSources().magic(), amount);
             }
         } else if (effect == MobEffects.WITHER) {
-            // Wither does 6 + 0.5% of mob's health per tick
-            float amount = 6F + livingEntity.getMaxHealth() * 0.005f;
+            // Wither does 4 + 0.6% of mob's health per tick
+            float amount = 4F + livingEntity.getMaxHealth() * 0.006f;
             livingEntity.hurt(livingEntity.damageSources().wither(), amount);
         } else if (effect == MobEffects.HUNGER && livingEntity instanceof Player) {
             ((Player) livingEntity).causeFoodExhaustion(0.005F * (amplifier + 1));
         } else if (effect == MobEffects.SATURATION && livingEntity instanceof Player) {
-            if (!livingEntity.level().isClientSide) {
+            if (!livingEntity.level().isClientSide()) {
                 ((Player) livingEntity).getFoodData().eat(amplifier + 1, 1.0F);
             }
         } else if ((effect != MobEffects.HEAL || livingEntity.isInvertedHealAndHarm()) && (effect != MobEffects.HARM || !livingEntity.isInvertedHealAndHarm())) {
@@ -97,7 +97,7 @@ public abstract class MobEffectMixin {
             int j = 30 >> amplifier;
             cir.setReturnValue(j <= 0 || duration % j == 0);
         } else if (effect == MobEffects.WITHER) {
-            int i = 40 >> amplifier;
+            int i = 40 - (amplifier * 5);
             cir.setReturnValue(i <= 0 || duration % i == 0);
         } else {
             cir.setReturnValue(effect == MobEffects.HUNGER);

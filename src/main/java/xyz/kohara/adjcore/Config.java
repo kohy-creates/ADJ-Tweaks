@@ -21,6 +21,7 @@ public class Config {
     public static final ForgeConfigSpec.DoubleValue UNBREAKNG_DURABILITY_MULTIPLIER;
     public static final ForgeConfigSpec.ConfigValue<String> CURIO_TYPE_TO_KEEP;
     public static final ForgeConfigSpec.ConfigValue<String> SOULBOUND_FOR_CURIOS;
+    public static final ForgeConfigSpec.IntValue MIN_STRUCTURE_DISTANCE;
 
     public static final ForgeConfigSpec.ConfigValue<Double> MIN_DAMAGE_TAKEN;
     public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_POINT_REDUCTION_FACTOR;
@@ -28,6 +29,15 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_DURABILITY_DAMAGE_FACTOR;
 
     static {
+
+        BUILDER.comment("Structures").push("structures");
+
+        MIN_STRUCTURE_DISTANCE = BUILDER
+                .comment("Minimum distance between structures")
+                .defineInRange("MIN_STRUCTURE_DISTANCE", 32, 1, 256);
+
+        BUILDER.pop();
+
         BUILDER.comment("Tools").push("tools");
 
         DURABILITY_SAVE_CHANCE = BUILDER
