@@ -7,10 +7,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.client.networking.packet.ChangeLoadOutC2SPacket;
-import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
-import xyz.kohara.adjcore.client.networking.packet.EmiReloadS2CPacket;
-import xyz.kohara.adjcore.client.networking.packet.ShowRainbowMessageS2CPacket;
+import xyz.kohara.adjcore.client.networking.packet.*;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -52,6 +49,18 @@ public class ModMessages {
                 .decoder(DamageIndicatorS2CPacket::new)
                 .encoder(DamageIndicatorS2CPacket::toBytes)
                 .consumerMainThread(DamageIndicatorS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(RequestEntityTagsC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(RequestEntityTagsC2SPacket::new)
+                .encoder(RequestEntityTagsC2SPacket::toBytes)
+                .consumerMainThread(RequestEntityTagsC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(SyncEntityTagsS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncEntityTagsS2CPacket::new)
+                .encoder(SyncEntityTagsS2CPacket::toBytes)
+                .consumerMainThread(SyncEntityTagsS2CPacket::handle)
                 .add();
     }
 

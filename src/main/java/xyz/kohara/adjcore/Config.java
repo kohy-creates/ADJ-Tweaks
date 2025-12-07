@@ -8,7 +8,6 @@ public class Config {
 
     // Configurable values
     public static final ForgeConfigSpec.DoubleValue DURABILITY_SAVE_CHANCE;
-    public static final ForgeConfigSpec.DoubleValue EXTRA_FORTUNE_CHANCE;
     public static final ForgeConfigSpec.ConfigValue<Integer> SHIELD_DELAY;
     public static final ForgeConfigSpec.BooleanValue DISABLE_CRITS;
     public static final ForgeConfigSpec.BooleanValue DISABLE_SWEEP_ATTACKS;
@@ -44,11 +43,6 @@ public class Config {
                 .comment("Chance (0 - 1) to prevent durability loss. Default: 0.5 (50%)")
                 .comment("Set to 0 to disable or 1 to make all items unbreakable")
                 .defineInRange("DURABILITY_SAVE_CHANCE", 0.5, 0, 1);
-
-        EXTRA_FORTUNE_CHANCE = BUILDER
-                .comment("Chance (0 - 1) to treat blocks as if they were mined with Fortune higher by 1")
-                .comment("This also applies to breaking blocks without Fortune. Set to 0 to disable")
-                .defineInRange("EXTRA_FORTUNE_CHANCE", 1.0, 0, 1);
 
         SHIELD_DELAY = BUILDER
                 .comment("Delay in ticks after which shield will start blocking damage")

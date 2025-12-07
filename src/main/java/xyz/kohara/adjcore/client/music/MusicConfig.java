@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class MusicConfig {
 
@@ -37,9 +38,14 @@ public class MusicConfig {
     }
 
     public static class BossMusic {
-        public String start;
-        public String loop;
-        public String stop;
+        public Map<String, Config> phases = new HashMap<>();
+
+        public static class Config {
+            public String track;
+            public String title;
+            public String author;
+            public Integer distance;
+        }
     }
 
     public static class MusicEntryDeserializer implements JsonDeserializer<MusicEntry> {
@@ -59,9 +65,25 @@ public class MusicConfig {
         }
     }
 
+    public static class BossMusicDeserializer implements JsonDeserializer<BossMusic> {
+        @Override
+        public BossMusic deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            BossMusic boss = new BossMusic();
+            JsonObject obj = json.getAsJsonObject();
+
+            for (Map.Entry<String, JsonElement> e : obj.entrySet()) {
+                BossMusic.Config cfg = context.deserialize(e.getValue(), BossMusic.Config.class);
+                boss.phases.put(e.getKey(), cfg);
+            }
+
+            return boss;
+        }
+    }
+
     public static void load(IEventBus bus) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MusicEntry.class, new MusicEntryDeserializer())
+                .registerTypeAdapter(BossMusic.class, new BossMusicDeserializer())
                 .create();
 
         try (Reader reader = Files.newBufferedReader(Paths.get("config/adjcore/music.json"))) {
@@ -71,7 +93,7 @@ public class MusicConfig {
             Set<ResourceLocation> toRegister = new HashSet<>();
 
             // Helper to check and add sound string
-            java.util.function.Consumer<String> addIfAdjMusic = str -> {
+            Consumer<String> addIfAdjMusic = str -> {
                 if (str != null && str.startsWith("adj:music.")) {
                     toRegister.add(ResourceLocation.parse(str));
                 }
@@ -104,9 +126,9 @@ public class MusicConfig {
             if (CONFIG.boss != null) {
                 for (BossMusic bossMusic : CONFIG.boss.values()) {
                     if (bossMusic != null) {
-                        addIfAdjMusic.accept(bossMusic.start);
-                        addIfAdjMusic.accept(bossMusic.loop);
-                        addIfAdjMusic.accept(bossMusic.stop);
+                        for (BossMusic.Config cfg : bossMusic.phases.values()) {
+                            if (cfg.track != null) addIfAdjMusic.accept(cfg.track);
+                        }
                     }
                 }
             }

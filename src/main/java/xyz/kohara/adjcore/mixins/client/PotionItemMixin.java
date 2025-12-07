@@ -1,24 +1,22 @@
 package xyz.kohara.adjcore.mixins.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Inject;
 import xyz.kohara.adjcore.ADJCore;
 
 @Mixin(PotionItem.class)
-public class PotionNameMixin extends Item {
+public class PotionItemMixin extends Item {
 
-    public PotionNameMixin(Properties properties) {
+    public PotionItemMixin(Properties properties) {
         super(properties);
     }
 
@@ -59,7 +57,6 @@ public class PotionNameMixin extends Item {
             newName.append(ADJCore.potionNameOverrides.getOrDefault(key, key));
         }
 
-
         if (type != null) {
             newName
                     .append(" (")
@@ -68,5 +65,10 @@ public class PotionNameMixin extends Item {
         }
 
         return newName;
+    }
+
+    @Override
+    public boolean isFoil(@NotNull ItemStack stack) {
+        return true;
     }
 }

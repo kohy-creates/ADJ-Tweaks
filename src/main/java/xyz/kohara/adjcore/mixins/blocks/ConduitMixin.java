@@ -49,7 +49,7 @@ public class ConduitMixin {
 
         for (LivingEntity target : targets) {
             if (pos.closerThan(target.getOnPos(), adjcore$CONDUIT_RANGE)) {
-                float adjcore$CONDUIT_DAMAGE = 2.0f;
+                float adjcore$CONDUIT_DAMAGE = 10.0f;
                 target.hurt(level.damageSources().magic(), adjcore$CONDUIT_DAMAGE);
                 level.playSound(null, target.getX(), target.getY(), target.getZ(),
                         SoundEvents.CONDUIT_ATTACK_TARGET, SoundSource.BLOCKS, 0.75F, 0.85f + new Random().nextFloat() * (1.15f - 0.85f));

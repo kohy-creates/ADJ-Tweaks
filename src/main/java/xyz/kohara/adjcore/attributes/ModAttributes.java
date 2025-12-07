@@ -39,6 +39,12 @@ public class ModAttributes {
             "Distance you can fall before fall damage calculations start"
     );
 
+    public static final RegistryObject<Attribute> EXTRA_ORE_DROPS = register(
+            new RangedAttribute(id("player", "extra_fortune_level"), 0.0, 0.0, 2048.0).setSyncable(true),
+            "Extra Ore Drops",
+            "Odds to get extra drops from ores (similar to Fortune enchantment)"
+    );
+
     private static RegistryObject<Attribute> register(Attribute attribute, String name, String description) {
         String descriptionID = attribute.getDescriptionId();
         LangGenerator.addAttributeTranslation(descriptionID, name, description);

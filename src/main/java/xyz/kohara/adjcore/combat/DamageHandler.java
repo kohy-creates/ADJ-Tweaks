@@ -3,6 +3,7 @@ package xyz.kohara.adjcore.combat;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import dev.shadowsoffire.attributeslib.AttributesLib;
+import dev.shadowsoffire.attributeslib.api.ALCombatRules;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import dev.shadowsoffire.attributeslib.packet.CritParticleMessage;
 import dev.shadowsoffire.placebo.network.PacketDistro;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -96,39 +98,26 @@ public class DamageHandler {
 
         int finalIFrames = -1;
 
-//        ADJCore.LOGGER.info("Handling damage event: source={}, entity={}, attacker={}",
-//                source.type().msgId(),
-//                entity.getType(),
-//                attacker != null ? ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()) : "none");
-
         for (String id : IFRAMES.keySet()) {
             IFrameConfig cfg = IFRAMES.get(id);
-//            ADJCore.LOGGER.info("Checking config entry: {}", id);
-
             if (id.startsWith("#")) {
                 TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
                 if (source.is(damageTypeTag)) {
                     finalIFrames = cfg.iframes;
-//                    ADJCore.LOGGER.info("Matched tag {} with base iframes={}", id, finalIFrames);
-
                     if (attacker != null) {
                         String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
                         if (cfg.overrides.containsKey(attackerId)) {
                             finalIFrames = cfg.overrides.get(attackerId);
-//                            ADJCore.LOGGER.info("Applied override for attacker {} -> iframes={}", attackerId, finalIFrames);
                         }
                     }
                 }
             } else {
                 if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
                     finalIFrames = cfg.iframes;
-//                    ADJCore.LOGGER.info("Matched damage type {} with base iframes={}", id, finalIFrames);
-
                     if (attacker != null) {
                         String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
                         if (cfg.overrides.containsKey(attackerId)) {
                             finalIFrames = cfg.overrides.get(attackerId);
-//                            ADJCore.LOGGER.info("Applied override for attacker {} -> iframes={}", attackerId, finalIFrames);
                         }
                     }
                     break;
@@ -177,7 +166,7 @@ public class DamageHandler {
         }
     }
 
-//    @SubscribeEvent(priority = EventPriority.HIGH)
+    //    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void handleLivingHurt(LivingHurtEvent event) {
         DamageSource source = event.getSource();
         LivingEntity entity = event.getEntity();
@@ -221,12 +210,39 @@ public class DamageHandler {
             finalAmount *= (float) multiplier;
         }
 
-        // 3. Handle crits
+        // 3. Apply combat rules
+        if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
+            finalAmount *= 1 - getValue(entity, ModAttributes.DAMAGE_REDUCTION.get());
+            if (source.is(DamageTypeTags.IS_PROJECTILE)) {
+                finalAmount *= 1 - getValue(entity, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+            }
+        }
+
+        finalAmount *= ALCombatRules.getProtDamageReduction(EnchantmentHelper.getDamageProtection(entity.getArmorSlots(), source));
+
+        int armorPoints = (int) getValue(entity, Attributes.ARMOR);
+        if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
+            int armorToughness = (int) getValue(entity, Attributes.ARMOR_TOUGHNESS);
+
+            if (attackerEntity instanceof LivingEntity attacker) {
+                int armorPierce = (int) getValue(attacker, ALObjects.Attributes.ARMOR_PIERCE.get());
+                float armorShred = Math.max(1 - getValue(attacker, ALObjects.Attributes.ARMOR_SHRED.get()), 0);
+                armorPierce = Math.max(0, armorPierce - armorToughness);
+                armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
+            }
+
+            float factor = (entity instanceof Player) ? ARMOR_POINT_FACTOR.get() : ARMOR_POINT_FACTOR_ENTITY.get();
+            finalAmount = Math.max(MIN_DAMAGE.get(), finalAmount - (armorPoints / factor));
+        }
+
+        // 4. Ensure minimum damage
+        finalAmount = (float) Math.max(Math.ceil(finalAmount), MIN_DAMAGE.get());
+
+        // 5. Handle crits
         //    Logic adapted from AttributesLib
 
         boolean isCrit = false;
         double critChance = 0d;
-        float critDmg = 0f;
         float critMult = 1.0F;
 
         LivingEntity livingAttacker = (attackerEntity instanceof LivingEntity le) ? le : null;
@@ -234,7 +250,7 @@ public class DamageHandler {
         if (livingAttacker != null) {
 
             critChance = livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
-            critDmg = (float) livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
+            float critDmg = (float) livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
 
             RandomSource rand = event.getEntity().getRandom();
 
@@ -257,34 +273,7 @@ public class DamageHandler {
             }
         }
 
-        // 4. Apply combat rules
-        if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
-            finalAmount *= 1 - getValue(entity, ModAttributes.DAMAGE_REDUCTION.get());
-            if (source.is(DamageTypeTags.IS_PROJECTILE)) {
-                finalAmount *= 1 - getValue(entity, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
-            }
-        }
-        if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-            int armorPoints = (int) getValue(entity, Attributes.ARMOR);
-            int armorToughness = (int) getValue(entity, Attributes.ARMOR_TOUGHNESS);
-
-            if (attackerEntity instanceof LivingEntity attacker) {
-                int armorPierce = (int) getValue(attacker, ALObjects.Attributes.ARMOR_PIERCE.get());
-                float armorShred = Math.max(1 - getValue(attacker, ALObjects.Attributes.ARMOR_SHRED.get()), 0);
-                armorPierce = Math.max(0, armorPierce - armorToughness);
-                armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
-            }
-
-            float factor = (entity instanceof Player) ? ARMOR_POINT_FACTOR.get() : ARMOR_POINT_FACTOR_ENTITY.get();
-            finalAmount = Math.max(MIN_DAMAGE.get(), finalAmount - (armorPoints / factor));
-        }
-
-        // 4. Ensure minimum damage
-        finalAmount = Math.max(
-                (isCrit) ? (float) Math.ceil(finalAmount)
-                : Math.round(finalAmount), MIN_DAMAGE.get());
-
-        // 5. Fire event and edit amount
+        // 6. Fire event and edit amount
         event.setAmount(finalAmount);
 
         ADJHurtEvent eventHook = new ADJHurtEvent(

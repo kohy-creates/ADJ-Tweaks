@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraftforge.common.world.ModifiableStructureInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,7 +32,8 @@ import java.util.function.Predicate;
 
 @Mixin(Structure.class)
 public abstract class StructureMinPlacementMixin {
-    @Shadow
+
+    @Shadow(remap = false)
     public abstract Structure.StructureSettings getModifiedStructureSettings();
 
     @Inject(method = "generate", at = @At(value = "RETURN"), cancellable = true)

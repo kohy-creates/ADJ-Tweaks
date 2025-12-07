@@ -76,7 +76,7 @@ public abstract class DeathScreenMixin extends Screen {
             this.setButtonsActive(true);
         }
 
-        if (adj$respawnTimer < 0) {
+        if (adj$respawnTimer == 0) {
             Component component = Component.literal((hardcore) ? "Cancel this moratory" : "Respawn");
 
             if (this.exitButtons.size() < 2) {

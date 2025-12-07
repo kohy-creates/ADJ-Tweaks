@@ -163,9 +163,11 @@ public class ADJCore {
         for (EntityType<? extends LivingEntity> type : event.getTypes()) {
             event.add(type, ModAttributes.DAMAGE_REDUCTION.get());
             event.add(type, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+            event.add(type, ModAttributes.SAFE_FALL_DISTANCE.get());
         }
 
         event.add(EntityType.PLAYER, ModAttributes.MANA_COST_REDUCTION.get());
+        event.add(EntityType.PLAYER, ModAttributes.EXTRA_ORE_DROPS.get());
     }
 
     private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";

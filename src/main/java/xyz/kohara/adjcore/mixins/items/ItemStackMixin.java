@@ -3,6 +3,7 @@ package xyz.kohara.adjcore.mixins.items;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
@@ -14,19 +15,16 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.misc.AuditoryTags;
 import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
 
 @Mixin(ItemStack.class)
-abstract class ItemStackMixin {
+public abstract class ItemStackMixin {
 
-    @Unique
-    private static AttributeModifier adj$HOLDER;
-
-    @Shadow
-    public abstract boolean is(TagKey<Item> tag);
+    @Shadow public abstract boolean is(TagKey<Item> tag);
 
     /**
      * Reduces durability damage taken
