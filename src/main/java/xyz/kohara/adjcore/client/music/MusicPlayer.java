@@ -19,10 +19,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.client.networking.ModMessages;
 import xyz.kohara.adjcore.client.networking.packet.RequestEntityTagsC2SPacket;
-import xyz.kohara.adjcore.client.networking.packet.ShowRainbowMessageS2CPacket;
 import xyz.kohara.adjcore.mixins.music.MusicManagerAccessor;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class MusicPlayer {
@@ -168,57 +168,71 @@ public class MusicPlayer {
         return track;
     }
 
-    private static void sendBossMusicMessage(LocalPlayer player, ResolvedBossMusic.Phase phase) {
-        Minecraft mc = Minecraft.getInstance();
-        mc.gui.setOverlayMessage(Component.literal("Now playing: " + phase.author + " - " + phase.title), true);
-    }
-
     private static Music getBossMusic(LocalPlayer player) {
 
-        for (Map.Entry<String, ResolvedBossMusic> bossEntry : resolvedBosses.entrySet()) {
-            ResourceLocation entityId = ResourceLocation.parse(bossEntry.getKey());
+        List<String> bossIDs = resolvedBosses.keySet().stream().toList();
 
-            LivingEntity boss = player.level().getEntities(
-                    EntityTypeTest.forClass(LivingEntity.class),
-                    player.getBoundingBox().inflate(120),  // big search radius
-                    e -> e.getType().builtInRegistryHolder().key().location().equals(entityId)
-            ).getFirst();
-
-            if (boss != null) {
-                ResolvedBossMusic bm = bossEntry.getValue();
-                String phaseTag = detectBossPhase(boss, bm);
-
-                ResolvedBossMusic.Phase phase = bm.phases().get(phaseTag);
-
-                if (phaseTag == null) continue;
-                if (phase == null) continue;
-
-                if (boss.distanceTo(player) <= phase.distance()) {
-
-                    if (CURRENT_TRACK != phase.track()) { // only send when track changes
-                        sendBossMusicMessage(player, phase);
+        AtomicReference<String> id = new AtomicReference<>();
+        List<LivingEntity> bosses = player.level().getEntities(
+                EntityTypeTest.forClass(LivingEntity.class),
+                player.getBoundingBox().inflate(120),
+                livingEntity -> {
+                    String entityID = livingEntity.getType().builtInRegistryHolder().key().location().toString();
+                    if (bossIDs.contains(entityID)) {
+                        id.set(entityID);
+                        return true;
                     }
-
-                    return phase.track();
+                    return false;
                 }
+        );
+
+        LivingEntity boss = bosses.isEmpty() ? null : bosses.get(0);
+
+        if (boss != null && id.get() != null) {
+            ResolvedBossMusic bm = resolvedBosses.get(id.get());
+            String phaseTag = detectBossPhase(boss, bm);
+
+            ResolvedBossMusic.Phase phase = bm.phases().get(phaseTag);
+
+            if (phaseTag == null || phase == null) return null;
+
+            if (boss.distanceTo(player) <= phase.distance()) {
+
+                if (CURRENT_TRACK != phase.track()) { // only send when track changes
+                    sendBossMusicMessage(phase);
+                }
+
+                return phase.track();
             }
         }
-
         return null;
     }
 
-    public static Set<String> getSyncedTags(LivingEntity boss) {
+    private static void sendBossMusicMessage(ResolvedBossMusic.Phase phase) {
+        if (phase.author != null) {
+            Minecraft mc = Minecraft.getInstance();
+            mc.gui.setOverlayMessage(Component.literal("Now playing: " + phase.author + " - " + phase.title), true);
+        }
+    }
+
+    public static List<String> getSyncedTags(LivingEntity boss) {
         ModMessages.sendToServer(new RequestEntityTagsC2SPacket(boss.getId()));
 
         String s = boss.getPersistentData().getString("adjcore_synced_tags");
-        if (s.isEmpty()) return Set.of();
-        return Set.of(s.split(";"));
+        if (s.isEmpty()) return new ArrayList<>();
+
+        return Arrays.stream(s.split(";"))
+                .sorted()
+                .toList();
     }
+
 
     private static String detectBossPhase(LivingEntity boss, ResolvedBossMusic bm) {
 
-        Set<String> tags = getSyncedTags(boss);
-        List<String> phases = new ArrayList<>(bm.phases().keySet());
+        List<String> tags = getSyncedTags(boss);
+        List<String> phases = bm.phases().keySet().stream()
+                .sorted()
+                .toList();
 
         for (int i = phases.size() - 1; i >= 0; i--) {
             String tag = phases.get(i);
