@@ -47,6 +47,9 @@ import xyz.kohara.adjcore.potions.PotionsEditor;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Mod(ADJCore.MOD_ID)
@@ -93,6 +96,10 @@ public class ADJCore {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+    }
+
+    public static ResourceLocation of(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     private static ModCreditsBase initModCredits() {
@@ -179,48 +186,49 @@ public class ADJCore {
     private static final String potionNameOverridesFile = "config/" + ADJCore.MOD_ID + "/potion_name_overrides.txt";
     public static final Map<String, String> potionNameOverrides = new HashMap<>();
 
+    private static final String windowTitlesFile = "config/" + ADJCore.MOD_ID + "/window_titles.txt";
+    public static final List<String> windowTitles = new ArrayList<>();
+
     static {
-        File config = new File(deathTextsFile);
-        try {
-            if (!config.exists()) {
-                config.createNewFile();
-            }
-            Scanner reader = new Scanner(config);
-            while (reader.hasNextLine()) {
-                String deathMessage = reader.nextLine();
-                deathTexts.add(deathMessage);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        deathTexts.addAll(
+                readLines(deathTextsFile)
+        );
 
-        config = new File(potionNameOverridesFile);
-        try {
-            if (!config.exists()) {
-                config.createNewFile();
-            }
-            Scanner reader = new Scanner(config);
-            while (reader.hasNext()) {
-                String[] line = reader.nextLine().split(":");
-                potionNameOverrides.put(line[0], line[1]);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        structuresIgnoreMinDistance.addAll(
+                readLines(structuresIgnoreMinDistanceFile)
+        );
 
-        config = new File(structuresIgnoreMinDistanceFile);
+        potionNameOverrides.putAll(
+                readMap(potionNameOverridesFile, ":")
+        );
+
+        windowTitles.addAll(
+                readLines(windowTitlesFile)
+        );
+    }
+
+    private static List<String> readLines(String path) {
         try {
-            if (!config.exists()) {
-                config.createNewFile();
+            Path file = Paths.get(path);
+            Files.createDirectories(file.getParent());
+            if (Files.notExists(file)) {
+                Files.createFile(file);
             }
-            Scanner reader = new Scanner(config);
-            while (reader.hasNextLine()) {
-                String structureID = reader.nextLine();
-                structuresIgnoreMinDistance.add(structureID);
-            }
+            return Files.readAllLines(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to read config: " + path, e);
         }
+    }
+
+    private static Map<String, String> readMap(String path, String separator) {
+        Map<String, String> map = new HashMap<>();
+        for (String line : readLines(path)) {
+            if (line.isBlank() || !line.contains(separator)) continue;
+
+            String[] parts = line.split(separator, 2);
+            map.put(parts[0].trim(), parts[1].trim());
+        }
+        return map;
     }
 
     public static String getRandomDeathText() {

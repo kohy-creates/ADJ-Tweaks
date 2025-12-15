@@ -2,6 +2,7 @@ package xyz.kohara.adjcore.attributes;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
+import com.hollingsworth.arsnouveau.common.event.ArsEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -66,7 +67,6 @@ public class AttributeReplace {
 //            }
 //        });
     }
-
 
     private static Attribute attributeFromString(String string) {
         String[] s = string.split(":");
