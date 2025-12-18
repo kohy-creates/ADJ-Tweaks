@@ -166,6 +166,8 @@ dependencies {
     modImplementation "curse.maven:coroutil-237749:5096038"
     modImplementation "curse.maven:zombie-awareness-237754:5096285"
 
+    compileOnly "curse.maven:bigger-stacks-564896:6458432"
+
     //modImplementation "com.aetherteam.aether:aether:${project.aether_version}"
 }
 

@@ -32,10 +32,10 @@ public class ProtectionMixin {
     private static void getFireAfterDampener(LivingEntity livingEntity, int level, CallbackInfoReturnable<Integer> cir) {
         int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.BLAST_PROTECTION, livingEntity);
         if (i > 0) {
-            i -= Mth.floor(i * (i * 0.15F));
+            level -= Mth.floor(i * (i * 0.15F));
         }
 
-        cir.setReturnValue(i);
+        cir.setReturnValue(level);
     }
 
     @Inject(method = "getExplosionKnockbackAfterDampener", at = @At("HEAD"), cancellable = true)

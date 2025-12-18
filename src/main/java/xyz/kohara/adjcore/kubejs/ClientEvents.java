@@ -6,10 +6,9 @@ import xyz.kohara.adjcore.kubejs.clientevents.ItemIsLockedRenderCheckEventJS;
 import xyz.kohara.adjcore.kubejs.serverevents.ADJHurtEventJS;
 import xyz.kohara.adjcore.kubejs.serverevents.RecipeLookupEventJS;
 
-public interface ServerEvents {
-    EventGroup GROUP = EventGroup.of("ADJServerEvents");
+public interface ClientEvents {
+    EventGroup GROUP = EventGroup.of("ADJClientEvents");
 
-    EventHandler ADJ_HURT = GROUP.server("adjHurt", () -> ADJHurtEventJS.class);
-    EventHandler RECIPE_LOOKUP = GROUP.server("recipeLookup", () -> RecipeLookupEventJS.class).hasResult();
+    EventHandler IS_LOCKED_RENDER_CHECK = GROUP.client("itemIsLockedRenderCheck", () -> ItemIsLockedRenderCheckEventJS.class).hasResult();
 
 }
