@@ -12,33 +12,59 @@ import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 
 public class DamageIndicators {
 
-    private void showIndicator(Entity entity,
-                               double x,
-                               double y,
-                               double z,
+    private void showIndicator(Entity victim,
+                               LivingEntity attacker,
                                float amount,
                                int type
     ) {
         double maxDistance = 48;
 
-        entity.level().getServer().getPlayerList().getPlayers().forEach(player -> {
-            if (player.distanceToSqr(entity) <= Math.pow(maxDistance, 2)) {
-                Vec3 pos = offsetTowardsViewer(entity, player, 0.66);
-                ModMessages.sendToPlayer(new DamageIndicatorS2CPacket(pos.x, pos.y, pos.z, amount, type), player);
+        victim.level().getServer().getPlayerList().getPlayers().forEach(viewer -> {
+            if (viewer.distanceToSqr(victim) > maxDistance * maxDistance) return;
+
+            Vec3 pos;
+
+            // Player took damage AND this viewer is the victim
+            if (type == Type.DAMAGE_PLAYER.get()
+                    && viewer == victim
+                    && attacker != null) {
+
+                pos = offsetTowardsEntity(victim, attacker);
+
+            } else {
+                // Default behavior: offset toward viewer
+                pos = offsetTowardsEntity(victim, viewer);
             }
+
+            ModMessages.sendToPlayer(
+                    new DamageIndicatorS2CPacket(
+                            pos.x, pos.y, pos.z, amount, type
+                    ),
+                    viewer
+            );
         });
     }
 
-    private Vec3 offsetTowardsViewer(Entity entity, Entity viewer, double forwardDistance) {
-        Vec3 direction = entity.position().subtract(viewer.position()).normalize().scale(-1);
-        Vec3 base = new Vec3(entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ());
+    private Vec3 offsetTowardsEntity(Entity origin, Entity target) {
+        Vec3 direction = target.position()
+                .subtract(origin.position())
+                .normalize();
+
+        Vec3 base = new Vec3(
+                origin.getX(),
+                origin.getY() + origin.getEyeHeight(),
+                origin.getZ()
+        );
+
         double spread = 0.33d;
-        double dx = direction.x * forwardDistance + (Math.random() * (spread * 2d) - spread);
-        double dy = direction.y * forwardDistance + (Math.random() * (spread * 2d) - spread);
-        double dz = direction.z * forwardDistance + (Math.random() * (spread * 2d) - spread);
+
+        double dx = direction.x * 0.66 + (Math.random() * spread * 2 - spread);
+        double dy = direction.y * 0.66 + (Math.random() * spread * 2 - spread);
+        double dz = direction.z * 0.66 + (Math.random() * spread * 2 - spread);
 
         return base.add(dx, dy, dz);
     }
+
 
     @SubscribeEvent
     public void showDamageParticle(ADJHurtEvent event) {
@@ -49,45 +75,47 @@ public class DamageIndicators {
         int type = Type.DAMAGE_ENTITY.get();
         if (victim instanceof ServerPlayer) {
             type = Type.DAMAGE_PLAYER.get();
-        }
-        else if (event.isCritical()) {
+        } else if (event.isCritical()) {
             type = Type.CRIT.get();
         }
 
-        double x = victim.getX();
-        double y = victim.getY() + victim.getEyeHeight();
-        double z = victim.getZ();
-
-        showIndicator(victim, x, y, z, event.getDamage(), type);
+        showIndicator(
+                victim,
+                attacker,
+                event.getDamage(),
+                type
+        );
     }
 
     @SubscribeEvent
     public void onEntityHeal(LivingHealEvent event) {
         LivingEntity entity = event.getEntity();
 
-        if (!entity.level().isClientSide()
-                && entity.getHealth() != entity.getMaxHealth()
-                && event.getAmount() > 2) {
-
-            double x = entity.getX();
-            double y = entity.getY() + entity.getEyeHeight();
-            double z = entity.getZ();
-
-            showIndicator(entity, x, y, z, event.getAmount(), Type.HEAL.get());
+        if (entity.getHealth() != entity.getMaxHealth() && event.getAmount() > 2) {
+            if (!entity.level().isClientSide()) {
+                showIndicator(
+                        entity,
+                        null,
+                        event.getAmount(),
+                        Type.HEAL.get()
+                );
+            }
+            entity.adjcore$setHealTime(8);
         }
-
     }
 
-    public enum Type {
+    private enum Type {
         DAMAGE_ENTITY(0),
         DAMAGE_PLAYER(1),
         HEAL(2),
         CRIT(3);
 
         private final int type;
+
         Type(int type) {
             this.type = type;
         }
+
         public int get() {
             return this.type;
         }

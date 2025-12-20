@@ -169,6 +169,8 @@ dependencies {
     compileOnly "curse.maven:bigger-stacks-564896:6458432"
 
     //modImplementation "com.aetherteam.aether:aether:${project.aether_version}"
+
+    compileOnly "curse.maven:cyclops-core-232758:7210370"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

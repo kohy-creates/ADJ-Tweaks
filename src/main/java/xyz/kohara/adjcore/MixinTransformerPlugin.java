@@ -21,8 +21,13 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.contains("BiggerStacks")) {
-            return FMLLoader.getLoadingModList().getModFileById("biggerstacks") != null;
+
+        if (mixinClassName.contains("client.GuiItemRenderingMixin")) {
+            if (mixinClassName.contains("BiggerStacks")) {
+                return FMLLoader.getLoadingModList().getModFileById("biggerstacks") != null;
+            } else {
+                return FMLLoader.getLoadingModList().getModFileById("biggerstacks") == null;
+            }
         }
         return true;
     }

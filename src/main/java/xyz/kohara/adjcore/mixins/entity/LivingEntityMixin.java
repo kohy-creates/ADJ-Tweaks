@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -28,16 +29,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.attributes.ModAttributes;
 import xyz.kohara.adjcore.combat.KnockbackCooldown;
+import xyz.kohara.adjcore.entity.IHealTime;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown {
+public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown, IHealTime {
 
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 
     @Shadow
-    public abstract Iterable<ItemStack> getArmorSlots();
+    public abstract @NotNull Iterable<ItemStack> getArmorSlots();
 
     // Yeeting Resistance effect logic out of here
     @Inject(
@@ -74,6 +76,9 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
     @Unique
     public int adjcore$knockbackCooldown;
 
+    @Unique
+    public int adjcore$healTime;
+
     @Override
     public int adjcore$getKnockbackCooldown() {
         return adjcore$knockbackCooldown;
@@ -84,6 +89,16 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
         adjcore$knockbackCooldown = cooldown;
     }
 
+    @Override
+    public int adjcore$getHealTime() {
+        return adjcore$healTime;
+    }
+
+    public void adjcore$setHealTime(int time) {
+        adjcore$healTime = time;
+    }
+
+
     @Inject(
             method = "tick",
             at = @At("HEAD")
@@ -91,6 +106,9 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
     private void onTick(CallbackInfo ci) {
         if (adjcore$knockbackCooldown > 0) {
             adjcore$knockbackCooldown--;
+        }
+        if (adjcore$healTime > 0) {
+            adjcore$healTime--;
         }
     }
 
@@ -125,7 +143,7 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
 
         if (damageAmount > 0) {
             if (!(self instanceof Player)) {
-                damageAmount /= 4;
+                damageAmount /= 3;
             }
             self.hurt(self.damageSources().fall(), damageAmount);
         }

@@ -39,6 +39,8 @@ public class CapabilityEvents {
                             inst.deserializeNBT(nbt);
                         }
                     });
+
+            event.addCapability(ADJCore.of("last_trader_summon"), new BellTraderDataProvider());
         }
     }
 

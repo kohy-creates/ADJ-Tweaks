@@ -49,6 +49,7 @@
 		"entity.LivingEntityMixin",
 		"entity.PlayerMixin",
 		"entity.ServerPlayerMixin",
+		"entity.TemptGoalMixin",
 		"items.BoatPlaceSoundMixin",
 		"items.BowMixin",
 		"items.CrossbowItemAccessor",
@@ -68,6 +69,7 @@
 		"structure.StructureMinPlacementMixin"
 	],
 	"client": [
+		"CyclopsCoreRemoveAnnoyingAssTooltipsMixin",
 		"DebugRendererMixin",
 		"ars.GlyphCostMixin",
 		"client.ArmorTrimMixin",
@@ -81,6 +83,7 @@
 		"client.GuiMixin",
 		"client.ItemInHandRendererMixin",
 		"client.ItemStackItemNameMixin",
+		"client.LivingEntityRendererMixin",
 		"client.LogoRendererMixin",
 		"client.MinecraftMixin",
 		"client.PotionItemMixin",

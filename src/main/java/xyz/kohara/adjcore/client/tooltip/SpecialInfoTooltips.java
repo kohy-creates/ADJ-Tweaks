@@ -62,7 +62,6 @@ public class SpecialInfoTooltips {
             traits.add(defaultTraitTexts.get("can_be_placed"));
         }
         EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
-        @SuppressWarnings({"deprecation", "removal"})
         boolean isCurio = !CuriosApi.getCuriosHelper().getCurioTags(item).isEmpty();
         if (item instanceof Equipable || (slot != EquipmentSlot.MAINHAND && slot != EquipmentSlot.OFFHAND) || isCurio) {
             traits.add(defaultTraitTexts.get("equipable"));

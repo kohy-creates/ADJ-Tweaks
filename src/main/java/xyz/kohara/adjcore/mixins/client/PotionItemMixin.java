@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -69,6 +70,6 @@ public class PotionItemMixin extends Item {
 
     @Override
     public boolean isFoil(@NotNull ItemStack stack) {
-        return true;
+        return super.isFoil(stack) || !PotionUtils.getMobEffects(stack).isEmpty();
     }
 }

@@ -86,6 +86,7 @@ public abstract class GuiItemRenderingMixin {
                 yOffset = (float) Math.floor(Math.sin(time * 0.04f) * 2.0f);
             }
 
+            this.pose.pushPose();
             this.pose.translate(0.0F, yOffset, 190.0F);
 
             Component darkText = Component.literal("?");
@@ -93,8 +94,15 @@ public abstract class GuiItemRenderingMixin {
             this.pose.scale(1.5f, 1.5f, 1);
             this.drawString(font, darkText, (int) ((x + (font.width(darkText))) / 1.5f), (int) (y / 1.5f), 16777215, false);
 
-            this.pose.scale(1 / 1.5f, 1 / 1.5f, 1);
-            this.pose.translate(0.0F, -yOffset, -190.0F);
+            this.pose.popPose();
         }
+    }
+
+    @Redirect(
+            method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I")
+    )
+    private int itemColor(GuiGraphics instance, Font font, String text, int x, int y, int color, boolean dropShadow) {
+        return instance.drawString(font, text, x, y, (adj$shouldHideStack) ? 6579300 : 16777215, true);
     }
 }
