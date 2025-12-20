@@ -1,6 +1,5 @@
 package xyz.kohara.adjcore;
 
-import dev.latvian.mods.kubejs.integration.forge.jei.HideJEIEventJS;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -9,7 +8,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -47,7 +45,6 @@ import xyz.kohara.adjcore.misc.credits.ModInfo;
 import xyz.kohara.adjcore.misc.placementmodifiertypes.ModPlacementModifierTypes;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
