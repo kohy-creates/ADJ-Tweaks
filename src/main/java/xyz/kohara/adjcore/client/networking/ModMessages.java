@@ -62,6 +62,12 @@ public class ModMessages {
                 .encoder(SyncEntityTagsS2CPacket::toBytes)
                 .consumerMainThread(SyncEntityTagsS2CPacket::handle)
                 .add();
+
+        net.messageBuilder(EnchantedCritParticleS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(EnchantedCritParticleS2CPacket::new)
+                .encoder(EnchantedCritParticleS2CPacket::toBytes)
+                .consumerMainThread(EnchantedCritParticleS2CPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

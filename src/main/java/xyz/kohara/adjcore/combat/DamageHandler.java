@@ -7,6 +7,9 @@ import dev.shadowsoffire.attributeslib.api.ALCombatRules;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import dev.shadowsoffire.attributeslib.packet.CritParticleMessage;
 import dev.shadowsoffire.placebo.network.PacketDistro;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -18,11 +21,18 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -31,6 +41,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
+import xyz.kohara.adjcore.client.networking.packet.EnchantedCritParticleS2CPacket;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
 
 import java.io.FileReader;
@@ -133,7 +146,7 @@ public class DamageHandler {
         setInvulTime(entity, INVUL_TIME);
     }
 
-    private static float getValue(LivingEntity entity, Attribute attribute) {
+    private static float getAttributeValue(LivingEntity entity, Attribute attribute) {
         AttributeInstance instance = entity.getAttribute(attribute);
         return instance != null ? (float) instance.getValue() : 0;
     }
@@ -166,12 +179,23 @@ public class DamageHandler {
         }
     }
 
-    //    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void handleLivingHurt(LivingHurtEvent event) {
         DamageSource source = event.getSource();
-        LivingEntity entity = event.getEntity();
+        LivingEntity victimEntity = event.getEntity();
         Entity attackerEntity = source.getEntity();
         float baseAmount = event.getAmount();
+
+        // Whenever attackerEntity is needed as a LivingEntity
+        LivingEntity livingAttacker = (attackerEntity instanceof LivingEntity le) ? le : null;
+
+        // 0. Prevent damaging tamed animals
+        if (victimEntity instanceof TamableAnimal tamableAnimal) {
+            if (tamableAnimal.getOwner() == attackerEntity && !attackerEntity.isShiftKeyDown()) {
+                event.setAmount(0);
+//                event.setCanceled(true);
+                return;
+            }
+        }
 
         // 1. Apply damage multipliers from config
         float finalAmount = baseAmount;
@@ -187,6 +211,48 @@ public class DamageHandler {
                     finalAmount *= MULTIPLIERS.get(id);
                     break;
                 }
+            }
+        }
+
+        // 1.5. Apply enchantment multipliers
+        if (livingAttacker != null) {
+            ItemStack weapon = livingAttacker.getMainHandItem();
+
+            final int sharpness = weapon.getEnchantmentLevel(Enchantments.SHARPNESS);
+            int isMagic = sharpness;
+            if (sharpness > 0) {
+                finalAmount += finalAmount * (float) (1 + sharpness * 0.1);
+            }
+
+            if (victimEntity.getMobType() == MobType.UNDEAD) {
+                final int smite = weapon.getEnchantmentLevel(Enchantments.SMITE);
+                if (smite > 0) {
+                    isMagic += smite;
+                    finalAmount += finalAmount * (float) (1 + smite * 0.15);
+                }
+            } else if (victimEntity.getMobType() == MobType.ARTHROPOD) {
+                final int bane = weapon.getEnchantmentLevel(Enchantments.BANE_OF_ARTHROPODS);
+                if (bane > 0) {
+                    isMagic += bane;
+                    finalAmount += finalAmount * (float) (1 + bane * 0.15);
+                }
+            }
+
+            if (victimEntity.isInWater() || victimEntity.level().isRainingAt(victimEntity.blockPosition())) {
+                final int impaling = weapon.getEnchantmentLevel(Enchantments.IMPALING);
+                if (impaling > 0) {
+                    isMagic += impaling;
+                    finalAmount *= (float) (1 + impaling * 0.1);
+                }
+            }
+
+            if (isMagic > 0 && !livingAttacker.level().isClientSide()) {
+                livingAttacker.level().getServer().getPlayerList().getPlayers().forEach(viewer -> {
+                    ModMessages.sendToPlayer(
+                            new EnchantedCritParticleS2CPacket(victimEntity.getId()),
+                            viewer
+                    );
+                });
             }
         }
 
@@ -212,26 +278,26 @@ public class DamageHandler {
 
         // 3. Apply combat rules
         if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
-            finalAmount *= 1 - getValue(entity, ModAttributes.DAMAGE_REDUCTION.get());
+            finalAmount *= 1 - getAttributeValue(victimEntity, ModAttributes.DAMAGE_REDUCTION.get());
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
-                finalAmount *= 1 - getValue(entity, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+                finalAmount *= 1 - getAttributeValue(victimEntity, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
             }
         }
 
-        finalAmount *= ALCombatRules.getProtDamageReduction(EnchantmentHelper.getDamageProtection(entity.getArmorSlots(), source));
+        finalAmount *= ALCombatRules.getProtDamageReduction(EnchantmentHelper.getDamageProtection(victimEntity.getArmorSlots(), source));
 
-        int armorPoints = (int) getValue(entity, Attributes.ARMOR);
+        int armorPoints = (int) getAttributeValue(victimEntity, Attributes.ARMOR);
         if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-            int armorToughness = (int) getValue(entity, Attributes.ARMOR_TOUGHNESS);
+            int armorToughness = (int) getAttributeValue(victimEntity, Attributes.ARMOR_TOUGHNESS);
 
             if (attackerEntity instanceof LivingEntity attacker) {
-                int armorPierce = (int) getValue(attacker, ALObjects.Attributes.ARMOR_PIERCE.get());
-                float armorShred = Math.max(1 - getValue(attacker, ALObjects.Attributes.ARMOR_SHRED.get()), 0);
+                int armorPierce = (int) getAttributeValue(attacker, ALObjects.Attributes.ARMOR_PIERCE.get());
+                float armorShred = Math.max(1 - getAttributeValue(attacker, ALObjects.Attributes.ARMOR_SHRED.get()), 0);
                 armorPierce = Math.max(0, armorPierce - armorToughness);
                 armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
             }
 
-            float factor = (entity instanceof Player) ? ARMOR_POINT_FACTOR.get() : ARMOR_POINT_FACTOR_ENTITY.get();
+            float factor = (victimEntity instanceof Player) ? ARMOR_POINT_FACTOR.get() : ARMOR_POINT_FACTOR_ENTITY.get();
             finalAmount = Math.max(MIN_DAMAGE.get(), finalAmount - (armorPoints / factor));
         }
 
@@ -244,8 +310,6 @@ public class DamageHandler {
         boolean isCrit = false;
         double critChance = 0d;
         float critMult = 1.0F;
-
-        LivingEntity livingAttacker = (attackerEntity instanceof LivingEntity le) ? le : null;
 
         if (livingAttacker != null) {
 

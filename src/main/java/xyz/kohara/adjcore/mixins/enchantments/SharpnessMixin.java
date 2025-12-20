@@ -41,17 +41,6 @@ public class SharpnessMixin extends Enchantment {
 
     @Inject(method = "getDamageBonus", at = @At("HEAD"), cancellable = true)
     public void getDamageBonus(int level, MobType type, CallbackInfoReturnable<Float> cir) {
-        cir.cancel();
-        DamageEnchantment enchantment = (DamageEnchantment) (Object) this;
-        if (enchantment.type == 0) {
-            float amount = 2.5F + 1.5F * (level - 1);
-            cir.setReturnValue(amount);
-        } else if (enchantment.type == 1 && type == MobType.UNDEAD) {
-            float amount = 3F + 2F * (level - 1);
-            cir.setReturnValue(amount);
-        } else {
-            float amount = 3F + 2F * (level - 1);
-            cir.setReturnValue(enchantment.type == 2 && type == MobType.ARTHROPOD ? amount : 0.0F);
-        }
+        cir.setReturnValue(0F);
     }
 }
