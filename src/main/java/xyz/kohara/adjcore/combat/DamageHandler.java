@@ -221,20 +221,20 @@ public class DamageHandler {
             final int sharpness = weapon.getEnchantmentLevel(Enchantments.SHARPNESS);
             int isMagic = sharpness;
             if (sharpness > 0) {
-                finalAmount += finalAmount * (float) (1 + sharpness * 0.1);
+                finalAmount += finalAmount * (float) (sharpness * 0.1);
             }
 
             if (victimEntity.getMobType() == MobType.UNDEAD) {
                 final int smite = weapon.getEnchantmentLevel(Enchantments.SMITE);
                 if (smite > 0) {
                     isMagic += smite;
-                    finalAmount += finalAmount * (float) (1 + smite * 0.15);
+                    finalAmount += finalAmount * (float) (smite * 0.15);
                 }
             } else if (victimEntity.getMobType() == MobType.ARTHROPOD) {
                 final int bane = weapon.getEnchantmentLevel(Enchantments.BANE_OF_ARTHROPODS);
                 if (bane > 0) {
                     isMagic += bane;
-                    finalAmount += finalAmount * (float) (1 + bane * 0.15);
+                    finalAmount += finalAmount * (float) (bane * 0.15);
                 }
             }
 
