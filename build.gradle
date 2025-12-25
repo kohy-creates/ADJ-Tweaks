@@ -171,6 +171,8 @@ dependencies {
     //modImplementation "com.aetherteam.aether:aether:${project.aether_version}"
 
     compileOnly "curse.maven:cyclops-core-232758:7210370"
+
+    modImplementation("org.embeddedt:embeddium-1.20.1:0.2.11-git.23aedfb+mc1.20.1")
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
