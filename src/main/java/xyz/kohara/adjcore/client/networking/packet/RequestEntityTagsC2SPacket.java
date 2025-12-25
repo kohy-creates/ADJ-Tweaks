@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
-import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 
 import java.util.Set;
 import java.util.function.Supplier;
@@ -42,7 +42,7 @@ public class RequestEntityTagsC2SPacket {
             Entity entity = level.getEntity(msg.entityId);
             if (entity != null) {
                 Set<String> tags = entity.getTags();
-                ModMessages.sendToPlayer(
+                ADJMessages.sendToPlayer(
                         new SyncEntityTagsS2CPacket(entity.getId(), tags),
                         player
                 );

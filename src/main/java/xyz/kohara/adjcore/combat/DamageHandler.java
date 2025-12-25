@@ -7,9 +7,6 @@ import dev.shadowsoffire.attributeslib.api.ALCombatRules;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import dev.shadowsoffire.attributeslib.packet.CritParticleMessage;
 import dev.shadowsoffire.placebo.network.PacketDistro;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -27,12 +24,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -40,9 +34,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.attributes.ModAttributes;
-import xyz.kohara.adjcore.client.networking.ModMessages;
-import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
+import xyz.kohara.adjcore.registry.ADJAttributes;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.EnchantedCritParticleS2CPacket;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
 
@@ -248,7 +241,7 @@ public class DamageHandler {
 
             if (isMagic > 0 && !livingAttacker.level().isClientSide()) {
                 livingAttacker.level().getServer().getPlayerList().getPlayers().forEach(viewer -> {
-                    ModMessages.sendToPlayer(
+                    ADJMessages.sendToPlayer(
                             new EnchantedCritParticleS2CPacket(victimEntity.getId()),
                             viewer
                     );
@@ -278,9 +271,9 @@ public class DamageHandler {
 
         // 3. Apply combat rules
         if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
-            finalAmount *= 1 - getAttributeValue(victimEntity, ModAttributes.DAMAGE_REDUCTION.get());
+            finalAmount *= 1 - getAttributeValue(victimEntity, ADJAttributes.DAMAGE_REDUCTION.get());
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
-                finalAmount *= 1 - getAttributeValue(victimEntity, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+                finalAmount *= 1 - getAttributeValue(victimEntity, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
             }
         }
 

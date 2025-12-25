@@ -11,7 +11,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.EmiReloadS2CPacket;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class EMIReloadCommand {
     private static int reloadEmi(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "targets");
         players.forEach(serverPlayer -> {
-            ModMessages.sendToPlayer(new EmiReloadS2CPacket(), serverPlayer);
+            ADJMessages.sendToPlayer(new EmiReloadS2CPacket(), serverPlayer);
         });
         return 1;
     }

@@ -2,10 +2,8 @@ package xyz.kohara.adjcore.mixins.ars;
 
 import com.hollingsworth.arsnouveau.api.event.MaxManaCalcEvent;
 import com.hollingsworth.arsnouveau.api.mana.IManaCap;
-import com.hollingsworth.arsnouveau.api.mana.IManaDiscountEquipment;
 import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
 import com.hollingsworth.arsnouveau.api.spell.Spell;
-import com.hollingsworth.arsnouveau.api.util.CuriosUtil;
 import com.hollingsworth.arsnouveau.api.util.ManaUtil;
 import com.hollingsworth.arsnouveau.setup.config.ServerConfig;
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
@@ -24,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.registry.ADJAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -118,7 +116,7 @@ public class ReworkMaxManaProgression {
 
         double reduction = 0d;
 
-        AttributeInstance costReduction = player.getAttribute(ModAttributes.MANA_COST_REDUCTION.get());
+        AttributeInstance costReduction = player.getAttribute(ADJAttributes.MANA_COST_REDUCTION.get());
         if (costReduction != null) {
             reduction = costReduction.getValue();
         }
@@ -137,7 +135,7 @@ public class ReworkMaxManaProgression {
 
         double reduction = 0d;
 
-        AttributeInstance costReduction = e.getAttribute(ModAttributes.MANA_COST_REDUCTION.get());
+        AttributeInstance costReduction = e.getAttribute(ADJAttributes.MANA_COST_REDUCTION.get());
         if (costReduction != null) {
             reduction = costReduction.getValue();
         }

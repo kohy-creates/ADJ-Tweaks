@@ -22,27 +22,30 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.registry.ADJAttributes;
 import xyz.kohara.adjcore.client.music.JukeboxTracker;
 import xyz.kohara.adjcore.client.music.MusicConfig;
-import xyz.kohara.adjcore.client.networking.ModMessages;
-import xyz.kohara.adjcore.client.particle.ModParticles;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
+import xyz.kohara.adjcore.registry.ADJParticles;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.DamageIndicators;
 import xyz.kohara.adjcore.curio.CurioControl;
-import xyz.kohara.adjcore.effects.ModEffects;
-import xyz.kohara.adjcore.effects.editor.EffectsEditor;
+import xyz.kohara.adjcore.registry.ADJEffects;
+import xyz.kohara.adjcore.registry.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
+import xyz.kohara.adjcore.registry.ADJFluidTypes;
+import xyz.kohara.adjcore.registry.ADJFluids;
+import xyz.kohara.adjcore.registry.ADJItems;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
 import xyz.kohara.adjcore.misc.LangGenerator;
-import xyz.kohara.adjcore.misc.ModCapabilities;
-import xyz.kohara.adjcore.misc.biomemodifiers.ModBiomeModifiers;
-import xyz.kohara.adjcore.misc.capabilities.CapabilityEvents;
+import xyz.kohara.adjcore.registry.ADJCapabilities;
+import xyz.kohara.adjcore.registry.ADJBiomeModifiers;
+import xyz.kohara.adjcore.registry.capabilities.CapabilityEvents;
 import xyz.kohara.adjcore.misc.credits.LoaderInfo;
 import xyz.kohara.adjcore.misc.credits.ModCreditsBase;
 import xyz.kohara.adjcore.misc.credits.ModInfo;
-import xyz.kohara.adjcore.misc.placementmodifiertypes.ModPlacementModifierTypes;
+import xyz.kohara.adjcore.registry.ADJPlacementModifierTypes;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 
 import java.io.IOException;
@@ -61,13 +64,13 @@ public class ADJCore {
 
     public ADJCore() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, MOD_ID + ".toml");
-        ModSoundEvents.registerSounds();
+        ADJSoundEvents.registerSounds();
 
         IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
         MOD_BUS.addListener(this::commonSetup);
         MOD_BUS.addListener(this::clientSetup);
         MOD_BUS.addListener(this::addEntityAttributes);
-        MOD_BUS.addListener(ModCapabilities::register);
+        MOD_BUS.addListener(ADJCapabilities::register);
         MOD_BUS.addListener(LangGenerator::gatherData);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -78,18 +81,21 @@ public class ADJCore {
         MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
         MinecraftForge.EVENT_BUS.register(new DamageIndicators());
 
-        ModEffects.register(MOD_BUS);
-        ModSoundEvents.SOUND_EVENTS.register(MOD_BUS);
-        ModAttributes.register(MOD_BUS);
+        ADJEffects.register(MOD_BUS);
+        ADJSoundEvents.SOUND_EVENTS.register(MOD_BUS);
+        ADJAttributes.register(MOD_BUS);
         MusicConfig.load(MOD_BUS);
-        ModPlacementModifierTypes.register(MOD_BUS);
-        ModParticles.register(MOD_BUS);
+        ADJPlacementModifierTypes.register(MOD_BUS);
+        ADJParticles.register(MOD_BUS);
+        ADJFluidTypes.register(MOD_BUS);
+        ADJFluids.register(MOD_BUS);
+        ADJItems.register(MOD_BUS);
         JukeboxTracker.init();
-        ModBiomeModifiers.register(MOD_BUS);
+        ADJBiomeModifiers.register(MOD_BUS);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(ModMessages::register);
+        event.enqueueWork(ADJMessages::register);
         PotionsEditor.edit();
         EffectsEditor.edit();
     }
@@ -167,13 +173,13 @@ public class ADJCore {
 
     public void addEntityAttributes(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> type : event.getTypes()) {
-            event.add(type, ModAttributes.DAMAGE_REDUCTION.get());
-            event.add(type, ModAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
-            event.add(type, ModAttributes.SAFE_FALL_DISTANCE.get());
+            event.add(type, ADJAttributes.DAMAGE_REDUCTION.get());
+            event.add(type, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+            event.add(type, ADJAttributes.SAFE_FALL_DISTANCE.get());
         }
 
-        event.add(EntityType.PLAYER, ModAttributes.MANA_COST_REDUCTION.get());
-        event.add(EntityType.PLAYER, ModAttributes.EXTRA_ORE_DROPS.get());
+        event.add(EntityType.PLAYER, ADJAttributes.MANA_COST_REDUCTION.get());
+        event.add(EntityType.PLAYER, ADJAttributes.EXTRA_ORE_DROPS.get());
     }
 
     private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";

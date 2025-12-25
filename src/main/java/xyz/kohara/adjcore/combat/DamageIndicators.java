@@ -7,7 +7,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
-import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 
 public class DamageIndicators {
@@ -36,7 +36,7 @@ public class DamageIndicators {
                 pos = offsetTowardsEntity(victim, viewer);
             }
 
-            ModMessages.sendToPlayer(
+            ADJMessages.sendToPlayer(
                     new DamageIndicatorS2CPacket(
                             pos.x, pos.y, pos.z, amount, type
                     ),

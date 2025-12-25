@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 
 @Mixin(JukeboxBlock.class)
 public class JukeboxDiscSoundMixin {
@@ -28,13 +28,13 @@ public class JukeboxDiscSoundMixin {
             )
     )
     private void auditory_ejectDiscSound(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        level.playSound(player, pos, ModSoundEvents.JUKEBOX_EJECT.get(), SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4F);
+        level.playSound(player, pos, ADJSoundEvents.JUKEBOX_EJECT.get(), SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4F);
     }
 
     @Inject(method = "onRemove", at = @At("HEAD"))
     private void auditory_insertDiscSound(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving, CallbackInfo ci) {
         if (newState.getBlock() instanceof JukeboxBlock && newState.getValue(JukeboxBlock.HAS_RECORD)) {
-            level.playSound(null, pos, ModSoundEvents.JUKEBOX_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound(null, pos, ADJSoundEvents.JUKEBOX_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 }

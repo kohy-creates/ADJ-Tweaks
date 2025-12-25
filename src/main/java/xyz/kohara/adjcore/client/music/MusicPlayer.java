@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.RequestEntityTagsC2SPacket;
 import xyz.kohara.adjcore.mixins.music.MusicManagerAccessor;
 
@@ -216,7 +216,7 @@ public class MusicPlayer {
     }
 
     public static List<String> getSyncedTags(LivingEntity boss) {
-        ModMessages.sendToServer(new RequestEntityTagsC2SPacket(boss.getId()));
+        ADJMessages.sendToServer(new RequestEntityTagsC2SPacket(boss.getId()));
 
         String s = boss.getPersistentData().getString("adjcore_synced_tags");
         if (s.isEmpty()) return new ArrayList<>();

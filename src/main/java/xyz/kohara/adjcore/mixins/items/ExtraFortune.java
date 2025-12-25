@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.registry.ADJAttributes;
 
 @Mixin(ApplyBonusCount.class)
 public class ExtraFortune {
@@ -34,7 +33,7 @@ public class ExtraFortune {
     private int addExtraFortuneLevels(int level, ItemStack stack, LootContext lootContext) {
         Entity entity = lootContext.getParamOrNull(LootContextParams.THIS_ENTITY);
         if (entity instanceof LivingEntity livingEntity && this.enchantment != Enchantments.SILK_TOUCH) {
-            AttributeInstance inst = livingEntity.getAttribute(ModAttributes.EXTRA_ORE_DROPS.get());
+            AttributeInstance inst = livingEntity.getAttribute(ADJAttributes.EXTRA_ORE_DROPS.get());
             if (inst != null) {
                 int amount = (int) Math.round(inst.getValue());
                 level += amount;

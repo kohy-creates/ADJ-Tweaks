@@ -2,7 +2,6 @@ package xyz.kohara.adjcore.mixins.client;
 
 import net.minecraft.client.CameraType;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -10,8 +9,6 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.players.PlayerList;
-import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.kohara.adjcore.ADJCore;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -115,7 +112,7 @@ public abstract class DeathScreenMixin extends Screen {
         adj$deathText = ADJCore.getRandomDeathText();
         minecraft.getSoundManager().play(
                 SimpleSoundInstance.forUI(
-                        ModSoundEvents.DEATH_SCREEN.get(),
+                        ADJSoundEvents.DEATH_SCREEN.get(),
                         1F,
                         1F
                 )

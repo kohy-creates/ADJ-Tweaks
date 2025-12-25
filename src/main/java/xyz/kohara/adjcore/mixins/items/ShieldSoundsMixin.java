@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 
 @Mixin(ShieldItem.class)
 public abstract class ShieldSoundsMixin extends Item implements Equipable {
@@ -28,13 +28,13 @@ public abstract class ShieldSoundsMixin extends Item implements Equipable {
     @Inject(at = @At("HEAD"), method = "use")
     private void auditory_blockSound(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         if (!level.isClientSide()) {
-            player.playNotifySound(ModSoundEvents.ITEM_SHIELD_RAISE.get(), SoundSource.PLAYERS, 0.3F, 0.8f + level.random.nextFloat() * 0.4F);
+            player.playNotifySound(ADJSoundEvents.ITEM_SHIELD_RAISE.get(), SoundSource.PLAYERS, 0.3F, 0.8f + level.random.nextFloat() * 0.4F);
         }
     }
 
     // Shields now have a unique equipping sound
     @Override
     public @NotNull SoundEvent getEquipSound() {
-        return ModSoundEvents.ITEM_SHIELD_EQUIP.get();
+        return ADJSoundEvents.ITEM_SHIELD_EQUIP.get();
     }
 }

@@ -13,7 +13,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.openjdk.nashorn.internal.runtime.regexp.joni.Warnings;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
 import top.theillusivec4.curios.api.event.DropRulesEvent;
@@ -24,7 +23,7 @@ import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.misc.ModTags;
+import xyz.kohara.adjcore.registry.ADJTags;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -98,7 +97,7 @@ public class CurioControl {
 
     @SubscribeEvent
     public static void keepCurios(DropRulesEvent event) {
-        event.addOverride(i -> !i.is(ModTags.CURIOS_DROPPED_ON_DEATH) || i.getEnchantmentLevel(CURIO_SOULBOUND) > 0, ICurio.DropRule.ALWAYS_KEEP);
+        event.addOverride(i -> !i.is(ADJTags.CURIOS_DROPPED_ON_DEATH) || i.getEnchantmentLevel(CURIO_SOULBOUND) > 0, ICurio.DropRule.ALWAYS_KEEP);
     }
 
 

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 
 @Mixin(EntityType.class)
 public class SpawnEggUseSoundMixin {
@@ -21,7 +21,7 @@ public class SpawnEggUseSoundMixin {
     @Inject(at = @At("RETURN"), method = "spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;")
     private void auditory_spawnEggSound(ServerLevel serverLevel, ItemStack stack, Player player, BlockPos pos, MobSpawnType spawnType, boolean shouldOffsetY, boolean shouldOffsetYMore, CallbackInfoReturnable<Entity> cir) {
         if (stack.getItem() instanceof SpawnEggItem) {
-            serverLevel.playSound(null, pos, ModSoundEvents.ITEM_SPAWN_EGG_USE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+            serverLevel.playSound(null, pos, ADJSoundEvents.ITEM_SPAWN_EGG_USE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
         }
     }
 }

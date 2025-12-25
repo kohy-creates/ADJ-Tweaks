@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import xyz.kohara.adjcore.client.particle.ModParticles;
+import xyz.kohara.adjcore.registry.ADJParticles;
 
 import java.util.function.Supplier;
 
@@ -45,7 +45,7 @@ public class DamageIndicatorS2CPacket {
             ClientLevel level = mc.getConnection().getLevel();
 
             level.addParticle(
-                    ModParticles.DAMAGE_PARTICLE.get(),
+                    ADJParticles.DAMAGE_PARTICLE.get(),
                     x,
                     y,
                     z,

@@ -23,7 +23,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
-import xyz.kohara.adjcore.misc.capabilities.BellTraderDataProvider;
+import xyz.kohara.adjcore.registry.capabilities.BellTraderDataProvider;
 
 public class WanderingTraderEdits {
 

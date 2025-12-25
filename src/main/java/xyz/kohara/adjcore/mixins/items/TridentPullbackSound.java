@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 
 @Mixin(TridentItem.class)
 public abstract class TridentPullbackSound {
@@ -24,6 +24,6 @@ public abstract class TridentPullbackSound {
             )
     )
     private void auditory_pullbackSound(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-           if (!level.isClientSide()) player.playNotifySound(ModSoundEvents.ITEM_TRIDENT_PULLING.get(), SoundSource.PLAYERS, 0.1F, 0.8f + level.random.nextFloat() * 0.4F);
+           if (!level.isClientSide()) player.playNotifySound(ADJSoundEvents.ITEM_TRIDENT_PULLING.get(), SoundSource.PLAYERS, 0.1F, 0.8f + level.random.nextFloat() * 0.4F);
     }
 }

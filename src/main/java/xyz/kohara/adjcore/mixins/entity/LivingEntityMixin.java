@@ -1,11 +1,7 @@
 package xyz.kohara.adjcore.mixins.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.attributes.ModAttributes;
+import xyz.kohara.adjcore.registry.ADJAttributes;
 import xyz.kohara.adjcore.combat.KnockbackCooldown;
 import xyz.kohara.adjcore.entity.IHealTime;
 
@@ -127,8 +123,8 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
         if (!onGround) return;
 
         double safeFall = 0;
-        if (self.getAttributes().hasAttribute(ModAttributes.SAFE_FALL_DISTANCE.get())) {
-            safeFall = self.getAttributeValue(ModAttributes.SAFE_FALL_DISTANCE.get());
+        if (self.getAttributes().hasAttribute(ADJAttributes.SAFE_FALL_DISTANCE.get())) {
+            safeFall = self.getAttributeValue(ADJAttributes.SAFE_FALL_DISTANCE.get());
         }
 
         float adjustedFall = (float) (this.fallDistance - safeFall);

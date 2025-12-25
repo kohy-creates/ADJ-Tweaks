@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.misc.AuditoryTags;
-import xyz.kohara.adjcore.client.sounds.ModSoundEvents;
+import xyz.kohara.adjcore.registry.AuditoryTags;
+import xyz.kohara.adjcore.registry.ADJSoundEvents;
 
 @Mixin(Block.class)
 public class BlockSoundsMixin {
@@ -38,28 +38,28 @@ public class BlockSoundsMixin {
             cir.setReturnValue(SoundType.BASALT);
         }
         else if (state.is(AuditoryTags.CLAY_BRICK_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.CLAY_BRICKS);
+            cir.setReturnValue(ADJSoundEvents.CLAY_BRICKS);
         }
         else if (state.is(AuditoryTags.DIRT_SOUNDS)) {
             cir.setReturnValue(SoundType.ROOTED_DIRT);
         }
         else if (state.is(AuditoryTags.GOLD_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.GOLD);
+            cir.setReturnValue(ADJSoundEvents.GOLD);
         }
         else if (state.is(AuditoryTags.LEAF_SOUNDS)) {
             cir.setReturnValue(SoundType.AZALEA_LEAVES);
         }
         else if (state.is(AuditoryTags.LILY_PAD_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.LILY_PAD);
+            cir.setReturnValue(ADJSoundEvents.LILY_PAD);
         }
         else if (state.is(AuditoryTags.METAL_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.METAL);
+            cir.setReturnValue(ADJSoundEvents.METAL);
         }
         else if (state.is(AuditoryTags.NETHERRACK_SOUNDS)) {
             cir.setReturnValue(SoundType.NETHERRACK);
         }
         else if (state.is(AuditoryTags.OBSIDIAN_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.OBSIDIAN);
+            cir.setReturnValue(ADJSoundEvents.OBSIDIAN);
         }
         else if (state.is(AuditoryTags.PLANT_SOUNDS)) {
             cir.setReturnValue(SoundType.HANGING_ROOTS);
@@ -71,25 +71,25 @@ public class BlockSoundsMixin {
             cir.setReturnValue(SoundType.SAND);
         }
         else if (state.is(AuditoryTags.SHULKER_BOX_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.SHULKER_BOX);
+            cir.setReturnValue(ADJSoundEvents.SHULKER_BOX);
         }
         else if (state.is(AuditoryTags.SMALL_OBJECT_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.SMALL_OBJECT);
+            cir.setReturnValue(ADJSoundEvents.SMALL_OBJECT);
         }
         else if (state.is(AuditoryTags.SPAWNER_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.SPAWNER);
+            cir.setReturnValue(ADJSoundEvents.SPAWNER);
         }
         else if (state.is(AuditoryTags.STONE_BRICK_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.STONE_BRICKS);
+            cir.setReturnValue(ADJSoundEvents.STONE_BRICKS);
         }
         else if (state.is(AuditoryTags.STONE_ORE_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.STONE_ORE);
+            cir.setReturnValue(ADJSoundEvents.STONE_ORE);
         }
         else if (state.is(AuditoryTags.STRING_SOUNDS)) {
             cir.setReturnValue(SoundType.VINE);
         }
         else if (state.is(AuditoryTags.TERRACOTTA_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.TERRACOTTA);
+            cir.setReturnValue(ADJSoundEvents.TERRACOTTA);
         }
         else if (state.is(AuditoryTags.WOOD_SOUNDS)) {
             cir.setReturnValue(SoundType.WOOD);
@@ -101,19 +101,19 @@ public class BlockSoundsMixin {
             cir.setReturnValue(SoundType.STEM);
         }
         else if (state.is(AuditoryTags.PURPUR_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.PURPUR);
+            cir.setReturnValue(ADJSoundEvents.PURPUR);
         }
         else if (state.is(AuditoryTags.CHORUS_PLANT_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.CHORUS_PLANT);
+            cir.setReturnValue(ADJSoundEvents.CHORUS_PLANT);
         }
         else if (state.is(AuditoryTags.ICE_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.ICE);
+            cir.setReturnValue(ADJSoundEvents.ICE);
         }
         else if (state.is(AuditoryTags.GOURD_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.GOURD);
+            cir.setReturnValue(ADJSoundEvents.GOURD);
         }
         else if (state.is(AuditoryTags.POT_SOUNDS)) {
-            cir.setReturnValue(ModSoundEvents.SMALL_OBJECT);
+            cir.setReturnValue(ADJSoundEvents.SMALL_OBJECT);
         }
         else if (state.is(AuditoryTags.BOOKSHELF_SOUNDS)) {
             cir.setReturnValue(SoundType.CHISELED_BOOKSHELF);

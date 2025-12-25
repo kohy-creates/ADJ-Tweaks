@@ -7,7 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.client.Keybindings;
-import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.ChangeLoadOutC2SPacket;
 
 @Mod.EventBusSubscriber(modid = ADJCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -19,13 +19,13 @@ public class ClientForgeHandler {
         if (client.player == null) return;
 
         if (Keybindings.INSTANCE.LOADOUT_1.consumeClick()) {
-            ModMessages.sendToServer(new ChangeLoadOutC2SPacket(1));
+            ADJMessages.sendToServer(new ChangeLoadOutC2SPacket(1));
         }
         if (Keybindings.INSTANCE.LOADOUT_2.consumeClick()) {
-            ModMessages.sendToServer(new ChangeLoadOutC2SPacket(2));
+            ADJMessages.sendToServer(new ChangeLoadOutC2SPacket(2));
         }
         if (Keybindings.INSTANCE.LOADOUT_3.consumeClick()) {
-            ModMessages.sendToServer(new ChangeLoadOutC2SPacket(3));
+            ADJMessages.sendToServer(new ChangeLoadOutC2SPacket(3));
         }
         if (Keybindings.INSTANCE.NEW_HIDE_GUI.consumeClick()) {
             client.options.hideGui = !client.options.hideGui;

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.kohara.adjcore.combat.ModDamageTypeTags;
+import xyz.kohara.adjcore.registry.ADJDamageTypeTags;
 
 @Mixin(ProtectionEnchantment.class)
 public class ProtectionMixin {
@@ -53,9 +53,9 @@ public class ProtectionMixin {
         ProtectionEnchantment enchantment = (ProtectionEnchantment) (Object) this;
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             cir.setReturnValue(0);
-        } else if (enchantment.type == ProtectionEnchantment.Type.ALL && source.is(ModDamageTypeTags.IS_PHYSICAL)) {
+        } else if (enchantment.type == ProtectionEnchantment.Type.ALL && source.is(ADJDamageTypeTags.IS_PHYSICAL)) {
             cir.setReturnValue(level);
-        } else if (enchantment.type == ProtectionEnchantment.Type.EXPLOSION && source.is(ModDamageTypeTags.IS_ENVIRONMENTAL)) {
+        } else if (enchantment.type == ProtectionEnchantment.Type.EXPLOSION && source.is(ADJDamageTypeTags.IS_ENVIRONMENTAL)) {
             cir.setReturnValue(level * 2);
         } else if (enchantment.type == ProtectionEnchantment.Type.FALL && source.is(DamageTypeTags.IS_FALL)) {
             cir.setReturnValue(level * 4);

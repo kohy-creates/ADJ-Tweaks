@@ -16,9 +16,9 @@ import net.minecraft.world.phys.AABB;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
-import xyz.kohara.adjcore.misc.ModCapabilities;
-import xyz.kohara.adjcore.misc.capabilities.IPlayerLoadouts;
-import xyz.kohara.adjcore.client.networking.ModMessages;
+import xyz.kohara.adjcore.registry.ADJCapabilities;
+import xyz.kohara.adjcore.registry.capabilities.IPlayerLoadouts;
+import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.ShowRainbowMessageS2CPacket;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public class PlayerLoadouts {
     );
 
     public static void changeLoadout(ServerPlayer player, int targetLoadout) {
-        player.getCapability(ModCapabilities.PLAYER_LOADOUTS).ifPresent(loadouts -> {
+        player.getCapability(ADJCapabilities.PLAYER_LOADOUTS).ifPresent(loadouts -> {
             int currentLoadout = loadouts.getCurrentLoadout();
 
             if (currentLoadout == 0) {
@@ -149,7 +149,7 @@ public class PlayerLoadouts {
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.HORSE_ARMOR, SoundSource.PLAYERS, 0.8F, 0.8f + random.nextFloat() * 0.4F);
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEASH_KNOT_PLACE, SoundSource.PLAYERS, 0.5F, 0.8f + random.nextFloat() * 0.4F);
 
-        ModMessages.sendToPlayer(new ShowRainbowMessageS2CPacket(Component.literal("Switched active loadout to Loadout " + loadout)), player);
+        ADJMessages.sendToPlayer(new ShowRainbowMessageS2CPacket(Component.literal("Switched active loadout to Loadout " + loadout)), player);
 
         AABB box = player.getBoundingBox();
 
