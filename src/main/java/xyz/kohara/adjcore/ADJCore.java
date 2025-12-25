@@ -22,30 +22,21 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.kohara.adjcore.registry.ADJAttributes;
+import xyz.kohara.adjcore.registry.*;
 import xyz.kohara.adjcore.client.music.JukeboxTracker;
 import xyz.kohara.adjcore.client.music.MusicConfig;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
-import xyz.kohara.adjcore.registry.ADJParticles;
-import xyz.kohara.adjcore.registry.ADJSoundEvents;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.DamageIndicators;
 import xyz.kohara.adjcore.curio.CurioControl;
-import xyz.kohara.adjcore.registry.ADJEffects;
 import xyz.kohara.adjcore.registry.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
-import xyz.kohara.adjcore.registry.ADJFluidTypes;
-import xyz.kohara.adjcore.registry.ADJFluids;
-import xyz.kohara.adjcore.registry.ADJItems;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
 import xyz.kohara.adjcore.misc.LangGenerator;
-import xyz.kohara.adjcore.registry.ADJCapabilities;
-import xyz.kohara.adjcore.registry.ADJBiomeModifiers;
 import xyz.kohara.adjcore.registry.capabilities.CapabilityEvents;
 import xyz.kohara.adjcore.misc.credits.LoaderInfo;
 import xyz.kohara.adjcore.misc.credits.ModCreditsBase;
 import xyz.kohara.adjcore.misc.credits.ModInfo;
-import xyz.kohara.adjcore.registry.ADJPlacementModifierTypes;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 
 import java.io.IOException;
@@ -81,17 +72,24 @@ public class ADJCore {
         MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
         MinecraftForge.EVENT_BUS.register(new DamageIndicators());
 
-        ADJEffects.register(MOD_BUS);
-        ADJSoundEvents.SOUND_EVENTS.register(MOD_BUS);
-        ADJAttributes.register(MOD_BUS);
-        MusicConfig.load(MOD_BUS);
-        ADJPlacementModifierTypes.register(MOD_BUS);
-        ADJParticles.register(MOD_BUS);
-        ADJFluidTypes.register(MOD_BUS);
-        ADJFluids.register(MOD_BUS);
-        ADJItems.register(MOD_BUS);
         JukeboxTracker.init();
-        ADJBiomeModifiers.register(MOD_BUS);
+
+        initRegistries(MOD_BUS);
+
+    }
+
+    private void initRegistries(IEventBus bus) {
+        ADJBiomeModifiers.register(bus);
+        ADJEffects.register(bus);
+        ADJSoundEvents.SOUND_EVENTS.register(bus);
+        ADJAttributes.register(bus);
+        MusicConfig.load(bus);
+        ADJPlacementModifierTypes.register(bus);
+        ADJParticles.register(bus);
+        ADJFluidTypes.register(bus);
+        ADJFluids.register(bus);
+        ADJItems.register(bus);
+        ADJBlocks.register(bus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

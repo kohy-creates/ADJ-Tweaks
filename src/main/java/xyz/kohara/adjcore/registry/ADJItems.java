@@ -14,8 +14,8 @@ public class ADJItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, ADJCore.MOD_ID);
 
-    public static final RegistryObject<Item> TEST_FLUID_BUCKET = ITEMS.register(
-            "test_fluid_bucket",
+    public static final RegistryObject<Item> SHIMMER_BUCKET = ITEMS.register(
+            "shimmer_bucket",
             () -> new BucketItem(
                     ADJFluids.SHIMMER,
                     new Item.Properties()
