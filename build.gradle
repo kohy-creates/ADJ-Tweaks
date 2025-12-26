@@ -177,6 +177,7 @@ dependencies {
     compileOnly("curse.maven:ftb-quests-forge-289412:7260736")
     compileOnly("curse.maven:ftb-teams-forge-404468:6130786")
     compileOnly("curse.maven:ftb-library-forge-404465:7296748")
+    compileOnly("curse.maven:ftb-xmod-compat-889915:6402486")
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

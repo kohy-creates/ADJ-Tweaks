@@ -5,7 +5,7 @@
 			"xyz/kohara/adjcore/entity/IHealTime"
 		],
 		"net/minecraft/class_1657": [
-			"xyz/kohara/adjcore/misc/ArsManaShenanigans"
+			"xyz/kohara/adjcore/compat/ArsManaShenanigans"
 		]
 	},
 	"accessWidener": "adjcore.accesswidener"

@@ -1,5 +1,6 @@
 package xyz.kohara.adjcore;
 
+import dev.ftb.mods.ftbquests.quest.QuestObject;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -96,9 +97,12 @@ public class ADJCore {
         event.enqueueWork(ADJMessages::register);
         PotionsEditor.edit();
         EffectsEditor.edit();
+
+        QuestObject object = null;
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+
     }
 
     public static ResourceLocation of(String path) {
