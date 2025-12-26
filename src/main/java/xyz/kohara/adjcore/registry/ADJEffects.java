@@ -21,7 +21,7 @@ public class ADJEffects {
     );
 
     private static RegistryObject<MobEffect> register(String id, MobEffect effect, String name, String description) {
-        LangGenerator.addEffectTranslation("effect.adjcore." + id, name, description);
+        LangGenerator.addEffectTranslation(id, name, description);
         return MOB_EFFECTS.register(id, () -> effect);
     }
 

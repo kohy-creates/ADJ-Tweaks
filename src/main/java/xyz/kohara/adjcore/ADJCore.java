@@ -178,6 +178,7 @@ public class ADJCore {
             event.add(type, ADJAttributes.DAMAGE_REDUCTION.get());
             event.add(type, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
             event.add(type, ADJAttributes.SAFE_FALL_DISTANCE.get());
+            event.add(type, ADJAttributes.HEALTH_REGEN.get());
         }
 
         event.add(EntityType.PLAYER, ADJAttributes.MANA_COST_REDUCTION.get());

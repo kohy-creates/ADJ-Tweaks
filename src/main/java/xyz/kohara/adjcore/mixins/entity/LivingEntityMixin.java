@@ -7,6 +7,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -75,6 +76,9 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
     @Unique
     public int adjcore$healTime;
 
+    @Unique
+    public int adjcore$healthRegenTicker;
+
     @Override
     public int adjcore$getKnockbackCooldown() {
         return adjcore$knockbackCooldown;
@@ -106,6 +110,24 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
         if (adjcore$healTime > 0) {
             adjcore$healTime--;
         }
+        LivingEntity entity = (LivingEntity) (Object) this;
+        float regenAmount = adj$calculateExtraRegenAmount(entity);
+        if (regenAmount > 0
+                && entity.getHealth() != entity.getMaxHealth()) {
+            entity.heal(regenAmount);
+        }
+        else if (regenAmount < 0) {
+            entity.setHealth(entity.getHealth() - regenAmount);
+        }
+    }
+
+    @Unique
+    private float adj$calculateExtraRegenAmount(LivingEntity entity) {
+        AttributeInstance instance = entity.getAttribute(ADJAttributes.HEALTH_REGEN.get());
+        if (instance != null) {
+            return (float) (instance.getValue() / 20f);
+        }
+        return 0;
     }
 
     @Inject(

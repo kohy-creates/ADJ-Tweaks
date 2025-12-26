@@ -1,11 +1,9 @@
 package xyz.kohara.adjcore.misc;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.ADJCore;
 
 import java.util.HashMap;
@@ -15,6 +13,10 @@ public class LangGenerator {
 
     private static final Map<String, String> LOCALS = new HashMap<>();
 
+    private static String constructId(String category, String name) {
+        return category + "." + ADJCore.MOD_ID + "." + name;
+    }
+
     public static void gatherData(GatherDataEvent event) {
         event.getGenerator().addProvider(
                 event.includeClient(),
@@ -22,15 +24,27 @@ public class LangGenerator {
         );
     }
 
-    public static void addAttributeTranslation(String id, String name, String description) {
-        LOCALS.put(id, name);
-        LOCALS.put(id + ".desc", description);
+    public static void addAttributeTranslation(String descriptionID, String name, String description) {
+        LOCALS.put(descriptionID, name);
+        LOCALS.put(descriptionID + ".desc", description);
     }
 
     public static void addEffectTranslation(String id, String name, String description) {
-        LOCALS.put(id, name);
-        LOCALS.put(id + ".description", description);
-        LOCALS.put(id + ".desc", description);
+        LOCALS.put(constructId("effect", id), name);
+        LOCALS.put(constructId("effect", id) + ".description", description);
+        LOCALS.put(constructId("effect", id) + ".desc", description);
+    }
+
+    public static void addFluidTypeTranslation(String id, String name) {
+        LOCALS.put(constructId("fluid_type", id), name);
+    }
+
+    public static void addItemTranslation(String id, String name) {
+        LOCALS.put(constructId("item", id), name);
+    }
+
+    public static void addBlockTranslation(String id, String name) {
+        LOCALS.put(constructId("block", id), name);
     }
 
     private static class ADJLanguageProvider extends LanguageProvider {
