@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.compat;
 
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.spongepowered.asm.mixin.Mixin;

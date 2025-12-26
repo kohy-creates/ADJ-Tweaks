@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.compat;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;

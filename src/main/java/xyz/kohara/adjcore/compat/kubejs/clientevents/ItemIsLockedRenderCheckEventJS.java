@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.kubejs.clientevents;
+package xyz.kohara.adjcore.compat.kubejs.clientevents;
 
 import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.client.player.LocalPlayer;

@@ -1,7 +1,6 @@
-package xyz.kohara.adjcore.mixins.items.buildtool;
+package xyz.kohara.adjcore.mixins.compat.client;
 
 import com.legacy.structure_gel.core.client.renderers.BuildingToolRenderer;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

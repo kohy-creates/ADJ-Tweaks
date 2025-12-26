@@ -1,11 +1,11 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.compat;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import xyz.kohara.adjcore.curio.FireImmunityCurios;
+import xyz.kohara.adjcore.compat.curios.FireImmunityCurios;
 
 @Mixin(value = Entity.class, priority = 500)
 public class TerraCurioEntityMixinFix {

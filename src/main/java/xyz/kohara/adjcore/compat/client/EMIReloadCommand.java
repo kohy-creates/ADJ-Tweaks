@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.client.emi;
+package xyz.kohara.adjcore.compat.client;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;

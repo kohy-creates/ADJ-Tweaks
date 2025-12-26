@@ -172,7 +172,11 @@ dependencies {
 
     compileOnly "curse.maven:cyclops-core-232758:7210370"
 
-    modImplementation("org.embeddedt:embeddium-1.20.1:0.2.11-git.23aedfb+mc1.20.1")
+    compileOnly("org.embeddedt:embeddium-1.20.1:0.2.11-git.23aedfb+mc1.20.1")
+
+    compileOnly("curse.maven:ftb-quests-forge-289412:7260736")
+    compileOnly("curse.maven:ftb-teams-forge-404468:6130786")
+    compileOnly("curse.maven:ftb-library-forge-404465:7296748")
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

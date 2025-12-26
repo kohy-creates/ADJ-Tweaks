@@ -16,8 +16,11 @@ public class ADJBlocks {
     public static final RegistryObject<LiquidBlock> SHIMMER_BLOCK =
             BLOCKS.register("shimmer",
                     () -> new LiquidBlock(ADJFluids.SHIMMER, Block.Properties.copy(Blocks.WATER)
+                            .liquid()
+                            .lightLevel(value -> 12)
                             .noCollission()
                             .strength(100f)
+                            .emissiveRendering((arg, arg2, arg3) -> true)
                     ));
 
     public static void register(IEventBus bus) {
