@@ -1,15 +1,20 @@
 {
   "attribute.name.generic.damage_reduction": "Damage Reduction",
-  "attribute.name.generic.damage_reduction.desc": "Reduces incoming damage",
+  "attribute.name.generic.damage_reduction.desc": "Reduces incoming damage. Stacks with other forms of damage reduction.",
+  "attribute.name.generic.health_regeneration": "Health Regeneration",
+  "attribute.name.generic.health_regeneration.desc": "Extra health regeneration in points per second. This is ticked separately outside of natural health regeneration.",
   "attribute.name.generic.projectile_damage_reduction": "Projectile Damage Reduction",
-  "attribute.name.generic.projectile_damage_reduction.desc": "Reduces incoming damage from projectiles",
+  "attribute.name.generic.projectile_damage_reduction.desc": "Reduces incoming damage from projectiles. Stacks with other forms of damage reduction.",
   "attribute.name.generic.safe_fall_distance": "Safe Fall Distance",
-  "attribute.name.generic.safe_fall_distance.desc": "Distance you can fall before fall damage calculations start",
+  "attribute.name.generic.safe_fall_distance.desc": "Distance you can fall before fall damage starts accumulating.",
   "attribute.name.player.extra_fortune_level": "Extra Ore Drops",
-  "attribute.name.player.extra_fortune_level.desc": "Odds to get extra drops from ores (similar to Fortune enchantment)",
+  "attribute.name.player.extra_fortune_level.desc": "Every points increases the odds to get extra drops from ores (similar to Fortune enchantment).",
   "attribute.name.player.mana_cost_reduction": "Mana Cost Reduction",
-  "attribute.name.player.mana_cost_reduction.desc": "Reduces casting cost of spells",
+  "attribute.name.player.mana_cost_reduction.desc": "Reduces casting cost of spells.",
+  "block.adjcore.shimmer": "Shimmer",
   "effect.adjcore.cozy_campfire": "Cozy Campfire",
   "effect.adjcore.cozy_campfire.desc": "Slowly regenerates lost life",
-  "effect.adjcore.cozy_campfire.description": "Slowly regenerates lost life"
+  "effect.adjcore.cozy_campfire.description": "Slowly regenerates lost life",
+  "fluid_type.adjcore.shimmer": "Shimmer",
+  "item.adjcore.shimmer_bucket": "Shimmer Bucket"
 }

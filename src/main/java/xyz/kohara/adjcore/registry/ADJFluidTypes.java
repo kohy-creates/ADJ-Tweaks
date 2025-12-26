@@ -31,44 +31,7 @@ public class ADJFluidTypes {
     public static final RegistryObject<FluidType> SHIMMER_FLUID_TYPE = register(
             "shimmer",
             "Shimmer",
-            () -> new FluidType(FluidType.Properties.create()
-                    .density(2500)
-                    .viscosity(2500)
-                    .lightLevel(13)
-                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
-                    .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.GENERIC_EXTINGUISH_FIRE)
-                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                    .canConvertToSource(false)
-                    .canDrown(false)
-                    .canHydrate(false)
-                    .fallDistanceModifier(0.5f)
-                    .rarity(Rarity.EPIC)
-                    .canExtinguish(true)
-                    .canSwim(false)) {
-                @Override
-                public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-
-                    consumer.accept(new IClientFluidTypeExtensions() {
-
-                        @Override
-                        public ResourceLocation getStillTexture() {
-                            return ADJCore.of("block/shimmer");
-                        }
-
-                        @Override
-                        public ResourceLocation getFlowingTexture() {
-                            return ADJCore.of("block/shimmer_flowing");
-                        }
-
-                        @Override
-                        public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-                            return new Vector3f(1f,1f,1f);
-                        }
-                    });
-
-                    super.initializeClient(consumer);
-                }
-            }
+            () -> new ShimmerFluidType(null)
     );
 
     private static RegistryObject<FluidType> register(String id, String name, Supplier<FluidType> factory) {

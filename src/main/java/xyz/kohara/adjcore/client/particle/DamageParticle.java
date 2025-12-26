@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.registry.particle;
+package xyz.kohara.adjcore.client.particle;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -249,7 +250,7 @@ public class DamageParticle extends Particle {
         return ParticleRenderType.CUSTOM;
     }
 
-
+    @OnlyIn(Dist.CLIENT)
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
         public Factory(SpriteSet spriteSet) {
