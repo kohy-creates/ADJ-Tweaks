@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.mixins.items.buildtool;
+package xyz.kohara.adjcore.mixins.compat;
 
 import com.legacy.structure_gel.core.item.building_tool.BuildingToolItem;
 import net.minecraft.world.entity.player.Player;

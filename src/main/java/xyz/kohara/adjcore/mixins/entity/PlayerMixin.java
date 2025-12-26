@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.misc.ArsManaShenanigans;
+import xyz.kohara.adjcore.compat.ArsManaShenanigans;
 
 import java.util.List;
 

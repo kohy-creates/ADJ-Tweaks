@@ -1,6 +1,5 @@
 package xyz.kohara.adjcore;
 
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -28,6 +27,9 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
             } else {
                 return FMLLoader.getLoadingModList().getModFileById("biggerstacks") == null;
             }
+        }
+        else if (mixinClassName.contains("Embeddium")) {
+            return FMLLoader.getLoadingModList().getModFileById("sodium") != null;
         }
         return true;
     }

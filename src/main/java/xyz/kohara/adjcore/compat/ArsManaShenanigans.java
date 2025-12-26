@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.misc;
+package xyz.kohara.adjcore.compat;
 
 public interface ArsManaShenanigans {
 

@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.curio;
+package xyz.kohara.adjcore.compat.curios;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.registries.BuiltInRegistries;

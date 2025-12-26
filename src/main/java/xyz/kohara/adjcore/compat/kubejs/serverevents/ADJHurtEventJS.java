@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.kubejs.serverevents;
+package xyz.kohara.adjcore.compat.kubejs.serverevents;
 
 import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.world.entity.Entity;

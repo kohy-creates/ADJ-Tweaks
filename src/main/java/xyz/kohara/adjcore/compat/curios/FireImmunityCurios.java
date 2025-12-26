@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.curio;
+package xyz.kohara.adjcore.compat.curios;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

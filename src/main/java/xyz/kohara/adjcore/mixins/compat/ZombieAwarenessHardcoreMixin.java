@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.compat;
 
 import com.corosus.coroutil.util.CoroUtilWorldTime;
 import com.corosus.zombieawareness.ZAUtil;

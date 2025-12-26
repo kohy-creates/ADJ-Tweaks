@@ -4,8 +4,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
-import xyz.kohara.adjcore.kubejs.ClientEvents;
-import xyz.kohara.adjcore.kubejs.clientevents.ItemIsLockedRenderCheckEventJS;
+import xyz.kohara.adjcore.compat.kubejs.ClientEvents;
+import xyz.kohara.adjcore.compat.kubejs.clientevents.ItemIsLockedRenderCheckEventJS;
 
 @Cancelable
 public class ItemIsLockedRenderCheckEvent extends Event {

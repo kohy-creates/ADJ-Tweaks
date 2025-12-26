@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.mixins.client;
+package xyz.kohara.adjcore.mixins.compat.client;
 
 import dev.shadowsoffire.attributeslib.client.AttributesLibClient;
 import net.minecraft.client.Minecraft;

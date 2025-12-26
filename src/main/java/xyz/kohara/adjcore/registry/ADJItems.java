@@ -16,11 +16,9 @@ public class ADJItems {
 
     public static final RegistryObject<Item> SHIMMER_BUCKET = ITEMS.register(
             "shimmer_bucket",
-            () -> new BucketItem(
-                    ADJFluids.SHIMMER,
-                    new Item.Properties()
-                            .craftRemainder(Items.BUCKET)
-                            .stacksTo(1)
+            () -> new BucketItem(ADJFluids.SHIMMER, new Item.Properties()
+                    .craftRemainder(Items.BUCKET)
+                    .stacksTo(1)
             )
     );
 

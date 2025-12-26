@@ -7,8 +7,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
-import xyz.kohara.adjcore.kubejs.ServerEvents;
-import xyz.kohara.adjcore.kubejs.serverevents.RecipeLookupEventJS;
+import xyz.kohara.adjcore.compat.kubejs.ServerEvents;
+import xyz.kohara.adjcore.compat.kubejs.serverevents.RecipeLookupEventJS;
 
 @Cancelable
 public class RecipeLookupEvent extends Event {

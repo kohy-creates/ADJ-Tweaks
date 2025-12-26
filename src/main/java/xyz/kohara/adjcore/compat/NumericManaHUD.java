@@ -1,9 +1,8 @@
-package xyz.kohara.adjcore.client;
+package xyz.kohara.adjcore.compat;
 
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.mana.IManaCap;
-import com.hollingsworth.arsnouveau.client.gui.book.GuiSpellBook;
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

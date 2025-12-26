@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.compat;
 
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;

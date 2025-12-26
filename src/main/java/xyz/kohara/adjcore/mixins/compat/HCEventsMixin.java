@@ -1,13 +1,11 @@
-package xyz.kohara.adjcore.mixins;
+package xyz.kohara.adjcore.mixins.compat;
 
 import com.rosemods.heart_crystals.core.HCConfig;
 import com.rosemods.heart_crystals.core.other.HCEvents;
 import com.rosemods.heart_crystals.core.other.HCPlayerInfo;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

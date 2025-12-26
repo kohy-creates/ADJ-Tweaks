@@ -1,10 +1,9 @@
-package xyz.kohara.adjcore.kubejs;
+package xyz.kohara.adjcore.compat.kubejs;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
-import xyz.kohara.adjcore.kubejs.clientevents.ItemIsLockedRenderCheckEventJS;
-import xyz.kohara.adjcore.kubejs.serverevents.ADJHurtEventJS;
-import xyz.kohara.adjcore.kubejs.serverevents.RecipeLookupEventJS;
+import xyz.kohara.adjcore.compat.kubejs.serverevents.ADJHurtEventJS;
+import xyz.kohara.adjcore.compat.kubejs.serverevents.RecipeLookupEventJS;
 
 public interface ServerEvents {
     EventGroup GROUP = EventGroup.of("ADJServerEvents");

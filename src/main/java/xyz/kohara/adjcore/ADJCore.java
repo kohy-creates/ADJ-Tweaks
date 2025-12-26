@@ -28,7 +28,7 @@ import xyz.kohara.adjcore.client.music.MusicConfig;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.DamageIndicators;
-import xyz.kohara.adjcore.curio.CurioControl;
+import xyz.kohara.adjcore.compat.curios.CurioControl;
 import xyz.kohara.adjcore.registry.effects.editor.EffectsEditor;
 import xyz.kohara.adjcore.entity.WanderingTraderEdits;
 import xyz.kohara.adjcore.misc.DelayedTaskScheduler;
@@ -88,8 +88,8 @@ public class ADJCore {
         ADJParticles.register(bus);
         ADJFluidTypes.register(bus);
         ADJFluids.register(bus);
-        ADJItems.register(bus);
         ADJBlocks.register(bus);
+        ADJItems.register(bus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
