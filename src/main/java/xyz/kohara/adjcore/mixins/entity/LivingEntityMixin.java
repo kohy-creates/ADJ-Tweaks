@@ -76,9 +76,6 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
     @Unique
     public int adjcore$healTime;
 
-    @Unique
-    public int adjcore$healthRegenTicker;
-
     @Override
     public int adjcore$getKnockbackCooldown() {
         return adjcore$knockbackCooldown;
