@@ -23,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xyz.kohara.adjcore.entity.HardcoreTweaks;
 import xyz.kohara.adjcore.registry.*;
 import xyz.kohara.adjcore.client.music.JukeboxTracker;
 import xyz.kohara.adjcore.client.music.MusicConfig;
@@ -59,19 +60,21 @@ public class ADJCore {
         ADJSoundEvents.registerSounds();
 
         IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus FORGE_BUS = MinecraftForge.EVENT_BUS;
         MOD_BUS.addListener(this::commonSetup);
         MOD_BUS.addListener(this::clientSetup);
         MOD_BUS.addListener(this::addEntityAttributes);
         MOD_BUS.addListener(ADJCapabilities::register);
         MOD_BUS.addListener(LangGenerator::gatherData);
 
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new DamageHandler());
-        MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
-        MinecraftForge.EVENT_BUS.register(WanderingTraderEdits.class);
-        MinecraftForge.EVENT_BUS.register(CurioControl.class);
-        MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
-        MinecraftForge.EVENT_BUS.register(new DamageIndicators());
+        FORGE_BUS.register(this);
+        FORGE_BUS.register(new DamageHandler());
+        FORGE_BUS.register(DelayedTaskScheduler.class);
+        FORGE_BUS.register(WanderingTraderEdits.class);
+        FORGE_BUS.register(CurioControl.class);
+        FORGE_BUS.register(CapabilityEvents.class);
+        FORGE_BUS.register(new DamageIndicators());
+        FORGE_BUS.register(new HardcoreTweaks());
 
         JukeboxTracker.init();
 

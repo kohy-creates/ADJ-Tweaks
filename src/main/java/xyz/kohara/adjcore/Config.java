@@ -27,7 +27,11 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_POINT_REDUCTION_FACTOR_ENTITY;
     public static final ForgeConfigSpec.ConfigValue<Double> ARMOR_DURABILITY_DAMAGE_FACTOR;
 
+    public static final ForgeConfigSpec.IntValue HARDCORE_RESPAW_RADIUS;
+
     static {
+
+        HARDCORE_RESPAW_RADIUS = BUILDER.defineInRange("HARDCORE_RESPAW_RADIUS", 10000, 0, Integer.MAX_VALUE);
 
         BUILDER.comment("Structures").push("structures");
 

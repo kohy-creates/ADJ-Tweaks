@@ -69,6 +69,8 @@ public class DamageIndicators {
     @SubscribeEvent
     public void showDamageParticle(ADJHurtEvent event) {
 
+        if (event.getDamage() == Integer.MAX_VALUE) return;
+
         Entity victim = event.getVictim();
         LivingEntity attacker = event.getAttacker();
 
