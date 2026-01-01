@@ -1,8 +1,11 @@
 package xyz.kohara.adjcore.registry;
 
 import dev.shadowsoffire.attributeslib.impl.PercentBasedAttribute;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -50,10 +53,29 @@ public class ADJAttributes {
             "Extra health regeneration in points per second. This is ticked separately outside of natural health regeneration."
     );
 
+    public static final RegistryObject<Attribute> HEALING_REDUCTION = register(
+            new PercentBasedAttribute(id("generic", "healing_reduction"), 0.0, -1, 0.0).setSyncable(true),
+            "Reduced Healing",
+            "Incoming healing will be reduced by this value."
+    );
+
     private static RegistryObject<Attribute> register(Attribute attribute, String name, String description) {
         String descriptionID = attribute.getDescriptionId();
         LangGenerator.addAttributeTranslation(descriptionID, name, description);
         return ATTRIBUTES.register(descriptionID.replace("attribute.name.", ""), () -> attribute);
+    }
+
+    public static void addEntityAttributes(EntityAttributeModificationEvent event) {
+        for (EntityType<? extends LivingEntity> type : event.getTypes()) {
+            event.add(type, ADJAttributes.DAMAGE_REDUCTION.get());
+            event.add(type, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+            event.add(type, ADJAttributes.SAFE_FALL_DISTANCE.get());
+            event.add(type, ADJAttributes.HEALTH_REGEN.get());
+            event.add(type, ADJAttributes.HEALING_REDUCTION.get());
+        }
+
+        event.add(EntityType.PLAYER, ADJAttributes.MANA_COST_REDUCTION.get());
+        event.add(EntityType.PLAYER, ADJAttributes.EXTRA_ORE_DROPS.get());
     }
 
     private static String id(String category, String name) {

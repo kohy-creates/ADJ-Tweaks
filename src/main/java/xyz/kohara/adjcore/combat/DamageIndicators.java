@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
@@ -89,7 +90,7 @@ public class DamageIndicators {
         );
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST) // lowest priority so that it applies after every form of healing modification
     public void onEntityHeal(LivingHealEvent event) {
         LivingEntity entity = event.getEntity();
 

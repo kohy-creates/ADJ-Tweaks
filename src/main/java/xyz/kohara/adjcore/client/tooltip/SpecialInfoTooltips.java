@@ -80,8 +80,7 @@ public class SpecialInfoTooltips {
 
             if (oE.shouldRemove()) {
                 traits.remove(defaultTraitTexts.get(defaultTrait));
-            }
-            else {
+            } else {
                 traits.add(defaultTraitTexts.get(defaultTrait));
             }
         }

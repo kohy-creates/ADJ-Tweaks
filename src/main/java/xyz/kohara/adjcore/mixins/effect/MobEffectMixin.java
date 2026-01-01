@@ -27,15 +27,15 @@ public abstract class MobEffectMixin {
                 livingEntity.heal(1.0F);
             }
         } else if (effect == MobEffects.POISON) {
-            // 5 damage per tick on entities
-            // and 3 on players
-            float amount = (livingEntity instanceof Player) ? 3f : 5f;
+            // 6 damage per tick on entities
+            // and 4 on players
+            float amount = (livingEntity instanceof Player) ? 4f : 6f;
             if (livingEntity.getHealth() > amount * 2) {
                 livingEntity.hurt(livingEntity.damageSources().magic(), amount);
             }
         } else if (effect == MobEffects.WITHER) {
-            // Wither does 4 + 0.6% of mob's health per tick
-            float amount = 4F + livingEntity.getMaxHealth() * 0.006f;
+            // Wither does 3 + 0.3% of mob's health per tick
+            float amount = 3F + livingEntity.getMaxHealth() * 0.003f;
             livingEntity.hurt(livingEntity.damageSources().wither(), amount);
         } else if (effect == MobEffects.HUNGER && livingEntity instanceof Player) {
             ((Player) livingEntity).causeFoodExhaustion(0.005F * (amplifier + 1));

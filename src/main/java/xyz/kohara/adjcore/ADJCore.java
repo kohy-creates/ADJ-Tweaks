@@ -23,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xyz.kohara.adjcore.attributes.AttributeFunctions;
 import xyz.kohara.adjcore.entity.HardcoreTweaks;
 import xyz.kohara.adjcore.registry.*;
 import xyz.kohara.adjcore.client.music.JukeboxTracker;
@@ -63,18 +64,19 @@ public class ADJCore {
         IEventBus FORGE_BUS = MinecraftForge.EVENT_BUS;
         MOD_BUS.addListener(this::commonSetup);
         MOD_BUS.addListener(this::clientSetup);
-        MOD_BUS.addListener(this::addEntityAttributes);
+        MOD_BUS.addListener(ADJAttributes::addEntityAttributes);
         MOD_BUS.addListener(ADJCapabilities::register);
         MOD_BUS.addListener(LangGenerator::gatherData);
 
         FORGE_BUS.register(this);
         FORGE_BUS.register(new DamageHandler());
-        FORGE_BUS.register(DelayedTaskScheduler.class);
-        FORGE_BUS.register(WanderingTraderEdits.class);
-        FORGE_BUS.register(CurioControl.class);
-        FORGE_BUS.register(CapabilityEvents.class);
+        FORGE_BUS.register(new DelayedTaskScheduler());
+        FORGE_BUS.register(new WanderingTraderEdits());
+        FORGE_BUS.register(new CurioControl());
+        FORGE_BUS.register(new CapabilityEvents());
         FORGE_BUS.register(new DamageIndicators());
         FORGE_BUS.register(new HardcoreTweaks());
+        FORGE_BUS.register(new AttributeFunctions());
 
         JukeboxTracker.init();
 
@@ -174,18 +176,6 @@ public class ADJCore {
                 serverPlayer.sendSystemMessage(newMessage);
             }
         });
-    }
-
-    public void addEntityAttributes(EntityAttributeModificationEvent event) {
-        for (EntityType<? extends LivingEntity> type : event.getTypes()) {
-            event.add(type, ADJAttributes.DAMAGE_REDUCTION.get());
-            event.add(type, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
-            event.add(type, ADJAttributes.SAFE_FALL_DISTANCE.get());
-            event.add(type, ADJAttributes.HEALTH_REGEN.get());
-        }
-
-        event.add(EntityType.PLAYER, ADJAttributes.MANA_COST_REDUCTION.get());
-        event.add(EntityType.PLAYER, ADJAttributes.EXTRA_ORE_DROPS.get());
     }
 
     private static final String deathTextsFile = "config/" + ADJCore.MOD_ID + "/death_text.txt";
