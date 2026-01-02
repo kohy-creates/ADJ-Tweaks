@@ -11,7 +11,7 @@ public class HardcoreTweaks {
 
     // Random respawn
     @SubscribeEvent
-    private static void onWorldLoad(LevelEvent.Load event) {
+    public static void onWorldLoad(LevelEvent.Load event) {
         LevelAccessor accessor = event.getLevel();
         if (accessor instanceof ServerLevel level && level.getLevelData().isHardcore()) {
             level.getGameRules()

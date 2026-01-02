@@ -82,7 +82,7 @@ public class DamageHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onLivingKnockback(LivingKnockBackEvent event) {
+    public static void onLivingKnockback(LivingKnockBackEvent event) {
         LivingEntity entity = event.getEntity();
 
         int cooldown = entity.adjcore$getKnockbackCooldown();
@@ -97,7 +97,7 @@ public class DamageHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void adjustIFrames(LivingHurtEvent event) {
+    public static void adjustIFrames(LivingHurtEvent event) {
         DamageSource source = event.getSource();
         LivingEntity entity = event.getEntity();
         Entity attacker = source.getEntity();

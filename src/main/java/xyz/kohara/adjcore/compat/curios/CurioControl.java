@@ -34,7 +34,7 @@ public class CurioControl {
     private static List<TagKey<Item>> EXCLUSION_LIST;
 
     @SubscribeEvent
-    public void onCurioEquipEvent(CurioEquipEvent event) {
+    public static void onCurioEquipEvent(CurioEquipEvent event) {
 
         LivingEntity entity = event.getEntity();
         if (entity.level().isClientSide()) return;
@@ -69,13 +69,14 @@ public class CurioControl {
 
     // Only keep one type of curio slots
     @SubscribeEvent
-    public void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
         Map<String, ISlotType> slots = CuriosApi.getPlayerSlots(event.getEntity());
         for (ISlotType slot : slots.values()) {
             String id = slot.getIdentifier();
             if (!Objects.equals(id, ACCESSORY_SLOT)
                     && !Objects.equals(id, "back") //why the fuck does that crash Backpacked
                     && !Objects.equals(id, "spellbook") //whoever wanted to use Iron's Spells you should thank me for actually doing this
+                    && !Objects.equals(id, "hook")
             ) {
                 CuriosApi.getSlotHelper().setSlotsForType(id, event.getEntity(), 0);
             }
@@ -83,7 +84,7 @@ public class CurioControl {
     }
 
     @SubscribeEvent
-    public void onTagsUpdated(TagsUpdatedEvent event) {
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
         generateExclusions();
     }
 
@@ -96,7 +97,7 @@ public class CurioControl {
     ));
 
     @SubscribeEvent
-    public void keepCurios(DropRulesEvent event) {
+    public static void keepCurios(DropRulesEvent event) {
         event.addOverride(i -> !i.is(ADJTags.CURIOS_DROPPED_ON_DEATH) || i.getEnchantmentLevel(CURIO_SOULBOUND) > 0, ICurio.DropRule.ALWAYS_KEEP);
     }
 

@@ -18,7 +18,7 @@ import xyz.kohara.adjcore.registry.ADJCapabilities;
 public class CapabilityEvents {
 
     @SubscribeEvent
-    public void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+    public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             event.addCapability(ResourceLocation.fromNamespaceAndPath(ADJCore.MOD_ID, "loadouts"),
                     new ICapabilitySerializable<CompoundTag>() {
@@ -45,7 +45,7 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public void clonePlayer(PlayerEvent.Clone event) {
+    public static void clonePlayer(PlayerEvent.Clone event) {
         event.getOriginal().reviveCaps(); // in case
         event.getOriginal().getCapability(ADJCapabilities.PLAYER_LOADOUTS).ifPresent(oldCap -> {
             event.getEntity().getCapability(ADJCapabilities.PLAYER_LOADOUTS).ifPresent(newCap -> {

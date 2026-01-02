@@ -13,10 +13,10 @@ import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 
 public class DamageIndicators {
 
-    private void showIndicator(Entity victim,
-                               LivingEntity attacker,
-                               float amount,
-                               int type
+    private static void showIndicator(Entity victim,
+                                      LivingEntity attacker,
+                                      float amount,
+                                      int type
     ) {
         double maxDistance = 48;
 
@@ -46,7 +46,7 @@ public class DamageIndicators {
         });
     }
 
-    private Vec3 offsetTowardsEntity(Entity origin, Entity target) {
+    private static Vec3 offsetTowardsEntity(Entity origin, Entity target) {
         Vec3 direction = target.position()
                 .subtract(origin.position())
                 .normalize();
@@ -68,7 +68,7 @@ public class DamageIndicators {
 
 
     @SubscribeEvent
-    public void showDamageParticle(ADJHurtEvent event) {
+    public static void showDamageParticle(ADJHurtEvent event) {
 
         if (event.getDamage() == Integer.MAX_VALUE) return;
 
@@ -91,7 +91,7 @@ public class DamageIndicators {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST) // lowest priority so that it applies after every form of healing modification
-    public void onEntityHeal(LivingHealEvent event) {
+    public static void onEntityHeal(LivingHealEvent event) {
         LivingEntity entity = event.getEntity();
 
         if (entity.getHealth() != entity.getMaxHealth() && event.getAmount() > 2) {

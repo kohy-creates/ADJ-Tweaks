@@ -1,6 +1,7 @@
 package xyz.kohara.adjcore;
 
 import dev.ftb.mods.ftbquests.quest.QuestObject;
+import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -69,14 +70,14 @@ public class ADJCore {
         MOD_BUS.addListener(LangGenerator::gatherData);
 
         FORGE_BUS.register(this);
-        FORGE_BUS.register(new DamageHandler());
-        FORGE_BUS.register(new DelayedTaskScheduler());
-        FORGE_BUS.register(new WanderingTraderEdits());
-        FORGE_BUS.register(new CurioControl());
-        FORGE_BUS.register(new CapabilityEvents());
-        FORGE_BUS.register(new DamageIndicators());
-        FORGE_BUS.register(new HardcoreTweaks());
-        FORGE_BUS.register(new AttributeFunctions());
+        FORGE_BUS.register(DamageHandler.class);
+        FORGE_BUS.register(DelayedTaskScheduler.class);
+        FORGE_BUS.register(WanderingTraderEdits.class);
+        FORGE_BUS.register(CurioControl.class);
+        FORGE_BUS.register(CapabilityEvents.class);
+        FORGE_BUS.register(DamageIndicators.class);
+        FORGE_BUS.register(HardcoreTweaks.class);
+        FORGE_BUS.register(AttributeFunctions.class);
 
         JukeboxTracker.init();
 
@@ -102,12 +103,9 @@ public class ADJCore {
         event.enqueueWork(ADJMessages::register);
         PotionsEditor.edit();
         EffectsEditor.edit();
-
-        QuestObject object = null;
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-
     }
 
     public static ResourceLocation of(String path) {

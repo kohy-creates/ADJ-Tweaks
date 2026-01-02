@@ -8,7 +8,7 @@ import xyz.kohara.adjcore.registry.ADJAttributes;
 public class AttributeFunctions {
 
     @SubscribeEvent
-    public void onLivingHeal(LivingHealEvent event) {
+    public static void onLivingHeal(LivingHealEvent event) {
         AttributeInstance healingReduction = event.getEntity().getAttribute(ADJAttributes.HEALING_REDUCTION.get());
         if (healingReduction != null) {
             var value = healingReduction.getValue();

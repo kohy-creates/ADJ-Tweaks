@@ -28,7 +28,7 @@ import xyz.kohara.adjcore.registry.capabilities.BellTraderDataProvider;
 public class WanderingTraderEdits {
 
     @SubscribeEvent
-    public void onBellUse(PlayerInteractEvent.RightClickBlock event) {
+    public static void onBellUse(PlayerInteractEvent.RightClickBlock event) {
         Level level = event.getLevel();
         if (level.isClientSide) return;
 

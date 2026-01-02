@@ -26,7 +26,7 @@ public class DelayedTaskScheduler {
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             DelayedTaskScheduler.tick();
         }
