@@ -27,6 +27,8 @@
 		"compat.StructureGelBuildToolMixin",
 		"compat.TerraCurioEntityMixinFix",
 		"compat.TerraCurioNukeJEIDescriptions",
+		"compat.TravelersBackpackRemoveRightClick",
+		"compat.TravelersBackpackReplaceSleepingBag",
 		"compat.ars.EventHandlerMixin",
 		"compat.ars.ManaCapEventsMixin",
 		"compat.ars.ReworkMaxManaProgression",
@@ -65,6 +67,8 @@
 		"entity.PlayerMixin",
 		"entity.ServerPlayerMixin",
 		"entity.TemptGoalMixin",
+		"entity.villager.VillagerDataMixin",
+		"entity.villager.VillagerMixin",
 		"items.BoatPlaceSoundMixin",
 		"items.BowMixin",
 		"items.CrossbowItemAccessor",
@@ -113,12 +117,15 @@
 		"client.music.MusicMixin",
 		"client.music.SoundEngineMixin",
 		"compat.CyclopsCoreRemoveAnnoyingAssTooltipsMixin",
-		"compat.ars.EMIMixin",
 		"compat.ars.GlyphCostMixin",
+		"compat.ars.emi.ArmorUpgradeRecipeCategoryMixin",
+		"compat.ars.emi.EnchantingApparatusRecipeCategoryMixin",
+		"compat.ars.emi.ImbuementRecipeCategoryMixin",
 		"compat.client.AttributesLibClientMixin",
 		"compat.client.BuildToolOverlayMixin",
 		"compat.client.BuildToolRendererMixin",
-		"compat.client.QuarkItemTooltipMixin"
+		"compat.client.QuarkItemTooltipMixin",
+		"compat.client.TravelersBackpackRemoveRightClick"
 	],
 	"injectors": {
 		"defaultRequire": 1

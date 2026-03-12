@@ -1,5 +1,10 @@
 package xyz.kohara.adjcore;
 
+import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
+import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -10,13 +15,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.FireAspectEnchantment;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -50,6 +61,8 @@ import xyz.kohara.adjcore.registry.capabilities.CapabilityEvents;
 import xyz.kohara.adjcore.registry.effects.EffectsHandler;
 
 import java.util.*;
+
+import static com.hollingsworth.arsnouveau.client.jei.MultiInputCategory.rotatePointAbout;
 
 @Mod(ADJCore.MOD_ID)
 public class ADJCore {
@@ -234,4 +247,39 @@ public class ADJCore {
                 .orElse(null);
     }
 
+    public static Vec2
+            point = new Vec2(48, 13),
+            center = new Vec2(48, 45);
+
+    @OnlyIn(Dist.CLIENT)
+    public static void expandArsEMIGuis(GuiGraphics guiGraphics, int ingrAmount, int sourceCost) {
+
+        double angleBetweenEach = 360.0 / ingrAmount;
+
+        var pose = guiGraphics.pose();
+
+        pose.pushPose();
+        pose.translate(-1d, -1d, 1d);
+        pose.scale(1.5f, 1.5f, 1.5f);
+
+        for (int i = 0; i < ingrAmount; i++) {
+            guiGraphics.blit(
+                    ResourceLocation.fromNamespaceAndPath("ars_nouveau", "textures/block/arcane_pedestal.png"),
+                    (int) ((int) point.x / 1.5f), (int) ((int) point.y / 1.5f),
+                    0, 0,
+                    12, 12,
+                    64, 64
+            );
+            point = rotatePointAbout(point, center, angleBetweenEach);
+        }
+
+        pose.popPose();
+
+        if (sourceCost > 0) {
+            Font renderer = Minecraft.getInstance().font;
+            guiGraphics.drawString(renderer, Component.literal("Mᴀɴᴀ Cᴏsᴛ: "), 0, 101 - renderer.lineHeight, 10, false);
+            guiGraphics.drawString(renderer, Component.literal(sourceCost / 100 + "% ᴏғ ᴀ Mᴀɴᴀ Jᴀʀ"), 0, 101, 10, false);
+        }
+    }
 }
+
