@@ -20,7 +20,7 @@ public abstract class OptionsMixin {
             "options.fov",
             OptionInstance.noTooltip(),
             (arg, integer) -> switch (integer) {
-                case 30 -> genericValueLabel(arg, Component.literal("Bootleg Zoom"));
+                case 30 -> genericValueLabel(arg, Component.literal("Just use a Spyglass"));
                 case 70 -> genericValueLabel(arg, Component.literal("Screenshots"));
                 case 90 -> genericValueLabel(arg, Component.literal("Normal"));
                 case 110 -> genericValueLabel(arg, Component.literal("Quake Pro"));

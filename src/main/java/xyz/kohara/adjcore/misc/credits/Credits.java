@@ -33,9 +33,6 @@ public class Credits {
     }
 
     public static Map<String, String> PLAYER_TITLES = new HashMap<>();
-
-    public static Map<String, String> NAME_TO_SKIN = new HashMap<>();
-
     static {
         File config;
         try {
@@ -46,16 +43,6 @@ public class Credits {
                     String lineEntry = reader.nextLine();
                     String[] line = lineEntry.split(":");
                     PLAYER_TITLES.put(line[0], line[1]);
-                }
-            }
-
-            config = Files.SKINS.getFile();
-            if (config.exists()) {
-                Scanner reader = new Scanner(config);
-                while (reader.hasNextLine()) {
-                    String lineEntry = reader.nextLine();
-                    String[] line = lineEntry.split(":");
-                    NAME_TO_SKIN.put(line[0], line[1]);
                 }
             }
 

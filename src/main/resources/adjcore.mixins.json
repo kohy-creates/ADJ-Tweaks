@@ -94,6 +94,7 @@
 		"client.DebugRendererMixin",
 		"client.DroppedItemRendererMixin",
 		"client.EffectInventoryScreenMixin",
+		"client.EntityRenderDispatcherMixin",
 		"client.EntityRendererMixin",
 		"client.GuiItemRenderingMixin",
 		"client.GuiItemRenderingMixinBiggerStacks",

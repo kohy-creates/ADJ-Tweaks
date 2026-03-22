@@ -193,7 +193,7 @@ public abstract class CreditScreenMixin extends Screen {
                     for (JsonElement jsonElement4 : jsonArray4) {
                         String string4 = jsonElement4.getAsString();
                         boolean addEmpty = adj$addPlayerTitle(string4);
-                        this.addCreditsLine(Component.literal(adj$getPlayerSkin(string4)).append(string4).withStyle(ChatFormatting.WHITE), true);
+                        this.addCreditsLine(Component.literal("").append(string4).withStyle(ChatFormatting.WHITE), true);
                         if (addEmpty) this.addEmptyLine();
                     }
 
@@ -214,7 +214,7 @@ public abstract class CreditScreenMixin extends Screen {
             adj$addCreditTitle("Mods");
             try {
                 for (ModInfo modInfo : ADJCore.impl.getMods()) {
-                    adj$addCreditSection("[mod+" + modInfo.modId() + "] " + modInfo.modName() + "", Stream.concat(
+                    adj$addCreditSection(modInfo.modName(), Stream.concat(
                             modInfo.authors().stream(),
                             modInfo.contributors().stream()
                     ).toList());
@@ -228,15 +228,6 @@ public abstract class CreditScreenMixin extends Screen {
         this.addEmptyLine();
         this.addEmptyLine();
         this.addEmptyLine();
-    }
-
-    @Unique
-    private String adj$getPlayerSkin(String name) {
-        String playerName = name;
-        if (Credits.NAME_TO_SKIN.containsKey(name)) {
-            playerName = Credits.NAME_TO_SKIN.get(name);
-        }
-        return (playerName.equals("NONE")) ? "" : "[face:" + playerName + "] ";
     }
 
     @Unique
@@ -266,7 +257,7 @@ public abstract class CreditScreenMixin extends Screen {
 
         for (String author : contributors) {
             boolean addEmpty = adj$addPlayerTitle(author);
-            this.addCreditsLine(Component.literal(adj$getPlayerSkin(author)).append(author).withStyle(ChatFormatting.WHITE), true);
+            this.addCreditsLine(Component.literal("").append(author).withStyle(ChatFormatting.WHITE), true);
             if (addEmpty) this.addEmptyLine();
         }
 
