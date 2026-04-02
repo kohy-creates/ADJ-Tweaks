@@ -96,7 +96,7 @@ repositories {
     maven {
         url = "https://maven.teamabnormals.com"
     }
-//    maven { url = "https://packages.aether-mod.net/The-Aether" }
+    maven { url = "https://packages.aether-mod.net/The-Aether" }
 //    maven { url = "https://packages.aether-mod.net/Emissivity" }
 //    maven { url = "https://packages.aether-mod.net/Treasure-Reforging" }
 //    maven { url = "https://packages.aether-mod.net/Protect-Your-Moa" }
@@ -164,7 +164,7 @@ dependencies {
 
     compileOnly "curse.maven:bigger-stacks-564896:7423694"
 
-//    modImplementation "com.aetherteam.aether:aether:${project.aether_version}"
+    compileOnly "com.aetherteam.aether:aether:${project.aether_version}"
 
     compileOnly "curse.maven:cyclops-core-232758:7210370"
 

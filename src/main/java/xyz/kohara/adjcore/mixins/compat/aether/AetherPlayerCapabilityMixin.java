@@ -1,5 +1,6 @@
-package xyz.kohara.adjcore.mixins.compat;
+package xyz.kohara.adjcore.mixins.compat.aether;
 
+import com.aetherteam.aether.capability.player.AetherPlayerCapability;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 
 @Pseudo
-@Mixin(targets = "com.aetherteam.aether.capability.player.AetherPlayerCapability", remap = false)
+@Mixin(value = AetherPlayerCapability.class, remap = false)
 public abstract class AetherPlayerCapabilityMixin {
 
     @Shadow @Final private static UUID LIFE_SHARD_HEALTH_ID;

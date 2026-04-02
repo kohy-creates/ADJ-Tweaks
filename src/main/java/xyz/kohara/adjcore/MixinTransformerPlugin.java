@@ -36,6 +36,8 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
             return isModLoaded("fnaf_plushie_remastered");
         } else if (mixinClassName.contains("LegendaryTabs")) {
             return isModLoaded("legendarytabs");
+        } else if (mixinClassName.contains("aether")) {
+            return isModLoaded("aether");
         }
         return true;
     }

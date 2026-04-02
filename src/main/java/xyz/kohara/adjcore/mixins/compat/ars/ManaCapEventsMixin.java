@@ -7,6 +7,7 @@ import com.hollingsworth.arsnouveau.common.network.Networking;
 import com.hollingsworth.arsnouveau.common.network.PacketUpdateMana;
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,10 +22,15 @@ public class ManaCapEventsMixin {
     private static void makeThisThingMakeMoreSense(TickEvent.PlayerTickEvent e, CallbackInfo ci) {
         ci.cancel();
 
-        if (e.player.level().isClientSide() || e.phase != TickEvent.Phase.END)
+        if (e.player == null || e.player.getCommandSenderWorld().isClientSide() || e.phase != TickEvent.Phase.END)
             return;
 
-        IManaCap mana = CapabilityRegistry.getMana(e.player).orElse(null);
+        var manaLazyOptional = CapabilityRegistry.getMana(e.player);
+        var manaOptional = manaLazyOptional.resolve();
+        IManaCap mana = null;
+        if (manaOptional.isPresent()) {
+            mana = manaOptional.get();
+        }
         if (mana == null) return;
 
         boolean shouldIgnoreMax = e.player.level().getGameTime() % 60 == 0;

@@ -15,3 +15,4 @@ accessible field net/minecraft/client/gui/screens/worldselection/WorldSelectionL
 accessible field net/minecraft/world/level/storage/LevelSummary levelId Ljava/lang/String;
 accessible class net/minecraft/client/OptionInstance$ValueSet
 accessible method net/minecraft/client/Minecraft grabHugeScreenshot (Ljava/io/File;IIII)Lnet/minecraft/network/chat/Component;
+accessible class net/minecraft/client/gui/Font$StringRenderOutput

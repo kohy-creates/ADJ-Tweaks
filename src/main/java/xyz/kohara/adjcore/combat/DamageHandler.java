@@ -149,26 +149,6 @@ public class DamageHandler {
         setInvulTime(entity, INVUL_TIME);
     }
 
-//    @SubscribeEvent(priority = EventPriority.LOWEST)
-//    public static void onPlayerAttack(AttackEntityEvent event) {
-//        if (!event.isCanceled()) {
-//            Player player = event.getEntity();
-//            if (player.level().isClientSide() || player instanceof FakePlayer) {
-//                return;
-//            }
-//
-//            float str = player.getAttackStrengthScale(0);
-//            if (str <= 0.99f) {
-//                Entity target = event.getTarget();
-//                // Don't worry, it's only magic
-//                if (target instanceof LivingEntity) {
-//                    ((LivingEntity) target).swinging = true;
-//                }
-//                event.setCanceled(true);
-//            }
-//        }
-//    }
-
     private static float getAttributeValue(LivingEntity entity, Attribute attribute) {
         AttributeInstance instance = entity.getAttribute(attribute);
         return instance != null ? (float) instance.getValue() : 0;
