@@ -108,7 +108,10 @@ public abstract class DeathScreenMixin extends Screen {
 
         // Default respawn time = 7 seconds
         // x2 in hardcore, x1.5 in multiplayer
-        adj$respawnTimer = (int) (140 * ((hardcore) ? 2 : 1) * (!minecraft.isSingleplayer() ? 1.5 : 1));
+        // Overridden in Creative to be 1 second regardless
+        adj$respawnTimer = (!minecraft.player.isCreative()) ?
+                (int) (140 * ((hardcore) ? 2 : 1) * (!minecraft.isSingleplayer() ? 1.5 : 1))
+                : 20;
 
         adj$deathText = ADJData.getRandomDeathText();
         minecraft.getSoundManager().play(

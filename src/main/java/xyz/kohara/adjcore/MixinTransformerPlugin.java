@@ -39,6 +39,9 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
         } else if (mixinClassName.contains("aether")) {
             return isModLoaded("aether");
         }
+        else if (mixinClassName.contains("twilightforest")) {
+            return isModLoaded("twilightforest");
+        }
         return true;
     }
 
