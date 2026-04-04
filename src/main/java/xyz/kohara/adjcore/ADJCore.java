@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -50,7 +49,6 @@ import xyz.kohara.adjcore.misc.credits.ModInfo;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.registry.*;
 import xyz.kohara.adjcore.registry.capabilities.CapabilityEvents;
-import xyz.kohara.adjcore.registry.effects.EffectsHandler;
 
 import java.util.*;
 
@@ -86,7 +84,6 @@ public class ADJCore {
         FORGE_BUS.register(HardcoreTweaks.class);
         FORGE_BUS.register(ArsSpellPowerEdit.class);
         FORGE_BUS.register(ExtraLivingDrops.class);
-        FORGE_BUS.register(EffectsHandler.class);
 
         JukeboxTracker.init();
 
