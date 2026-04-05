@@ -16,6 +16,6 @@ public abstract class VillagerDataMixin {
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void increaseLevelAmounts(CallbackInfo ci) {
-        NEXT_LEVEL_XP_THRESHOLDS = new int[]{0, 35, 220, 500, 1050};
+        NEXT_LEVEL_XP_THRESHOLDS = new int[]{0, 40, 120, 300, 600};
     }
 }
