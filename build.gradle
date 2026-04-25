@@ -147,8 +147,8 @@ dependencies {
     modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
     modImplementation("mezz.jei:jei-${project.minecraft_version}-forge:${jei_version}")
 
-    compileOnly("com.teamabnormals:blueprint:1.20.1-7.1.3")
-    compileOnly("curse.maven:heart-crystals-947411:6811770")
+    modImplementation("com.teamabnormals:blueprint:1.20.1-7.1.3")
+    modImplementation("curse.maven:heart-crystals-947411:6811770")
 
     compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.5-beta.2"))
     implementation(include("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.5-beta.2"))
@@ -185,7 +185,7 @@ dependencies {
     compileOnly("curse.maven:legendary-tabs-1172469:6586335")
 
     modImplementation "curse.maven:travelers-backpack-321117:7573110"
-    compileOnly "teamtwilight:twilightforest:4.3.2145:universal"
+    modImplementation "teamtwilight:twilightforest:4.3.2145:universal"
 
     compileOnly "curse.maven:holoinventory-revived-1493003:7819497"
 
