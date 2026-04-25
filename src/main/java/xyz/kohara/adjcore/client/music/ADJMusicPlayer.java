@@ -14,10 +14,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.client.misc.events.ADJFindMusicEvent;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.RequestEntityTagsC2SPacket;
+import xyz.kohara.adjcore.misc.events.PlayerTitleEvent;
 import xyz.kohara.adjcore.mixins.client.music.MusicManagerAccessor;
 
 import java.util.*;
@@ -36,7 +39,6 @@ public class ADJMusicPlayer {
 
     public static void buildResolvedMaps() {
         ADJMusicData.Config cfg = ADJMusicData.get();
-        ;
         if (cfg.defaults != null) {
             for (Map.Entry<String, ADJMusicData.Config.MusicEntry> e : cfg.defaults.entrySet()) {
                 resolvedDefaults.put(e.getKey(), resolveEntry(e.getValue()));
@@ -80,9 +82,12 @@ public class ADJMusicPlayer {
         return new ResolvedEntry(track, conds);
     }
 
-    public static Music findMusic(MusicManager musicManager) {
+    public static Music findMusic() {
         Music track = resolvedMenu;
         LocalPlayer player = Minecraft.getInstance().player;
+        ADJFindMusicEvent event = new ADJFindMusicEvent(player, Minecraft.getInstance().level);
+        MinecraftForge.EVENT_BUS.post(event);
+        if (event.getMusic() != null) return event.getMusic();
         if (player != null) {
             ResolvedEntry overworld = resolvedDefaults.get("minecraft:overworld");
             Music bossTrack = getBossMusic(player);
@@ -128,11 +133,6 @@ public class ADJMusicPlayer {
                         }
                     }
                 }
-            }
-        }
-        if (track != null && ADJMusicManager.getInstance().getCurrentlyPlayingMusic() != track) {
-            if (ADJMusicManager.getInstance().getCurrentlyPlayingInstance() != null && ((MusicManagerAccessor) musicManager).getCurrentMusic() != null) {
-                musicManager.stopPlaying(ADJMusicManager.getInstance().getCurrentlyPlayingMusic());
             }
         }
         return track;

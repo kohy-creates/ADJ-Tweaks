@@ -8,7 +8,6 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,13 +41,11 @@ public class ADJMusicManager {
     }
 
     public void setCurrentlyPlaying(Music music, SoundInstance soundInstance) {
-        if (music != null) System.out.println("Playing music " + music.getEvent().get().getLocation());
         this.currentlyPlaying = new Pair<>(music, soundInstance);
         this.MINECRAFT.getMusicManager().currentMusic = soundInstance;
     }
 
     private final Minecraft MINECRAFT = Minecraft.getInstance();
-    private final RandomSource RANDOM = RandomSource.create();
 
     private double nextSongDelay;
     public final Set<Channel> musicBlockChannels = new HashSet<>();
@@ -57,21 +54,16 @@ public class ADJMusicManager {
     private boolean isStopFading = false;
 
 
-    public void onMusicManagerTick() {
-        Music music = ADJMusicPlayer.findMusic(MINECRAFT.getMusicManager());
+    public void tick(boolean isPaused) {
+        Music music = ADJMusicPlayer.findMusic();
         if (music == null) return;
-        if (getCurrentlyPlayingMusic() != null) {
-            if (!music.getEvent().value().getLocation().equals(getCurrentlyPlayingInstance().getLocation())
-                    && music.replaceCurrentMusic()) {
-                MINECRAFT.getSoundManager().stop(getCurrentlyPlayingInstance());
-                nextSongDelay = Mth.nextInt(RANDOM, 0, music.getMinDelay() / 2);
-            }
+        if (getCurrentlyPlayingMusic() != null && !music.getEvent().value().getLocation().equals(getCurrentlyPlayingInstance().getLocation())) {
+            stopPlaying(true);
+        }
 
-
-            if (!MINECRAFT.getSoundManager().isActive(getCurrentlyPlayingInstance())) {
-                setCurrentlyPlaying(null, null);
-                nextSongDelay = Math.min(nextSongDelay, Mth.nextInt(RANDOM, music.getMinDelay(), music.getMaxDelay()));
-            }
+        if (!MINECRAFT.getSoundManager().isActive(getCurrentlyPlayingInstance())) {
+            setCurrentlyPlaying(null, null);
+            nextSongDelay = 0;
         }
 
         nextSongDelay = Math.min(nextSongDelay, music.getMaxDelay());
@@ -81,22 +73,16 @@ public class ADJMusicManager {
 
         // Fade outs
         float newVolumeMultiplier = 1f;
-        if (MINECRAFT.player != null || isStopFading) {
-            // Allow fade-out to continue, but prevent new fade triggers
-            if (!isStopFading) {
-                musicVolumeMultiplier = 1f;
-            }
-            float targetMultiplier = shouldFadeMusic() ? 0f : 1f;
-            if (targetMultiplier != musicVolumeMultiplier) {
-                float volumeChange = targetMultiplier - musicVolumeMultiplier;
-                int FADE_IN_TICKS = 40;
-                int FADE_OUT_TICKS = 80;
-                volumeChange
-                        = volumeChange > 0f ? Math.min(volumeChange, 1f / FADE_IN_TICKS)
-                        : Math.max(volumeChange, -1f / FADE_OUT_TICKS);
-                newVolumeMultiplier = musicVolumeMultiplier + volumeChange;
-            } else newVolumeMultiplier = targetMultiplier;
-        }
+        float targetMultiplier = shouldFadeMusic() ? 0f : 1f;
+        if (targetMultiplier != musicVolumeMultiplier) {
+            float volumeChange = targetMultiplier - musicVolumeMultiplier;
+            int FADE_IN_TICKS = 40;
+            int FADE_OUT_TICKS = 40;
+            volumeChange
+                    = volumeChange > 0f ? Math.min(volumeChange, 1f / FADE_IN_TICKS)
+                    : Math.max(volumeChange, -1f / FADE_OUT_TICKS);
+            newVolumeMultiplier = musicVolumeMultiplier + volumeChange;
+        } else newVolumeMultiplier = targetMultiplier;
 
         if (newVolumeMultiplier != musicVolumeMultiplier) {
             updateMusicVolume(newVolumeMultiplier);
@@ -130,10 +116,27 @@ public class ADJMusicManager {
         nextSongDelay = Integer.MAX_VALUE;
     }
 
-    public void onMusicManagerStopPlaying() {
-        if (getCurrentlyPlayingMusic() != null) {
-            isStopFading = true;
+
+    public void stopPlaying(Music music) {
+        if (isPlayingMusic(music)) {
+            stopPlaying(true);
         }
+    }
+
+    public void stopPlaying(boolean shouldFadeOut) {
+        if (shouldFadeOut && getCurrentlyPlayingMusic() != null) {
+            isStopFading = true;
+        } else if (getCurrentlyPlayingInstance() != null) {
+            MINECRAFT.getSoundManager().stop(getCurrentlyPlayingInstance());
+            setCurrentlyPlaying(null, null);
+
+            nextSongDelay += 0;
+        }
+    }
+
+    public boolean isPlayingMusic(Music selector) {
+        return getCurrentlyPlayingInstance() != null
+                && selector.getEvent().value().getLocation().equals(getCurrentlyPlayingInstance().getLocation());
     }
 
     private void updateMusicVolume(float volume) {
@@ -155,7 +158,7 @@ public class ADJMusicManager {
                 }
                 setCurrentlyPlaying(null, null);
                 isStopFading = false;
-                return 0.00001f;
+                return 0f;
             }
             return Mth.clamp(baseVolume * musicSourceVolume * this.musicVolumeMultiplier, 0.00001f, 1f);
         }

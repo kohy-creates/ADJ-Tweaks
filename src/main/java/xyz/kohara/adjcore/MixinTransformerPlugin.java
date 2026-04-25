@@ -42,6 +42,8 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
             return isModLoaded("twilightforest");
         } else if (mixinClassName.contains("evilcraft")) {
             return isModLoaded("evilcraft");
+        } else if (mixinClassName.contains("HoloInventory")) {
+            return isModLoaded("holoinventoryrevived");
         }
         return true;
     }
