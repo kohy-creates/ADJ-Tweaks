@@ -90,7 +90,7 @@ public class CurioControl {
     }
 
 //    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
-//            Config.SOULBOUND_FOR_CURIOS.get()
+//            BossMusicConfig.SOULBOUND_FOR_CURIOS.get()
 //    ));
 
     private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(

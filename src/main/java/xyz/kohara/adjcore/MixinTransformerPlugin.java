@@ -38,9 +38,10 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
             return isModLoaded("legendarytabs");
         } else if (mixinClassName.contains("aether")) {
             return isModLoaded("aether");
-        }
-        else if (mixinClassName.contains("twilightforest")) {
+        } else if (mixinClassName.contains("twilightforest")) {
             return isModLoaded("twilightforest");
+        } else if (mixinClassName.contains("evilcraft")) {
+            return isModLoaded("evilcraft");
         }
         return true;
     }

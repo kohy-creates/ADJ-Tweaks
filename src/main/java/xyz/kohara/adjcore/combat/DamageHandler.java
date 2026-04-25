@@ -195,7 +195,6 @@ public class DamageHandler {
         if (livingAttacker != null && victimEntity instanceof TamableAnimal tamableAnimal) {
             if (tamableAnimal.getOwner() == livingAttacker && !livingAttacker.isShiftKeyDown()) {
                 event.setAmount(0);
-//                event.setCanceled(true);
                 return;
             }
         }
@@ -350,7 +349,8 @@ public class DamageHandler {
                 finalAmount,
                 isCrit,
                 (float) critChance,
-                critMult
+                critMult,
+                event.getSource().type()
         );
         MinecraftForge.EVENT_BUS.post(eventHook);
 

@@ -30,8 +30,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.kohara.adjcore.client.music.JukeboxTracker;
-import xyz.kohara.adjcore.client.music.MusicConfig;
+import xyz.kohara.adjcore.client.music.ADJMusicData;
+import xyz.kohara.adjcore.client.music.ADJMusicManager;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.ExtraLivingDrops;
@@ -85,9 +85,9 @@ public class ADJCore {
         FORGE_BUS.register(ArsSpellPowerEdit.class);
         FORGE_BUS.register(ExtraLivingDrops.class);
 
-        JukeboxTracker.init();
-
         initRegistries(MOD_BUS);
+
+        new ADJMusicManager();
     }
 
     private void initRegistries(IEventBus bus) {
@@ -95,7 +95,7 @@ public class ADJCore {
         ADJAttributes.register(bus);
         ADJEffects.register(bus);
         ADJSoundEvents.SOUND_EVENTS.register(bus);
-        MusicConfig.load(bus);
+        ADJMusicData.load(bus);
         ADJPlacementModifierTypes.register(bus);
         ADJParticles.register(bus);
         ADJFluidTypes.register(bus);

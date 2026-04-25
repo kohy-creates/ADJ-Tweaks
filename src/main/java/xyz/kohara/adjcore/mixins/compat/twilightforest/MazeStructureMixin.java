@@ -22,33 +22,28 @@ import twilightforest.world.components.structures.TFMaze;
 @Mixin(value = HedgeMazeComponent.class, remap = false)
 public class MazeStructureMixin {
 
-
-	@Shadow
-	@Final
-	@Mutable
-	private static int MSIZE = 32;
-
-	@Inject(
-			method = "postProcess",
-			at = @At(
-					value = "INVOKE",
-					target = "Ltwilightforest/world/components/structures/TFMaze;setSeed(J)V",
-					shift = At.Shift.AFTER
-			)
-	)
-	private void makeMazesSlightlyNewer(
-			WorldGenLevel world,
-			StructureManager manager,
-			ChunkGenerator generator,
-			RandomSource rand,
-			BoundingBox sbb,
-			ChunkPos chunkPosIn,
-			BlockPos blockPos,
-			CallbackInfo ci,
-			@Local(name = "maze") TFMaze maze
-			) {
-				maze.tall = 8;
-				maze.torchBlockState = Blocks.SHROOMLIGHT.defaultBlockState();
-				maze.torchRarity = 0.3f;
-	}
+    @Inject(
+            method = "postProcess",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ltwilightforest/world/components/structures/TFMaze;setSeed(J)V",
+                    shift = At.Shift.AFTER
+            ),
+            remap = true
+    )
+    private void makeMazesSlightlyNewer(
+            WorldGenLevel world,
+            StructureManager manager,
+            ChunkGenerator generator,
+            RandomSource rand,
+            BoundingBox sbb,
+            ChunkPos chunkPosIn,
+            BlockPos blockPos,
+            CallbackInfo ci,
+            @Local(name = "maze") TFMaze maze
+    ) {
+        maze.tall = 8;
+        maze.torchBlockState = Blocks.SHROOMLIGHT.defaultBlockState();
+        maze.torchRarity = 0.3f;
+    }
 }

@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.w3c.dom.ranges.Range;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.misc.LangGenerator;
 
@@ -59,6 +60,12 @@ public class ADJAttributes {
             "Extra health regeneration in points per second. This is ticked separately outside of natural health regeneration."
     );
 
+    public static final RegistryObject<Attribute> MUSIC_PITCH = register(
+            new RangedAttribute(id("client", "music_pitch"), 1.0d, 0d, 2d).setSyncable(true),
+            "Music Pitch",
+            "Defines clientside music pitch. If you can actually read this, then this isn't supposed to be seen and it's a bug."
+    );
+
     private static RegistryObject<Attribute> register(Attribute attribute, String name, String description) {
         String descriptionID = attribute.getDescriptionId();
         LangGenerator.addAttributeTranslation(descriptionID, name, description);
@@ -76,6 +83,7 @@ public class ADJAttributes {
 
         event.add(EntityType.PLAYER, ADJAttributes.MANA_COST_REDUCTION.get());
         event.add(EntityType.PLAYER, ADJAttributes.EXTRA_ORE_DROPS.get());
+        event.add(EntityType.PLAYER, ADJAttributes.MUSIC_PITCH.get());
     }
 
     private static String id(String category, String name) {

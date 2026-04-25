@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.client.Keybindings;
-import xyz.kohara.adjcore.client.renderer.entity.CollectableItemRenderer;
-import xyz.kohara.adjcore.client.renderer.entity.TerraSlashRenderer;
 import xyz.kohara.adjcore.client.particle.FlashingSparkParticle;
 import xyz.kohara.adjcore.client.particle.ShimmerParticle;
 import xyz.kohara.adjcore.client.particle.TerraShineParticle;
+import xyz.kohara.adjcore.client.renderer.entity.CollectableItemRenderer;
+import xyz.kohara.adjcore.client.renderer.entity.TerraSlashRenderer;
 import xyz.kohara.adjcore.registry.ADJEntities;
 import xyz.kohara.adjcore.registry.ADJParticles;
 import xyz.kohara.adjcore.registry.entities.CollectibleEntity;
@@ -29,7 +29,7 @@ public class ClientModHandler {
         event.register(Keybindings.INSTANCE.LOADOUT_2);
         event.register(Keybindings.INSTANCE.LOADOUT_3);
         event.register(Keybindings.INSTANCE.NEW_HIDE_GUI);
-        event.register(Keybindings.INSTANCE.HUGE_ASS_SCREENSHOT);
+//        event.register(Keybindings.INSTANCE.HUGE_ASS_SCREENSHOT);
     }
 
     @SubscribeEvent

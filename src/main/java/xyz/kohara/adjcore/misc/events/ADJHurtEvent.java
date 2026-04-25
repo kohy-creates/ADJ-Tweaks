@@ -1,11 +1,12 @@
 package xyz.kohara.adjcore.misc.events;
 
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Event;
-import org.apache.logging.log4j.core.jmx.Server;
 import xyz.kohara.adjcore.compat.kubejs.ServerEvents;
 import xyz.kohara.adjcore.compat.kubejs.serverevents.ADJHurtEventJS;
+import xyz.kohara.adjcore.misc.ParticleTextIndicators;
 
 import javax.annotation.Nullable;
 
@@ -17,6 +18,8 @@ public class ADJHurtEvent extends Event {
             chance,
             multiplier;
     private final boolean critical;
+    private @Nullable ParticleTextIndicators.Type style;
+    private final DamageType type;
 
     public ADJHurtEvent(@Nullable LivingEntity attacker,
                         Entity victim,
@@ -24,7 +27,8 @@ public class ADJHurtEvent extends Event {
                         float finalDamage,
                         boolean critical,
                         float critChance,
-                        float critMultiplier
+                        float critMultiplier,
+                        DamageType type
     ) {
         this.attacker = attacker;
         this.victim = victim;
@@ -33,6 +37,8 @@ public class ADJHurtEvent extends Event {
         this.critical = critical;
         this.chance = critChance;
         this.multiplier = critMultiplier;
+        this.style = null;
+        this.type = type;
 
         if (ServerEvents.ADJ_HURT.hasListeners())
             ServerEvents.ADJ_HURT.post(new ADJHurtEventJS(this));
@@ -64,5 +70,17 @@ public class ADJHurtEvent extends Event {
 
     public Entity getVictim() {
         return this.victim;
+    }
+
+    public ParticleTextIndicators.Type getStyle() {
+        return this.style;
+    }
+
+    public void setStyle(int id) {
+        this.style = ParticleTextIndicators.Type.fromValue(id);
+    }
+
+    public DamageType getDamageType() {
+        return this.type;
     }
 }

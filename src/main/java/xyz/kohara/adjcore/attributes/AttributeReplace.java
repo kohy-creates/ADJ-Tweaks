@@ -2,7 +2,6 @@ package xyz.kohara.adjcore.attributes;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
-import com.hollingsworth.arsnouveau.common.event.ArsEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -47,25 +46,6 @@ public class AttributeReplace {
         } catch (Exception e) {
             throw new RuntimeException("Failed to load attribute replacement config", e);
         }
-//        System.out.println("Global:");
-//        REPLACEMENTS.global.forEach((k, v) -> System.out.println(k + " -> " + v));
-//
-//        System.out.println("\nItems:");
-//        REPLACEMENTS.items.forEach((itemId, itemConfig) -> {
-//            System.out.println("Item: " + itemId);
-//            if (itemConfig.replace != null) {
-//                System.out.println("  Replace:");
-//                itemConfig.replace.forEach((k, v) -> System.out.println("    " + k + " -> " + v));
-//            }
-//            if (itemConfig.add != null) {
-//                System.out.println("  Add:");
-//                itemConfig.add.forEach(a -> System.out.println("    " + a));
-//            }
-//            if (itemConfig.remove != null) {
-//                System.out.println("  Remove:");
-//                itemConfig.remove.forEach(a -> System.out.println("    " + a));
-//            }
-//        });
     }
 
     private static Attribute attributeFromString(String string) {
@@ -91,8 +71,6 @@ public class AttributeReplace {
         AttributeConfig.ItemConfig config = REPLACEMENTS.items.get(itemKey);
 
         if (originalModifiers.isEmpty() && config == null) {
-            // String text = "Skipping item " + event.getItemStack().getItem();
-            // ADJCore.LOGGER.log(Level.INFO, text);
             return;
         }
 

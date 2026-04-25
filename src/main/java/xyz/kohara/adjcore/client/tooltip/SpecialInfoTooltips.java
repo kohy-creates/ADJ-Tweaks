@@ -47,7 +47,7 @@ public class SpecialInfoTooltips {
             "consumable", "Consumable"
     );
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void editTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         Item item = stack.getItem();

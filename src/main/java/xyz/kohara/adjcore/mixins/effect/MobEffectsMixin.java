@@ -30,15 +30,4 @@ public class MobEffectsMixin {
         }
         cir.setReturnValue(Registry.registerMapping(BuiltInRegistries.MOB_EFFECT, id, key, effect));
     }
-
-//    @ModifyReturnValue(
-//            method = "register",
-//            at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;registerMapping(Lnet/minecraft/core/Registry;ILjava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;")
-//    )
-//    private static MobEffect changeReturn(int id, String key, MobEffect effect, Object original) {
-//        if (effect instanceof AttackDamageMobEffect) {
-//            return Registry.registerMapping(BuiltInRegistries.MOB_EFFECT, id, key, new MobEffectEditable(effect.getCategory(), effect.getColor()));
-//        }
-//        return (MobEffect) original;
-//    }
 }

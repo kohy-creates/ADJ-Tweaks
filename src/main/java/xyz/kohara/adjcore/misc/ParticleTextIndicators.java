@@ -14,16 +14,16 @@ import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 
 import java.awt.*;
-import java.util.List;
 
 public class ParticleTextIndicators {
 
     public static void showIndicator(Entity atEntity,
                                      @Nullable LivingEntity offsetTo,
                                      float amount,
-                                     Type type
+                                     Type type,
+                                     int isCrit
     ) {
-        double maxDistance = 48;
+        double maxDistance = 40;
 
         atEntity.level().getServer().getPlayerList().getPlayers().forEach(viewer -> {
             if (viewer.distanceToSqr(atEntity) > maxDistance * maxDistance) return;
@@ -56,7 +56,7 @@ public class ParticleTextIndicators {
 
             ADJMessages.sendToPlayer(
                     new DamageIndicatorS2CPacket(
-                            pos.x, pos.y, pos.z, amount, type.id()
+                            pos.x, pos.y, pos.z, amount, type.id(), isCrit
                     ),
                     viewer
             );
@@ -91,18 +91,22 @@ public class ParticleTextIndicators {
         Entity victim = event.getVictim();
         LivingEntity attacker = event.getAttacker();
 
-        Type type = Type.DAMAGE_ENTITY;
-        if (victim instanceof ServerPlayer) {
-            type = Type.DAMAGE_PLAYER;
-        } else if (event.isCritical()) {
-            type = Type.CRIT;
+        Type type = event.getStyle();
+        if (event.getStyle() == null) {
+            type = Type.DAMAGE_ENTITY;
+            if (victim instanceof ServerPlayer) {
+                type = Type.DAMAGE_PLAYER;
+            } else if (event.isCritical()) {
+                type = Type.CRIT;
+            }
         }
 
         showIndicator(
                 victim,
                 attacker,
                 event.getDamage(),
-                type
+                type,
+                (event.isCritical()) ? 1 : 0
         );
     }
 
@@ -113,13 +117,14 @@ public class ParticleTextIndicators {
 
         if (
                 entity.getHealth() != entity.getMaxHealth() &&
-                event.getAmount() > 2) {
+                        event.getAmount() > 2) {
             if (!entity.level().isClientSide()) {
                 showIndicator(
                         entity,
                         null,
                         event.getAmount(),
-                        Type.HEAL
+                        Type.HEAL,
+                        0
                 );
             }
             entity.adjcore$setHealTime(8);
@@ -131,22 +136,38 @@ public class ParticleTextIndicators {
         DAMAGE_PLAYER(1, "#9C0909", "#E33B3B"),
         HEAL(2, "#3BE346", "#7EE686"),
         CRIT(3, "#FF3300", "#FF7E42"),
-        MANA(4, "#2787F5", "#2963E3");
+        MANA(4, "#2787F5", "#2963E3"),
+        FIRE(5, "#F55E27", "#F58E27", "🔥"),
+        POISON(6, "#39782F", "#45A137"),
+        WITHER(7, "#764857", "#6E2F3F"),
+        EXPLOSION(8, "#F53C27", "#F56B51", "💥"),
+        MIDNIGHT(9, "#F2FBFC", "#D9DDDE", "🌙");
 
-        private final int type;
+        private final int id;
         private final Pair<Color, Color> colors;
+        private @Nullable String icon = null;
 
-        Type(int type, String baseColor, String fadeColor) {
-            this.type = type;
+        Type(int id, String baseColor, String fadeColor) {
+            this.id = id;
             this.colors = new Pair<>(Color.decode(baseColor), Color.decode(fadeColor));
         }
 
+        Type(int id, String baseColor, String fadeColor, @Nullable String icon) {
+            this.id = id;
+            this.colors = new Pair<>(Color.decode(baseColor), Color.decode(fadeColor));
+            this.icon = icon;
+        }
+
         public int id() {
-            return this.type;
+            return this.id;
         }
 
         public Pair<Color, Color> getColors() {
             return this.colors;
+        }
+
+        public @Nullable String getIcon() {
+            return this.icon;
         }
 
         public static Type fromValue(int id) {

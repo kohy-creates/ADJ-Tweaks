@@ -22,8 +22,11 @@ public class ManaCapEventsMixin {
     private static void makeThisThingMakeMoreSense(TickEvent.PlayerTickEvent e, CallbackInfo ci) {
         ci.cancel();
 
-        if (e.player == null || e.player.getCommandSenderWorld().isClientSide() || e.phase != TickEvent.Phase.END)
-            return;
+        if (e.player == null
+                || e.player.getCommandSenderWorld().isClientSide()
+                || e.phase != TickEvent.Phase.END
+                || e.player.isDeadOrDying()
+        ) return;
 
         var manaLazyOptional = CapabilityRegistry.getMana(e.player);
         var manaOptional = manaLazyOptional.resolve();

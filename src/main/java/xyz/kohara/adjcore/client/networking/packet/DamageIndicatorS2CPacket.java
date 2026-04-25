@@ -13,13 +13,15 @@ public class DamageIndicatorS2CPacket {
     private final double x, y, z;
     private final float amount;
     private final int type;
+    private final int isCrit;
 
-    public DamageIndicatorS2CPacket(double x, double y, double z, float amount, int type) {
+    public DamageIndicatorS2CPacket(double x, double y, double z, float amount, int type, int isCrit) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.amount = amount;
         this.type = type;
+        this.isCrit = isCrit;
     }
 
     public DamageIndicatorS2CPacket(FriendlyByteBuf buf) {
@@ -28,14 +30,16 @@ public class DamageIndicatorS2CPacket {
         this.z = buf.readDouble();
         this.amount = buf.readFloat();
         this.type = buf.readInt();
+        this.isCrit = buf.readInt();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeDouble(x);
-        buf.writeDouble(y);
-        buf.writeDouble(z);
-        buf.writeFloat(amount);
-        buf.writeInt(type);
+        buf.writeDouble(this.x);
+        buf.writeDouble(this.y);
+        buf.writeDouble(this.z);
+        buf.writeFloat(this.amount);
+        buf.writeInt(this.type);
+        buf.writeInt(this.isCrit);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
@@ -46,12 +50,12 @@ public class DamageIndicatorS2CPacket {
 
             level.addParticle(
                     ADJParticles.DAMAGE_PARTICLE.get(),
-                    x,
-                    y,
-                    z,
+                    this.x,
+                    this.y,
+                    this.z,
                     this.amount,
                     this.type,
-                    0f
+                    this.isCrit
             );
         });
         return true;

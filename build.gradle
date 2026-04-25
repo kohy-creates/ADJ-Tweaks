@@ -154,7 +154,6 @@ dependencies {
     implementation(include("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.5-beta.2"))
 
     modImplementation("me.shedaniel.cloth:cloth-config-forge:17.0.144")
-    modImplementation "com.samsthenerd.inline:inline-forge:${project.inline_version}"
 
     implementation("com.eliotlash.mclib:mclib:20")
     forgeRuntimeLibrary("com.eliotlash.mclib:mclib:20")
@@ -166,7 +165,8 @@ dependencies {
 
     compileOnly "com.aetherteam.aether:aether:${project.aether_version}"
 
-    compileOnly "curse.maven:cyclops-core-232758:7210370"
+    modImplementation "curse.maven:cyclops-core-232758:7210370"
+    modImplementation "curse.maven:evilcraft-74610:7223464"
 
     compileOnly("org.embeddedt:embeddium-1.20.1:0.2.11-git.23aedfb+mc1.20.1")
 
@@ -186,6 +186,8 @@ dependencies {
 
     modImplementation "curse.maven:travelers-backpack-321117:7573110"
     modImplementation "teamtwilight:twilightforest:4.3.2145:universal"
+
+    modImplementation "curse.maven:holoinventory-revived-1493003:7819497"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

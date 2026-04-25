@@ -54,6 +54,6 @@ public abstract class ItemStackMixin {
 //    public void getMaxDamage(CallbackInfoReturnable<Integer> cir) {
 //        ItemStack stack = ((ItemStack) (Object) this);
 //        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack) != 0)
-//            cir.setReturnValue((int) (cir.getReturnValue() * Config.UNBREAKNG_DURABILITY_MULTIPLIER.get()));
+//            cir.setReturnValue((int) (cir.getReturnValue() * BossMusicConfig.UNBREAKNG_DURABILITY_MULTIPLIER.get()));
 //    }
 }

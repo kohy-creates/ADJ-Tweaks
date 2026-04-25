@@ -1,22 +1,17 @@
 package xyz.kohara.adjcore.mixins.entity;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,9 +19,10 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.registry.ADJAttributes;
 import xyz.kohara.adjcore.combat.KnockbackCooldown;
 import xyz.kohara.adjcore.entity.IHealTime;
+
+import java.util.UUID;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown, IHealTime {
@@ -37,6 +33,15 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
 
     @Shadow
     public abstract @NotNull Iterable<ItemStack> getArmorSlots();
+
+    @Shadow
+    @Final
+    private static UUID SPEED_MODIFIER_SPRINTING_UUID;
+
+    @Shadow
+    @Final
+    @Mutable
+    private static AttributeModifier SPEED_MODIFIER_SPRINTING;
 
     // Yeeting Resistance effect logic out of here
     @Inject(
@@ -109,12 +114,13 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
         }
     }
 
-    @Unique
-    private float adj$calculateExtraRegenAmount(LivingEntity entity) {
-        AttributeInstance instance = entity.getAttribute(ADJAttributes.HEALTH_REGEN.get());
-        if (instance != null) {
-            return (float) (instance.getValue() / 20f);
-        }
-        return 0;
+    @Inject(
+            method = "<clinit>",
+            at = @At("TAIL")
+    )
+    private static void nerfSprinting(CallbackInfo ci) {
+        SPEED_MODIFIER_SPRINTING = new AttributeModifier(
+                SPEED_MODIFIER_SPRINTING_UUID, "Sprinting speed boost", 0.3F, AttributeModifier.Operation.MULTIPLY_BASE
+        );
     }
 }

@@ -54,6 +54,7 @@ public class DamageParticle extends Particle {
     private float visualDX = 0;
 
     private final int type;
+    private final int isCrit;
 
     private final float maxRotation;
     private float rotationSpeed;  // how fast it swings
@@ -64,22 +65,31 @@ public class DamageParticle extends Particle {
                           double y,
                           double z,
                           double amount,
-                          double type,
-                          double unused
+                          double id,
+                          double isCrit
     ) {
         super(clientLevel, x, y, z);
 
         this.lifetime = 60;
 
-        this.type = (int) type;
+        this.type = (int) id;
 
-        this.color = ParticleTextIndicators.Type.fromValue((int) type).getColors();
+        ParticleTextIndicators.Type type = ParticleTextIndicators.Type.fromValue(this.type);
+
+        this.color = type.getColors();
 
         this.yd = 1;
 
         int number = (int) Math.abs(amount);
-        MutableComponent text = Component.literal(String.valueOf(number));
-        if (this.type == 3) {
+
+        MutableComponent text = Component.literal("");
+        if (type.getIcon() != null) {
+            text.append(type.getIcon());
+        }
+        text.append(Component.literal(String.valueOf(number)));
+
+        this.isCrit = (int) isCrit;
+        if (this.isCrit == 1) {
             text.append("!");
             text.withStyle(Style.EMPTY.withBold(true));
         }
@@ -91,7 +101,7 @@ public class DamageParticle extends Particle {
         this.rotationSpeed = 0.1f;
 
         // Larger angles for crit hits
-        if (this.type == 3) {
+        if (this.isCrit == 1) {
             this.maxRotation = 22.5f;
             this.rotationSpeed *= 1.5f;
         } else {
@@ -119,7 +129,7 @@ public class DamageParticle extends Particle {
 
         float fadeout = Mth.lerp(partialTicks, this.prevFadeout, this.fadeout);
 
-        float defScale = (this.type == 3) ? 0.0125f : 0.01f;
+        float defScale = (this.isCrit == 1) ? 0.0125f : 0.01f;
         float scale = (float) (defScale * distanceFromCam);
         poseStack.mulPose(camera.rotation());
 
