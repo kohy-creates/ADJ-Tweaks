@@ -178,11 +178,7 @@ dependencies {
     modImplementation("curse.maven:quark-243121:6427817")
     modImplementation("curse.maven:zeta-968868:7335229")
 
-    compileOnly("curse.maven:the-fnaf-plushie-mod-932407:5857666")
-
     compileOnly "vazkii.botania:Botania:1.20.1-450-FORGE"
-
-    compileOnly("curse.maven:legendary-tabs-1172469:6586335")
 
     modImplementation "curse.maven:travelers-backpack-321117:7573110"
     modImplementation "teamtwilight:twilightforest:4.3.2145:universal"

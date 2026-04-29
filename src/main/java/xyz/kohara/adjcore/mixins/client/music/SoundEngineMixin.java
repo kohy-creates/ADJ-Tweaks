@@ -109,31 +109,29 @@ public abstract class SoundEngineMixin {
             cir.setReturnValue(ADJMusicManager.getInstance().calculateMusicVolume(baseVolume, getVolume(SoundSource.MUSIC)));
     }
 
-//    @Inject(method = "stopAll", at = @At("HEAD"), cancellable = true)
-//    private void dontStopTheMusicILikeICantRefuseIt(CallbackInfo ci) {
-//        ci.cancel();
-//        if (this.loaded) {
-//            final var channelsToSkip = adj$getChannelsToSkip();
-//
-//            this.executor.flush();
-//            this.instanceToChannel.values().forEach(arg -> arg.execute(channel -> {
-//                if (!channelsToSkip.contains(channel)) channel.stop();
-//            }));
-//            this.channelAccess.clear();
-//            this.queuedSounds.clear();
-//            this.tickingSounds.clear();
-//
-//            Multimap<SoundSource, SoundInstance> instanceMap = HashMultimap.create(); // ConcurrentModificationException is not a joke
-//            this.instanceBySource.forEach(instanceMap::put);
-//            instanceMap.forEach((soundSource, soundInstance) -> {
-//                if (soundSource != SoundSource.MUSIC) {
-//                    this.instanceBySource.remove(soundSource, soundInstance);
-//                }
-//            });
-//            this.soundDeleteTime.clear();
-//            this.queuedTickableSounds.clear();
-//        }
-//    }
+    @Inject(method = "stopAll", at = @At("HEAD"), cancellable = true)
+    private void stopAllButMusic(CallbackInfo ci) {
+        ci.cancel();
+        if (!this.loaded) return;
+
+        this.executor.flush();
+        // Only stop non-music stuff
+        this.instanceToChannel.forEach((instance, handle) -> {
+            if (instance.getSource() != SoundSource.MUSIC) {
+                handle.execute(Channel::stop);
+            }
+        });
+        this.instanceToChannel.entrySet().removeIf(entry ->
+                entry.getKey().getSource() != SoundSource.MUSIC
+        );
+        this.instanceBySource.entries().removeIf(entry ->
+                entry.getKey() != SoundSource.MUSIC
+        );
+        this.queuedSounds.clear();
+        this.tickingSounds.clear();
+        this.soundDeleteTime.clear();
+        this.queuedTickableSounds.clear();
+    }
 
     @Unique
     private List<Channel> adj$getChannelsToSkip() {

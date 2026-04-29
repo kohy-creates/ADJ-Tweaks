@@ -17,3 +17,7 @@ accessible class net/minecraft/client/OptionInstance$ValueSet
 accessible method net/minecraft/client/Minecraft grabHugeScreenshot (Ljava/io/File;IIII)Lnet/minecraft/network/chat/Component;
 accessible class net/minecraft/client/gui/Font$StringRenderOutput
 accessible field net/minecraft/client/sounds/MusicManager currentMusic Lnet/minecraft/client/resources/sounds/SoundInstance;
+accessible field net/minecraft/client/sounds/SoundManager soundEngine Lnet/minecraft/client/sounds/SoundEngine;
+accessible field net/minecraft/client/sounds/SoundEngine loaded Z
+accessible field net/minecraft/client/sounds/SoundEngine tickingSounds Ljava/util/List;
+accessible field net/minecraft/client/sounds/SoundEngine queuedTickableSounds Ljava/util/List;

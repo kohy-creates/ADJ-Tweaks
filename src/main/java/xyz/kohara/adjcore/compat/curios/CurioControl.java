@@ -78,6 +78,7 @@ public class CurioControl {
                     && !Objects.equals(id, "mountbauble")
                     && !Objects.equals(id, "spellbook") //whoever wanted to use Iron's Spells you should thank me for actually doing this
                     && !Objects.equals(id, "hook")
+                    && !Objects.equals(id, "atlas")
             ) {
                 CuriosApi.getSlotHelper().setSlotsForType(id, event.getEntity(), 0);
             }
