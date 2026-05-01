@@ -6,6 +6,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.Music;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -89,21 +90,27 @@ public class ADJMusicManager {
         }
     }
 
-    public void startPlaying(Music music) {
-        float pitch = 1.0F;
-        isStopFading = false;
-        musicVolumeMultiplier = 1f;
-        if (MINECRAFT.player != null) {
+    private float getPitch(SoundEvent event) {
+        float pitch = 1f;
+
+        var eventLoc = event.getLocation().toString();
+        if (!eventLoc.startsWith("adj:music.boss") && MINECRAFT.player != null) {
             var attribute = MINECRAFT.player.getAttribute(ADJAttributes.MUSIC_PITCH.get());
             if (attribute != null) {
                 pitch = (float) attribute.getValue();
             }
         }
+        return pitch;
+    }
+
+    public void startPlaying(Music music) {
+        isStopFading = false;
+        musicVolumeMultiplier = 1f;
 
         var soundEvent = music.getEvent().value();
         var current = new SimpleSoundInstance(
                 soundEvent.getLocation(), SoundSource.MUSIC,
-                1.0F, pitch,
+                1.0F, getPitch(soundEvent),
                 SoundInstance.createUnseededRandom(),
                 false, 0,
                 SoundInstance.Attenuation.NONE,
@@ -115,7 +122,6 @@ public class ADJMusicManager {
         }
         nextSongDelay = Integer.MAX_VALUE;
     }
-
 
     public void stopPlaying(Music music) {
         if (isPlayingMusic(music)) {
@@ -129,7 +135,6 @@ public class ADJMusicManager {
         } else if (getCurrentlyPlayingInstance() != null) {
             MINECRAFT.getSoundManager().stop(getCurrentlyPlayingInstance());
             setCurrentlyPlaying(null, null);
-
             nextSongDelay += 0;
         }
     }
