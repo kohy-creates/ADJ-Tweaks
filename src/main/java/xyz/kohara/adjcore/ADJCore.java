@@ -50,6 +50,7 @@ import xyz.kohara.adjcore.misc.credits.ModInfo;
 import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.registry.*;
 import xyz.kohara.adjcore.registry.capabilities.CapabilityEvents;
+import xyz.kohara.adjcore.registry.effects.EffectsHandler;
 
 import java.util.*;
 
@@ -85,6 +86,7 @@ public class ADJCore {
         FORGE_BUS.register(HardcoreTweaks.class);
         FORGE_BUS.register(ArsSpellPowerEdit.class);
         FORGE_BUS.register(ExtraLivingDrops.class);
+        FORGE_BUS.register(EffectsHandler.class);
 
         initRegistries(MOD_BUS);
 

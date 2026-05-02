@@ -73,7 +73,7 @@ public class ADJMusicManager {
         }
 
         // Fade outs
-        float newVolumeMultiplier = 1f;
+        float newVolumeMultiplier;
         float targetMultiplier = shouldFadeMusic() ? 0f : 1f;
         if (targetMultiplier != musicVolumeMultiplier) {
             float volumeChange = targetMultiplier - musicVolumeMultiplier;
