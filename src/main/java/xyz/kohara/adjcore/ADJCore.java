@@ -19,7 +19,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -259,7 +258,7 @@ public class ADJCore {
                     (int) ((int) point.x / 1.5f), (int) ((int) point.y / 1.5f),
                     0, 0,
                     12, 12,
-                    64, 64
+                    128, 128
             );
             point = rotatePointAbout(point, center, angleBetweenEach);
         }

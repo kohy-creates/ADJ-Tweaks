@@ -45,9 +45,16 @@ public class ADJEffects {
     public static final RegistryObject<MobEffect> HEART_LANTERN = register(
             "heart_lantern",
             new HeartLanternEffect(),
-            "HeartEntity Lantern",
+            "Heart Lantern",
             "Life regeneration increased"
     );
+    public static final RegistryObject<MobEffect> FALLEN_KANADE = register(
+            "fallen_kanade",
+            new FallenKanadeEffect(),
+            "Fallen Kanade",
+            "Increased life regeneration and reduced negative effect duration"
+    );
+
 
     private static RegistryObject<MobEffect> register(String id, MobEffect effect, String name, String description) {
         LangGenerator.addEffectTranslation(id, name, description);
