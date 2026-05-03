@@ -1,6 +1,5 @@
 package xyz.kohara.adjcore.registry;
 
-import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
@@ -8,7 +7,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.confluence.terra_curio.effect.ModEffects;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.misc.LangGenerator;
 import xyz.kohara.adjcore.registry.effects.*;
