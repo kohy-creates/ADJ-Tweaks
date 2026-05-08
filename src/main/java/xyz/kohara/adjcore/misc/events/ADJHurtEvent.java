@@ -1,6 +1,6 @@
 package xyz.kohara.adjcore.misc.events;
 
-import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Event;
@@ -19,7 +19,7 @@ public class ADJHurtEvent extends Event {
             multiplier;
     private final boolean critical;
     private @Nullable ParticleTextIndicators.Type style;
-    private final DamageType type;
+    private final DamageSource source;
 
     public ADJHurtEvent(@Nullable LivingEntity attacker,
                         Entity victim,
@@ -28,7 +28,7 @@ public class ADJHurtEvent extends Event {
                         boolean critical,
                         float critChance,
                         float critMultiplier,
-                        DamageType type
+                        DamageSource source
     ) {
         this.attacker = attacker;
         this.victim = victim;
@@ -38,7 +38,7 @@ public class ADJHurtEvent extends Event {
         this.chance = critChance;
         this.multiplier = critMultiplier;
         this.style = null;
-        this.type = type;
+        this.source = source;
 
         if (ServerEvents.ADJ_HURT.hasListeners())
             ServerEvents.ADJ_HURT.post(new ADJHurtEventJS(this));
@@ -80,7 +80,7 @@ public class ADJHurtEvent extends Event {
         this.style = ParticleTextIndicators.Type.fromValue(id);
     }
 
-    public DamageType getDamageType() {
-        return this.type;
+    public DamageSource getSource() {
+        return this.source;
     }
 }

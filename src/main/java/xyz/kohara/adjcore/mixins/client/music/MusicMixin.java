@@ -26,13 +26,13 @@ public abstract class MusicMixin {
         ADJMusicManager.getInstance().tick(this.pause);
     }
 
-    @Redirect(method = "updateScreenAndTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundManager;stop()V"))
-    private void dont(SoundManager instance) {
-        // fixes crash with Cracker's Wither Storm
-        var soundManager = this.soundManager.soundEngine;
-        if (soundManager.loaded) {
-            soundManager.tickingSounds.clear();
-            soundManager.queuedTickableSounds.clear();
-        }
-    }
+//    @Redirect(method = "updateScreenAndTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundManager;stop()V"))
+//    private void dont(SoundManager instance) {
+//        // fixes crash with Cracker's Wither Storm
+//        var soundManager = this.soundManager.soundEngine;
+//        if (soundManager.loaded) {
+//            soundManager.tickingSounds.clear();
+//            soundManager.queuedTickableSounds.clear();
+//        }
+//    }
 }

@@ -25,7 +25,7 @@ public abstract class MobEffectInstanceMixin {
 	@Final
 	private MobEffect effect;
 	@Unique
-	LivingEntity adj$entity;
+	LivingEntity adj$entity = null;
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	private void getEntity(LivingEntity entity, Runnable onExpirationRunnable, CallbackInfoReturnable<Boolean> cir) {
@@ -35,11 +35,15 @@ public abstract class MobEffectInstanceMixin {
 	@WrapOperation(
 			method = "tickDownDuration",
 			at = @At(
-				value = "INVOKE",
-				target = "Lnet/minecraft/world/effect/MobEffectInstance;mapDuration(Lit/unimi/dsi/fastutil/ints/Int2IntFunction;)I"
-		)
+					value = "INVOKE",
+					target = "Lnet/minecraft/world/effect/MobEffectInstance;mapDuration(Lit/unimi/dsi/fastutil/ints/Int2IntFunction;)I"
+			)
 	)
 	private int tickDownFasterWithKanade(MobEffectInstance instance, Int2IntFunction mapper, Operation<Integer> original) {
+		if (adj$entity == null) {
+			return original.call(instance, mapper);
+		}
+
 		int reduceBy;
 		if (adj$entity.hasEffect(ADJEffects.FALLEN_KANADE.get())) {
 			if (!effect.isInstantenous() && !effect.isBeneficial()) {
@@ -50,8 +54,7 @@ public abstract class MobEffectInstanceMixin {
 			} else {
 				reduceBy = 1;
 			}
-		}
-		else {
+		} else {
 			reduceBy = 1;
 		}
 		return instance.mapDuration(i -> i - reduceBy);

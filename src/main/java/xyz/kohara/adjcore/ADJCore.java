@@ -258,7 +258,7 @@ public class ADJCore {
                     (int) ((int) point.x / 1.5f), (int) ((int) point.y / 1.5f),
                     0, 0,
                     12, 12,
-                    128, 128
+                    32, 32
             );
             point = rotatePointAbout(point, center, angleBetweenEach);
         }

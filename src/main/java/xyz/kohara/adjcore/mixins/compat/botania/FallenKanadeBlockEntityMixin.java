@@ -25,8 +25,9 @@ public abstract class FallenKanadeBlockEntityMixin {
 	@Shadow
 	@Final
 	private static int COST;
+
 	@Unique
-	private static final int adj$NEW_RADIUS = 5;
+	private static final int adj$NEW_RADIUS = 10;
 
 	@Unique
 	private static boolean adj$canHeal(LivingEntity e) {
@@ -50,13 +51,13 @@ public abstract class FallenKanadeBlockEntityMixin {
 			boolean did = false;
 			List<LivingEntity> entities = flower.getLevel().getEntitiesOfClass(
 					LivingEntity.class, new AABB(
-						flower.getEffectivePos().offset(-adj$NEW_RADIUS, -adj$NEW_RADIUS, -adj$NEW_RADIUS),
-						flower.getEffectivePos().offset(adj$NEW_RADIUS + 1, adj$NEW_RADIUS + 1, adj$NEW_RADIUS + 1)
+							flower.getEffectivePos().offset(-adj$NEW_RADIUS, -adj$NEW_RADIUS, -adj$NEW_RADIUS),
+							flower.getEffectivePos().offset(adj$NEW_RADIUS + 1, adj$NEW_RADIUS + 1, adj$NEW_RADIUS + 1)
 					),
 					FallenKanadeBlockEntityMixin::adj$canHeal
 			);
 			for (LivingEntity toHeal : entities) {
-				if (toHeal.getEffect(ADJEffects.FALLEN_KANADE.get()) == null && flower.getMana() >= COST) {
+				if (flower.getMana() >= COST) {
 					toHeal.addEffect(new MobEffectInstance(ADJEffects.FALLEN_KANADE.get(), 59, 0, true, true));
 					flower.addMana(-COST);
 					did = true;
@@ -71,7 +72,7 @@ public abstract class FallenKanadeBlockEntityMixin {
 	@Inject(method = "getRadius", at = @At("HEAD"), cancellable = true, remap = false)
 	private void changeRadius(CallbackInfoReturnable<RadiusDescriptor> cir) {
 		cir.setReturnValue(RadiusDescriptor.Rectangle.square(
-				((FallenKanadeBlockEntity)(Object)this).getEffectivePos(),
+				((FallenKanadeBlockEntity) (Object) this).getEffectivePos(),
 				adj$NEW_RADIUS
 		));
 	}
