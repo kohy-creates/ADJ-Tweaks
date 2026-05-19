@@ -183,7 +183,8 @@ dependencies {
     modImplementation "curse.maven:travelers-backpack-321117:7573110"
     modImplementation "teamtwilight:twilightforest:4.3.2145:universal"
 
-    compileOnly "curse.maven:holoinventory-revived-1493003:7819497"
+    modImplementation "curse.maven:fastsuite-475117:7527943"
+    compileOnly "curse.maven:loot-journal-700723:7867729"
 
 }
 

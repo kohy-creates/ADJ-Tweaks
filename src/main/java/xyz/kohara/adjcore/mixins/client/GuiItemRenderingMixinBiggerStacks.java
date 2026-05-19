@@ -101,11 +101,7 @@ public abstract class GuiItemRenderingMixinBiggerStacks {
         int light = 15728880;
         adj$shouldHideStack = false;
 
-        ItemIsLockedRenderCheckEvent eventHook = new ItemIsLockedRenderCheckEvent(
-                itemStack,
-                this.minecraft.player
-        );
-        if (MinecraftForge.EVENT_BUS.post(eventHook)) {
+        if (ItemIsLockedRenderCheckEvent.shouldHide(itemStack, Minecraft.getInstance().player)) {
             light = 0;
             adj$shouldHideStack = true;
         }

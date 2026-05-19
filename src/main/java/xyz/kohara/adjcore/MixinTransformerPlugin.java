@@ -45,6 +45,9 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
         } else if (mixinClassName.contains("botania")) {
             return isModLoaded("botania");
         }
+        else if (mixinClassName.contains("LootJournal")) {
+            return isModLoaded("loot_journal");
+        }
         return true;
     }
 

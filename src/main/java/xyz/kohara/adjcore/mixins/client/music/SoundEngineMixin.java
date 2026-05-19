@@ -41,7 +41,7 @@ public abstract class SoundEngineMixin {
     private Map<SoundInstance, ChannelAccess.ChannelHandle> instanceToChannel;
 
     @Shadow
-    private boolean loaded;
+	public boolean loaded;
 
     @Shadow
     @Final
@@ -60,19 +60,19 @@ public abstract class SoundEngineMixin {
 
     @Shadow
     @Final
-    private Map<SoundInstance, Integer> queuedSounds;
+	public Map<SoundInstance, Integer> queuedSounds;
 
     @Shadow
     @Final
-    private List<TickableSoundInstance> tickingSounds;
+	public List<TickableSoundInstance> tickingSounds;
 
     @Shadow
     @Final
-    private Map<SoundInstance, Integer> soundDeleteTime;
+	public Map<SoundInstance, Integer> soundDeleteTime;
 
     @Shadow
     @Final
-    private List<TickableSoundInstance> queuedTickableSounds;
+	public List<TickableSoundInstance> queuedTickableSounds;
 
     @Inject(method = "pause", at = @At("HEAD"), cancellable = true)
     private void pauseAllExceptMusic(CallbackInfo ci) {
@@ -109,29 +109,30 @@ public abstract class SoundEngineMixin {
             cir.setReturnValue(ADJMusicManager.getInstance().calculateMusicVolume(baseVolume, getVolume(SoundSource.MUSIC)));
     }
 
-    @Inject(method = "stopAll", at = @At("HEAD"), cancellable = true)
-    private void stopAllButMusic(CallbackInfo ci) {
-        ci.cancel();
-        if (!this.loaded) return;
-
-        this.executor.flush();
-        // Only stop non-music stuff
-        this.instanceToChannel.forEach((instance, handle) -> {
-            if (instance.getSource() != SoundSource.MUSIC) {
-                handle.execute(Channel::stop);
-            }
-        });
-        this.instanceToChannel.entrySet().removeIf(entry ->
-                entry.getKey().getSource() != SoundSource.MUSIC
-        );
-        this.instanceBySource.entries().removeIf(entry ->
-                entry.getKey() != SoundSource.MUSIC
-        );
-        this.queuedSounds.clear();
-        this.tickingSounds.clear();
-        this.soundDeleteTime.clear();
-        this.queuedTickableSounds.clear();
-    }
+//    @Inject(method = "stopAll", at = @At("HEAD"), cancellable = true)
+//    private void stopAllButMusic(CallbackInfo ci) {
+//        ci.cancel();
+//        if (!this.loaded) return;
+//
+//        this.executor.flush();
+//        // Only stop non-music stuff
+//        this.instanceToChannel.forEach((instance, handle) -> {
+//            if (instance.getSource() != SoundSource.MUSIC) {
+//                handle.execute(Channel::stop);
+//            }
+//        });
+//        this.instanceToChannel.entrySet().removeIf(entry ->
+//                entry.getKey().getSource() != SoundSource.MUSIC
+//        );
+//        this.instanceBySource.entries().removeIf(entry ->
+//                entry.getKey() != SoundSource.MUSIC
+//        );
+//        this.channelAccess.clear();
+//        this.queuedSounds.clear();
+//        this.tickingSounds.clear();
+//        this.soundDeleteTime.clear();
+//        this.queuedTickableSounds.clear();
+//    }
 
     @Unique
     private List<Channel> adj$getChannelsToSkip() {

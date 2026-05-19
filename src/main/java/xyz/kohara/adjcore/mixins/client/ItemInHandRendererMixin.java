@@ -25,37 +25,31 @@ import xyz.kohara.adjcore.misc.events.ItemIsLockedRenderCheckEvent;
 @Mixin(ItemInHandRenderer.class)
 public class ItemInHandRendererMixin {
 
-    @Shadow
-    @Final
-    private Minecraft minecraft;
+	@Shadow
+	@Final
+	private Minecraft minecraft;
 
-    @Redirect(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderStatic(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;III)V"))
-    private void redirectRenderItem(
-            ItemRenderer instance,
-            LivingEntity entity,
-            ItemStack itemStack,
-            ItemDisplayContext displayContext,
-            boolean leftHand,
-            PoseStack poseStack,
-            MultiBufferSource bufferSource,
-            Level level, int combinedLight, int combinedOverlay,
-            int seed
-    ) {
+	@Redirect(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderStatic(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;III)V"))
+	private void redirectRenderItem(
+			ItemRenderer instance,
+			LivingEntity entity,
+			ItemStack itemStack,
+			ItemDisplayContext displayContext,
+			boolean leftHand,
+			PoseStack poseStack,
+			MultiBufferSource bufferSource,
+			Level level, int combinedLight, int combinedOverlay,
+			int seed
+	) {
 
-        int light = combinedLight;
+		int light = combinedLight;
 
-        if (minecraft.level != null) {
-            ItemIsLockedRenderCheckEvent eventHook = new ItemIsLockedRenderCheckEvent(
-                    itemStack,
-                    this.minecraft.player
-            );
-            if (MinecraftForge.EVENT_BUS.post(eventHook)) {
-                light = 0;
-            }
-        }
+		if (minecraft.level != null && ItemIsLockedRenderCheckEvent.shouldHide(itemStack, Minecraft.getInstance().player)) {
+			light = 0;
+		}
 
-        instance.renderStatic(
-                entity, itemStack, displayContext, leftHand, poseStack, bufferSource, entity.level(), light, combinedOverlay, seed
-        );
-    }
+		instance.renderStatic(
+				entity, itemStack, displayContext, leftHand, poseStack, bufferSource, entity.level(), light, combinedOverlay, seed
+		);
+	}
 }
