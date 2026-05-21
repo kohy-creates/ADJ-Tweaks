@@ -5,11 +5,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import vazkii.botania.common.item.equipment.bauble.FlugelTiaraItem;
 
-@Mixin(value = FlugelTiaraItem.class, remap = false)
+@Mixin(value = FlugelTiaraItem.class)
 public class NukeFlugelTiaraAbilityMixin {
 
 	// Removes Flugel Tiara dashes by making the game think the player is never sprinting
-	@ModifyExpressionValue(method = "onWornTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;isSprinting()Z"))
+	@ModifyExpressionValue(
+			method = "onWornTick",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/world/entity/player/Player;isSprinting()Z"
+			)
+	)
 	private boolean noDashing(boolean original) {
 		return false;
 	}
