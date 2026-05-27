@@ -8,7 +8,6 @@ import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.registry.lootconditions.IsChapter;
 import xyz.kohara.adjcore.registry.lootconditions.IsHardcore;
-import xyz.kohara.adjcore.registry.placementmodifiertypes.IsHardcorePlacement;
 
 public class ADJLootConditions {
 

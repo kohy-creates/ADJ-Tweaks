@@ -36,12 +36,15 @@ public class IsChapter implements LootItemCondition {
 	}
 
 	public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<IsChapter> {
-		public void serialize(@NotNull JsonObject jsonObject, @NotNull IsChapter arg, @NotNull JsonSerializationContext jsonSerializationContext) {
+		public void serialize(@NotNull JsonObject jsonObject,
+							  @NotNull IsChapter arg,
+							  @NotNull JsonSerializationContext jsonSerializationContext) {
 			jsonObject.addProperty("from", arg.chapter);
 		}
 
-		public @NotNull IsChapter deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext jsonDeserializationContext) {
-			return new IsChapter(GsonHelper.convertToInt(jsonObject, "from"));
+		public @NotNull IsChapter deserialize(@NotNull JsonObject jsonObject,
+											  @NotNull JsonDeserializationContext jsonDeserializationContext) {
+			return new IsChapter(GsonHelper.getAsInt(jsonObject, "from"));
 		}
 	}
 }
