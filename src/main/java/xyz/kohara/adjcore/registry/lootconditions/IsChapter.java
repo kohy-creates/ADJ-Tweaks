@@ -28,8 +28,8 @@ public class IsChapter implements LootItemCondition {
 		var pData = lootContext.getLevel().getServer().kjs$getPersistentData();
 		if (pData != null && pData.get("chapters") != null) {
 			var chapters = pData.getCompound("chapters");
-			if (chapters.get("current_chapter") != null) {
-				return Integer.parseInt(chapters.getString("current_chapter").split("_")[1]) >= chapter;
+			if (chapters.get("current_stage") != null) {
+				return Integer.parseInt(chapters.getString("current_stage").split("_")[1]) >= chapter;
 			}
 		}
 		return false;
