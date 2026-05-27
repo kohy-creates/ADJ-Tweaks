@@ -162,10 +162,14 @@ public class ADJCore {
 	}
 
 	public static Component formatDeathMessage(Component deathMessage) {
+		return formatDeathMessage(deathMessage, false);
+	}
+
+	public static Component formatDeathMessage(Component deathMessage, boolean isAnimal) {
 		return Component.empty()
 				.append(Component.literal("s").withStyle(Style.EMPTY.withFont(ResourceLocation.parse("adjcore:icons"))))
 				.append(Component.literal(" "))
-				.append(deathMessage.copy().withStyle(Style.EMPTY.withColor(TextColor.parseColor("#FF1919"))));
+				.append(deathMessage.copy().withStyle(Style.EMPTY.withColor(TextColor.parseColor(isAnimal ? "#FF5252" : "#FF1919"))));
 	}
 
 	@SubscribeEvent

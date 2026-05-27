@@ -47,7 +47,9 @@
 		"compat.evilcraft.WorldStructureDarkTempleMixin",
 		"compat.evilcraft.WorldStructureDarkTemplePieceMixin",
 		"compat.twilightforest.CapabilityEventsMixin",
+		"compat.twilightforest.EnforcementMixin",
 		"compat.twilightforest.MazeStructureMixin",
+		"compat.twilightforest.TrophyPedestalBlockMixin",
 		"compat.twilightforest.worldgen.TFBlendedNoiseMixin",
 		"compat.twilightforest.worldgen.TFTerrainWarpMixin",
 		"compat.twilightforest.worldgen.TwilightChunkGeneratorMixin",
@@ -141,7 +143,9 @@
 		"compat.client.BuildToolRendererMixin",
 		"compat.client.LootJournalItemPickupEventMixin",
 		"compat.client.QuarkItemTooltipMixin",
-		"compat.client.TravelersBackpackRemoveRightClick"
+		"compat.client.TravelersBackpackRemoveRightClick",
+		"compat.client.twilightforest.FireflyParticleMixin",
+		"compat.client.ImmersiveOverlayHelperMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
