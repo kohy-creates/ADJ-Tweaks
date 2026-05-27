@@ -1,6 +1,5 @@
 package xyz.kohara.adjcore.misc.events;
 
-import net.mehvahdjukaar.moonlight.api.misc.WeakHashSet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,11 +16,14 @@ import net.minecraftforge.eventbus.api.Event;
 import xyz.kohara.adjcore.compat.kubejs.ClientEvents;
 import xyz.kohara.adjcore.compat.kubejs.clientevents.ItemIsLockedRenderCheckEventJS;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @OnlyIn(Dist.CLIENT)
 @Cancelable
 public class ItemIsLockedRenderCheckEvent extends Event {
 
-	private static final WeakHashSet<Item> cache = new WeakHashSet<>();
+	private static final Set<Item> cache = new HashSet<>();
 
 	public static void tick(Minecraft minecraft) {
 		ClientLevel level = minecraft.level;

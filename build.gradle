@@ -186,6 +186,10 @@ dependencies {
     modImplementation "curse.maven:fastsuite-475117:7527943"
     compileOnly "curse.maven:loot-journal-700723:7867729"
 
+//    modImplementation "curse.maven:xaeros-world-map-317780:8042194"
+//    modImplementation "curse.maven:xaeros-minimap-263420:8046960"
+    modImplementation "curse.maven:immersive-overlays-1245453:8055443"
+
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
