@@ -1,6 +1,7 @@
 package xyz.kohara.adjcore.mixins.client.music;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.main.GameConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,5 +18,10 @@ public abstract class MusicMixin {
 	@Inject(method = "tick", at = @At("HEAD"))
 	private void addOntoTick(CallbackInfo ci) {
 		ADJMusicManager.getInstance().tick(this.pause);
+	}
+
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void registerNewMusicManager(GameConfig gameConfig, CallbackInfo ci) {
+		new ADJMusicManager((Minecraft) (Object) this);
 	}
 }

@@ -46,7 +46,7 @@ public class RecipeLookupEvent extends Event {
 					level,
 					recipe
 			);
-			System.out.println("not cached, firing event!");
+//			System.out.println("not cached, firing event!");
 			if (MinecraftForge.EVENT_BUS.post(eventHook)) {
 				eventResultCache = new Pair<>(loc, false);
 				return Optional.empty();

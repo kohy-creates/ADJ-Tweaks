@@ -1,7 +1,5 @@
 package xyz.kohara.adjcore;
 
-import com.aetherteam.aether.loot.conditions.AetherLootConditions;
-import dev.shadowsoffire.attributeslib.client.AttributesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,9 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,7 +31,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.kohara.adjcore.client.music.ADJMusicData;
-import xyz.kohara.adjcore.client.music.ADJMusicManager;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.combat.DamageHandler;
 import xyz.kohara.adjcore.combat.ExtraLivingDrops;
@@ -92,8 +87,6 @@ public class ADJCore {
 		FORGE_BUS.register(EffectsHandler.class);
 
 		initRegistries(MOD_BUS);
-
-		new ADJMusicManager();
 	}
 
 	private void initRegistries(IEventBus bus) {
@@ -119,7 +112,6 @@ public class ADJCore {
 	}
 
 	private void clientSetup(final FMLClientSetupEvent event) {
-
 	}
 
 	public static ResourceLocation of(String path) {
