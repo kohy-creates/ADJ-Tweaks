@@ -25,7 +25,7 @@ public class ManaCapEventsMixin {
         if (e.player == null
                 || e.player.getCommandSenderWorld().isClientSide()
                 || e.phase != TickEvent.Phase.END
-                || e.player.isDeadOrDying()
+                || !e.player.isAlive()
         ) return;
 
         var manaLazyOptional = CapabilityRegistry.getMana(e.player);

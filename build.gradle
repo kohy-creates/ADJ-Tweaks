@@ -190,6 +190,9 @@ dependencies {
 //    modImplementation "curse.maven:xaeros-minimap-263420:8046960"
     modImplementation "curse.maven:immersive-overlays-1245453:8055443"
 
+//    compileOnly "curse.maven:fancymenu-367706:8094800"
+    compileOnly"curse.maven:decursio-stages-1116604:7105808"
+
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

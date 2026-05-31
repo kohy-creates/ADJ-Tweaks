@@ -69,6 +69,7 @@ public class ADJSoundEvents {
     public static final RegistryObject<SoundEvent> JUKEBOX_EJECT = registerAuditorySoundEvent("block.jukebox.eject");
 
     public static final RegistryObject<SoundEvent> DEATH_SCREEN = registerSoundEvent("death_screen", ADJCore.MOD_ID);
+    public static final RegistryObject<SoundEvent> ENTER_WORLD = registerSoundEvent("enter_world", ADJCore.MOD_ID);
 
     // Sound Groups:
 

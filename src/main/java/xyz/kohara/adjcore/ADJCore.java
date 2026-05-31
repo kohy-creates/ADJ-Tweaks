@@ -19,6 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -61,6 +62,8 @@ public class ADJCore {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MOD_ID = "adjcore";
+
+	public static boolean IsFTBQuestsCached = false;
 
 	public ADJCore() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, MOD_ID + ".toml");
@@ -162,6 +165,11 @@ public class ADJCore {
 				.append(Component.literal("s").withStyle(Style.EMPTY.withFont(ResourceLocation.parse("adjcore:icons"))))
 				.append(Component.literal(" "))
 				.append(deathMessage.copy().withStyle(Style.EMPTY.withColor(TextColor.parseColor(isAnimal ? "#FF5252" : "#FF1919"))));
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+		IsFTBQuestsCached = false;
 	}
 
 	@SubscribeEvent

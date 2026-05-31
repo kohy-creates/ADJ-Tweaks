@@ -32,6 +32,7 @@
 		"compat.TravelersBackpackReplaceSleepingBag",
 		"compat.aether.AetherPlayerCapabilityMixin",
 		"compat.aether.WeaponAbilityListenerMixin",
+		"compat.ars.CapabilityRegistryMixin",
 		"compat.ars.EventHandlerMixin",
 		"compat.ars.ManaCapEventsMixin",
 		"compat.ars.ReworkMaxManaProgression",
@@ -106,6 +107,7 @@
 		"client.CreditScreenMixin",
 		"client.DeathScreenMixin",
 		"client.DebugRendererMixin",
+		"client.DirtMessageScreenMixin",
 		"client.DroppedItemRendererMixin",
 		"client.EffectInventoryScreenMixin",
 		"client.EntityRenderDispatcherMixin",
@@ -133,6 +135,7 @@
 		"client.music.SoundEngineMixin",
 		"client.text.FontStringRendererOutputMixin",
 		"compat.CyclopsCoreRemoveAnnoyingAssTooltipsMixin",
+		"compat.FTBQuestFreezeFix",
 		"compat.ars.GlyphCostMixin",
 		"compat.ars.emi.ArmorUpgradeRecipeCategoryMixin",
 		"compat.ars.emi.EnchantingApparatusRecipeCategoryMixin",
@@ -141,11 +144,12 @@
 		"compat.client.AttributesLibClientMixin",
 		"compat.client.BuildToolOverlayMixin",
 		"compat.client.BuildToolRendererMixin",
+		"compat.client.ImmersiveOverlayHelperMixin",
 		"compat.client.LootJournalItemPickupEventMixin",
 		"compat.client.QuarkItemTooltipMixin",
 		"compat.client.TravelersBackpackRemoveRightClick",
 		"compat.client.twilightforest.FireflyParticleMixin",
-		"compat.client.ImmersiveOverlayHelperMixin"
+		"compat.DecursioStagesDontReloadEmiMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
