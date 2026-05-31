@@ -90,10 +90,6 @@ public class CurioControl {
         generateExclusions();
     }
 
-//    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
-//            BossMusicConfig.SOULBOUND_FOR_CURIOS.get()
-//    ));
-
     private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
             Config.SOULBOUND_FOR_CURIOS.get()
     ));

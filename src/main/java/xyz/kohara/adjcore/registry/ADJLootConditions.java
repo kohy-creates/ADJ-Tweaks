@@ -8,6 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.registry.lootconditions.IsChapter;
 import xyz.kohara.adjcore.registry.lootconditions.IsHardcore;
+import xyz.kohara.adjcore.registry.lootconditions.IsMultiplayer;
 
 public class ADJLootConditions {
 
@@ -18,6 +19,9 @@ public class ADJLootConditions {
 
 	public static final RegistryObject<LootItemConditionType> IS_CHAPTER =
 			LOOT_CONDITIONS.register("is_chapter", () -> new LootItemConditionType(new IsChapter.Serializer()));
+
+	public static final RegistryObject<LootItemConditionType> IS_MULTIPLAYER =
+			LOOT_CONDITIONS.register("is_multiplayer", () -> new LootItemConditionType(new IsMultiplayer.Serializer()));
 
 	public static void register(IEventBus eventBus) {
 		LOOT_CONDITIONS.register(eventBus);

@@ -25,6 +25,7 @@
 		"compat.HCEventsMixin",
 		"compat.HeartCrystalItemMixin",
 		"compat.HeartLanternMixin",
+		"compat.KubeJSScriptFileMixin",
 		"compat.StructureGelBuildToolMixin",
 		"compat.TerraCurioEntityMixinFix",
 		"compat.TerraCurioNukeJEIDescriptions",
@@ -135,6 +136,7 @@
 		"client.music.SoundEngineMixin",
 		"client.text.FontStringRendererOutputMixin",
 		"compat.CyclopsCoreRemoveAnnoyingAssTooltipsMixin",
+		"compat.DecursioStagesDontReloadEmiMixin",
 		"compat.FTBQuestFreezeFix",
 		"compat.ars.GlyphCostMixin",
 		"compat.ars.emi.ArmorUpgradeRecipeCategoryMixin",
@@ -148,8 +150,7 @@
 		"compat.client.LootJournalItemPickupEventMixin",
 		"compat.client.QuarkItemTooltipMixin",
 		"compat.client.TravelersBackpackRemoveRightClick",
-		"compat.client.twilightforest.FireflyParticleMixin",
-		"compat.DecursioStagesDontReloadEmiMixin"
+		"compat.client.twilightforest.FireflyParticleMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
