@@ -2,7 +2,6 @@ package xyz.kohara.adjcore.client.music;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -20,8 +19,6 @@ import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.client.misc.events.ADJFindMusicEvent;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.RequestEntityTagsC2SPacket;
-import xyz.kohara.adjcore.misc.events.PlayerTitleEvent;
-import xyz.kohara.adjcore.mixins.client.music.MusicManagerAccessor;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;

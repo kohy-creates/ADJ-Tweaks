@@ -25,53 +25,48 @@ import xyz.kohara.adjcore.misc.events.ItemIsLockedRenderCheckEvent;
 @Mixin(GuiGraphics.class)
 public abstract class GuiItemRenderingMixin {
 
-    @Shadow
-    @Final
-    private Minecraft minecraft;
+	@Shadow
+	@Final
+	private Minecraft minecraft;
 
-    @Shadow
-    public abstract int drawString(Font font, Component text, int x, int y, int color, boolean dropShadow);
+	@Shadow
+	public abstract int drawString(Font font, Component text, int x, int y, int color, boolean dropShadow);
 
-    @Shadow
-    @Final
-    private PoseStack pose;
+	@Shadow
+	@Final
+	private PoseStack pose;
 
-    @Unique
-    private boolean adj$shouldHideStack = false;
+	@Unique
+	private boolean adj$shouldHideStack = false;
 
-    @Redirect(
-            method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;IIII)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V"
-            )
-    )
-    private void redirectItemRender(
-            ItemRenderer instance,
-            ItemStack itemStack,
-            ItemDisplayContext itemDisplayContext,
-            boolean posestack$pose,
-            PoseStack poseStack,
-            MultiBufferSource multiBufferSource,
-            int vertexconsumer,
-            int rendertype,
-            BakedModel model
-    ) {
-        int light = 15728880;
-        adj$shouldHideStack = false;
-
-        ItemIsLockedRenderCheckEvent eventHook = new ItemIsLockedRenderCheckEvent(
-                itemStack,
-                this.minecraft.player
-        );
-        if (MinecraftForge.EVENT_BUS.post(eventHook)) {
-            light = 0;
-            adj$shouldHideStack = true;
-        }
-        this.minecraft
-                .getItemRenderer()
-                .render(itemStack, itemDisplayContext, false, this.pose, multiBufferSource, light, OverlayTexture.NO_OVERLAY, model);
-    }
+	@Redirect(
+			method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;IIII)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V"
+			)
+	)
+	private void redirectItemRender(
+			ItemRenderer instance,
+			ItemStack itemStack,
+			ItemDisplayContext itemDisplayContext,
+			boolean posestack$pose,
+			PoseStack poseStack,
+			MultiBufferSource multiBufferSource,
+			int vertexconsumer,
+			int rendertype,
+			BakedModel model
+	) {
+		int light = 15728880;
+		adj$shouldHideStack = false;
+		if (ItemIsLockedRenderCheckEvent.shouldHide(itemStack, Minecraft.getInstance().player)) {
+			light = 0;
+			adj$shouldHideStack = true;
+		}
+		this.minecraft
+				.getItemRenderer()
+				.render(itemStack, itemDisplayContext, false, this.pose, multiBufferSource, light, OverlayTexture.NO_OVERLAY, model);
+	}
 
     @Inject(
             method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
@@ -80,29 +75,29 @@ public abstract class GuiItemRenderingMixin {
     private void renderItemDecorations(Font font, ItemStack stack, int x, int y, String text, CallbackInfo ci) {
         if (adj$shouldHideStack) {
 
-            float yOffset = 0f;
-            if (minecraft.level != null) {
-                float time = minecraft.level.getGameTime() + minecraft.getFrameTime();
-                yOffset = (float) Math.floor(Math.sin(time * 0.04f) * 2.0f);
-            }
+			float yOffset = 0f;
+			if (minecraft.level != null) {
+				float time = minecraft.level.getGameTime() + minecraft.getFrameTime();
+				yOffset = (float) Math.floor(Math.sin(time * 0.04f) * 2.0f);
+			}
 
             this.pose.pushPose();
             this.pose.translate(0.0F, yOffset, 190.0F);
 
-            Component darkText = Component.literal("?");
+			Component darkText = Component.literal("?");
 
             this.pose.scale(1.5f, 1.5f, 1);
             this.drawString(font, darkText, (int) ((x + (font.width(darkText))) / 1.5f), (int) (y / 1.5f), 16777215, false);
 
-            this.pose.popPose();
-        }
-    }
+			this.pose.popPose();
+		}
+	}
 
-    @Redirect(
-            method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I")
-    )
-    private int itemColor(GuiGraphics instance, Font font, String text, int x, int y, int color, boolean dropShadow) {
-        return instance.drawString(font, text, x, y, (adj$shouldHideStack) ? 6579300 : 16777215, true);
-    }
+	@Redirect(
+			method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I")
+	)
+	private int itemColor(GuiGraphics instance, Font font, String text, int x, int y, int color, boolean dropShadow) {
+		return instance.drawString(font, text, x, y, (adj$shouldHideStack) ? 6579300 : 16777215, true);
+	}
 }

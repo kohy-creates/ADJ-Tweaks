@@ -19,6 +19,6 @@ public class DeathMessageTameableAnimal {
             )
     )
     private Component changeDeathMessageColor(CombatTracker instance) {
-        return ADJCore.formatDeathMessage(instance.getDeathMessage());
+        return ADJCore.formatDeathMessage(instance.getDeathMessage(), true);
     }
 }

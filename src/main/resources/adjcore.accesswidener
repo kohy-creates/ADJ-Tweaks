@@ -21,3 +21,5 @@ accessible field net/minecraft/client/sounds/SoundManager soundEngine Lnet/minec
 accessible field net/minecraft/client/sounds/SoundEngine loaded Z
 accessible field net/minecraft/client/sounds/SoundEngine tickingSounds Ljava/util/List;
 accessible field net/minecraft/client/sounds/SoundEngine queuedTickableSounds Ljava/util/List;
+accessible field net/minecraft/client/sounds/SoundEngine queuedSounds Ljava/util/Map;
+accessible field net/minecraft/client/sounds/SoundEngine soundDeleteTime Ljava/util/Map;

@@ -32,8 +32,8 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
             }
         } else if (mixinClassName.contains("Embeddium")) {
             return isModLoaded("sodium");
-        } else if (mixinClassName.contains("fnafplushies")) {
-            return isModLoaded("fnaf_plushie_remastered");
+        } else if (mixinClassName.contains("FTBQuest")) {
+            return isModLoaded("ftbquests");
         } else if (mixinClassName.contains("LegendaryTabs")) {
             return isModLoaded("legendarytabs");
         } else if (mixinClassName.contains("aether")) {
@@ -44,6 +44,15 @@ public class MixinTransformerPlugin implements IMixinConfigPlugin {
             return isModLoaded("evilcraft");
         } else if (mixinClassName.contains("botania")) {
             return isModLoaded("botania");
+        }
+        else if (mixinClassName.contains("LootJournal")) {
+            return isModLoaded("loot_journal");
+        }
+        else if (mixinClassName.contains("FancyMenu")) {
+            return isModLoaded("fancymenu");
+        }
+        else if (mixinClassName.contains("DecursioStages")) {
+            return isModLoaded("decursio_stages");
         }
         return true;
     }

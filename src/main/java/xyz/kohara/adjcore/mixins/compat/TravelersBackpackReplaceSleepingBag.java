@@ -16,7 +16,7 @@ public class TravelersBackpackReplaceSleepingBag {
 
     @Unique
     private static Block adj$getBlockFromID(String id) {
-        return ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("accents:sewing_station"));
+        return ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse(id));
     }
 
     @ModifyReturnValue(method = "getProperSleepingBag", at = @At("RETURN"), remap = false)

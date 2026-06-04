@@ -1,7 +1,7 @@
 package xyz.kohara.adjcore.compat.kubejs.serverevents;
 
 import dev.latvian.mods.kubejs.event.EventJS;
-import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import xyz.kohara.adjcore.misc.ParticleTextIndicators;
@@ -50,8 +50,8 @@ public class ADJHurtEventJS extends EventJS {
         this.event.setStyle(id);
     }
 
-    public DamageType getDamageType() {
-        return this.event.getDamageType();
+    public DamageSource getSource() {
+        return this.event.getSource();
     }
 
 }
