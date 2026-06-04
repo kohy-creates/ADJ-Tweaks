@@ -13,11 +13,11 @@ public abstract class ItemMixin implements IForgeItem {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int durability = IForgeItem.super.getMaxDamage(stack);
+        double durability = IForgeItem.super.getMaxDamage(stack);
         int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
         if (i > 0) {
-            durability *= Config.UNBREAKNG_DURABILITY_MULTIPLIER.get();
+            durability *= Config.Tools.unbreakingMultiplier;
         }
-        return durability;
+        return (int) durability;
     }
 }

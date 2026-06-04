@@ -72,7 +72,7 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
     // Removes shield use delay
     @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
     private int setShieldUseDelay(int constant) {
-        return Config.SHIELD_DELAY.get();
+        return Config.Combat.shieldDelay;
     }
 
     @Unique

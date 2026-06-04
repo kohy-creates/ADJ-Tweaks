@@ -46,7 +46,7 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
             )
     )
     private boolean adjUtils$canCrit(boolean isOnClimbable) {
-        return Config.DISABLE_CRITS.get() || isOnClimbable;
+        return Config.Combat.disableCrits || isOnClimbable;
     }
 
     @ModifyExpressionValue(
@@ -57,7 +57,7 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
             )
     )
     private List<LivingEntity> adjUtils$modifyListOfSweepAttacks(List<LivingEntity> listOfSweepAttacks) {
-        return Config.DISABLE_SWEEP_ATTACKS.get() ? List.of() : listOfSweepAttacks;
+        return Config.Combat.disableSweepAttacks ? List.of() : listOfSweepAttacks;
     }
 
     @Redirect(
@@ -141,5 +141,74 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
 
             ParticleTextIndicators.showIndicator(player, null, amount, ParticleTextIndicators.Type.MANA, 0);
         });
+    }
+
+    @Redirect(
+            method = "jumpFromGround",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V"
+            )
+    )
+    private void redirectJumpExhaustion(Player instance, float original) {
+        float multiplier = (float) Config.Exhaustion.jumpMul;
+        float modified = original * multiplier;
+        instance.causeFoodExhaustion(modified);
+    }
+
+    @Redirect(
+            method = "checkMovementStatistics",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V",
+                    ordinal = 0
+            )
+    )
+    private void redirectSwimExhaustion(Player player, float original) {
+        float multiplier = (float) Config.Exhaustion.swimMul;
+        float modified = original * multiplier;
+        player.causeFoodExhaustion(modified);
+    }
+
+    @Redirect(
+            method = "checkMovementStatistics",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V",
+                    ordinal = 1
+            )
+    )
+    private void redirectUnderwaterWalkExhaustion(Player player, float original) {
+        float multiplier = (float) Config.Exhaustion.underwaterWalkMul;
+        float modified = original * multiplier;
+        player.causeFoodExhaustion(modified);
+    }
+
+    @Redirect(
+            method = "checkMovementStatistics",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V",
+                    ordinal = 2
+            )
+    )
+    private void redirectShallowWaterWalkExhaustion(Player player, float original) {
+        float multiplier = (float) Config.Exhaustion.shallowWaterWalkMul;
+        float modified = original * multiplier;
+        player.causeFoodExhaustion(modified);
+    }
+
+    @Redirect(
+            method = "checkMovementStatistics",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V",
+                    ordinal = 3
+            )
+    )
+    private void redirectSprintExhaustion(Player player, float original) {
+        float multiplier = (float) Config.Exhaustion.sprintMul;
+        float modified = original * multiplier;
+        player.causeFoodExhaustion(modified);
     }
 }

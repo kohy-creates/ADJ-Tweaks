@@ -61,11 +61,6 @@ public class DamageHandler {
             DamageTypeTags.BYPASSES_EFFECTS,
             DamageTypeTags.BYPASSES_INVULNERABILITY
     );
-    private static final Supplier<Double> VARIATION = () -> Config.RANDOM_DAMAGE_VARIATION.get() / 100d;
-
-    private static final Supplier<Float> MIN_DAMAGE = () -> Config.MIN_DAMAGE_TAKEN.get().floatValue();
-    private static final Supplier<Float> ARMOR_POINT_FACTOR = () -> Config.ARMOR_POINT_REDUCTION_FACTOR.get().floatValue();
-    private static final Supplier<Float> ARMOR_POINT_FACTOR_ENTITY = () -> Config.ARMOR_POINT_REDUCTION_FACTOR_ENTITY.get().floatValue();
 
     private static final String PATH = "config/adjcore/damage_multipliers.json";
     public static Map<String, Double> MULTIPLIERS = new HashMap<>();
@@ -260,8 +255,8 @@ public class DamageHandler {
 
         // 2. Apply variation
         if (DISALLOWED_TAGS.stream().noneMatch(source::is)) {
-            double min = 1d - VARIATION.get();
-            double max = 1d + VARIATION.get();
+            double min = 1d - Config.Combat.damageVariation;
+            double max = 1d + Config.Combat.damageVariation;
             double multiplier = min + Math.random() * (max - min);
 
             if (attackerEntity instanceof LivingEntity attacker) {
@@ -299,12 +294,12 @@ public class DamageHandler {
                 armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
             }
 
-            float factor = (victimEntity instanceof Player) ? ARMOR_POINT_FACTOR.get() : ARMOR_POINT_FACTOR_ENTITY.get();
-            finalAmount = Math.max(MIN_DAMAGE.get(), finalAmount - (armorPoints / factor));
+            float factor = (float) ((victimEntity instanceof Player) ? Config.Combat.armorPointReductionFactor : Config.Combat.armorPointReductionFactorEntity);
+            finalAmount = (float) Math.max(Config.Combat.minDamage, finalAmount - (armorPoints / factor));
         }
 
         // 4. Ensure minimum damage
-        finalAmount = (float) Math.max(Math.ceil(finalAmount), MIN_DAMAGE.get());
+        finalAmount = (float) Math.max(Math.ceil(finalAmount), Config.Combat.minDamage);
 
         // 5. Handle crits
         //    Logic adapted from AttributesLib

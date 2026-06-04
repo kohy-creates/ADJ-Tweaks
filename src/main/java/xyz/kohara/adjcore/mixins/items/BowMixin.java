@@ -32,7 +32,7 @@ public class BowMixin {
                     value = "CONSTANT", args = "floatValue=1.0", ordinal = 0)
     )
     private float addInaccuracy(float original) {
-        return Config.BOW_INACCURACY.get().floatValue();
+        return (float) Config.Combat.bowInaccuracy;
     }
 
     @Redirect(

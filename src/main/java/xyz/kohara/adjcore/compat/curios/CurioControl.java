@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 
 public class CurioControl {
 
-    private static final String ACCESSORY_SLOT = Config.CURIO_TYPE_TO_KEEP.get();
     private static List<TagKey<Item>> EXCLUSION_LIST;
 
     @SubscribeEvent
@@ -90,13 +89,7 @@ public class CurioControl {
         generateExclusions();
     }
 
-//    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
-//            BossMusicConfig.SOULBOUND_FOR_CURIOS.get()
-//    ));
-
-    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(
-            Config.SOULBOUND_FOR_CURIOS.get()
-    ));
+    private static final Enchantment CURIO_SOULBOUND = ForgeRegistries.ENCHANTMENTS.getValue(Config.Tools.soulboundEnchant);
 
     @SubscribeEvent
     public static void keepCurios(DropRulesEvent event) {
