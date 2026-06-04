@@ -3,10 +3,12 @@ package xyz.kohara.adjcore.mixins.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(WorldSelectionList.class)
 public abstract class WorldSelectionListMixin extends ObjectSelectionList<WorldSelectionList.Entry> {
@@ -36,5 +38,15 @@ public abstract class WorldSelectionListMixin extends ObjectSelectionList<WorldS
         int j = this.x0 + (this.width + width) / 2 - dx;
         guiGraphics.fill(i, top - 2 - dy, j, top + height + 2 - dy, outerColor);
         guiGraphics.fill(i + 1, top - 1 - dy, j - 1, top + height + 1 - dy, innerColor);
+    }
+
+    @Redirect(
+            method = "loadLevels",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/screens/worldselection/CreateWorldScreen;openFresh(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/gui/screens/Screen;)V"
+            )
+    )
+    private void redirect$loadLevels(Minecraft mc, Screen screen) {
     }
 }
