@@ -1,15 +1,20 @@
 package xyz.kohara.adjcore.mixins.entity;
 
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -122,5 +127,53 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
         SPEED_MODIFIER_SPRINTING = new AttributeModifier(
                 SPEED_MODIFIER_SPRINTING_UUID, "Sprinting speed boost", 0.3F, AttributeModifier.Operation.MULTIPLY_BASE
         );
+    }
+
+    @Inject(
+            method = "baseTick",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void injectBaseTick(CallbackInfo ci) {
+        if (this.isAlive()) {
+            LivingEntity living = (LivingEntity) (Object) this;
+
+            if (living instanceof Player player) {
+                WorldBorder border = this.level().getWorldBorder();
+
+                if (!border.isWithinBounds(this.blockPosition())) {
+                    ci.cancel();
+
+                    if (!this.level().isClientSide) {
+                        double targetX = Mth.clamp(
+                                this.position().x,
+                                border.getMinX() + 0.5D,
+                                border.getMaxX() - 0.5D
+                        );
+
+                        double targetZ = Mth.clamp(
+                                this.position().z,
+                                border.getMinZ() + 0.5D,
+                                border.getMaxZ() - 0.5D
+                        );
+
+                        double targetY =
+                                this.level().getHeight(
+                                        Heightmap.Types.MOTION_BLOCKING,
+                                        (int) Math.floor(targetX),
+                                        (int) Math.floor(targetZ)
+                                ) + 1.0D;
+
+                        this.setPos(targetX, targetY, targetZ);
+
+                        player.playSound(
+                                SoundEvents.ENDERMAN_TELEPORT,
+                                1.0F,
+                                1.0F
+                        );
+                    }
+                }
+            }
+        }
     }
 }

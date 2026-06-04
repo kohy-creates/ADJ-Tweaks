@@ -10,6 +10,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -170,6 +171,17 @@ public class ADJCore {
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		IsFTBQuestsCached = false;
+	}
+
+	@SubscribeEvent
+	public static void onBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
+		Player player = event.getEntity();
+		if (player.isInWater() && player.isEyeInFluid(FluidTags.WATER)) {
+			event.setNewSpeed(event.getNewSpeed() * 5.0F);
+		}
+		if (!player.onGround()) {
+			event.setNewSpeed(event.getNewSpeed() * 5.0F);
+		}
 	}
 
 	@SubscribeEvent
