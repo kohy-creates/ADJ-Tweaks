@@ -5,7 +5,9 @@
   "minVersion": "0.8",
   "plugin": "xyz.kohara.adjcore.MixinTransformerPlugin",
   "mixins": [
+    "DamageSourceMixin",
     "ExplosionMixin",
+    "FoodDataMixin",
     "InventoryMixin",
     "RecipeManagerMixin",
     "blocks.BlockMixin",
