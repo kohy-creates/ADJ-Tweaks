@@ -1,0 +1,8 @@
+{
+	"replace": false,
+	"values": [
+		"botania:mana_ring",
+		"botania:mana_ring_greater",
+		"botania:mana_tablet"
+	]
+}

@@ -17,7 +17,7 @@ public class HardcoreTweaks {
             level.getGameRules()
                     .getRule(GameRules.RULE_SPAWN_RADIUS)
                     .set(
-                            Config.HARDCORE_RESPAW_RADIUS.get(),
+                            Config.Hardcore.respawnRadius,
                             level.getServer()
                     );
 

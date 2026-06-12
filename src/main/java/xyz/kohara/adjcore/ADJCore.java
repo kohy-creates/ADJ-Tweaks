@@ -65,6 +65,7 @@ public class ADJCore {
 	public static final String MOD_ID = "adjcore";
 
 	public static boolean IsFTBQuestsCached = false;
+	public static final ResourceLocation OUTLINE_FONT = ResourceLocation.withDefaultNamespace("outline");
 
 	public ADJCore() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, MOD_ID + ".toml");
@@ -291,5 +292,13 @@ public class ADJCore {
 			guiGraphics.drawString(renderer, Component.literal("Mᴀɴᴀ Cᴏsᴛ: "), 0, 101 - renderer.lineHeight, 10, false);
 			guiGraphics.drawString(renderer, Component.literal(sourceCost / 100 + "% ᴏғ ᴀ Mᴀɴᴀ Jᴀʀ"), 0, 101, 10, false);
 		}
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static float getFontAdvance(ResourceLocation font, float base) {
+		if (font.equals(OUTLINE_FONT)) {
+			return base - 2f;
+		}
+		return base;
 	}
 }

@@ -29,7 +29,7 @@ public class CozyCampfire {
 
     public static void applyEffects(Level world, BlockPos pos) {
         if (!world.isClientSide()) {
-            double radius = (isCampfireSignal(world, pos)) ? Config.CAMPFIRE_HEAL_RADIUS_SIGNAL.get() : Config.CAMPFIRE_HEAL_RADIUS.get();
+            double radius = (isCampfireSignal(world, pos)) ? Config.Campfire.healRadiusSignal : Config.Campfire.healRadius;
             AABB area = new AABB(pos).inflate(radius);
             List<LivingEntity> list = world.getEntitiesOfClass(LivingEntity.class, area, livingEntity -> isPassiveMob(livingEntity) && livingEntity.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= (radius * radius));
             MobEffectInstance cozyCampfireEffect = new MobEffectInstance(ADJEffects.COZY_CAMPFIRE.get(),16, 0, true, true, true);

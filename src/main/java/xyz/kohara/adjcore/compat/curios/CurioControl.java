@@ -22,6 +22,7 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import xyz.kohara.adjcore.ADJCore;
+import xyz.kohara.adjcore.ADJData;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.registry.ADJTags;
 
@@ -72,13 +73,7 @@ public class CurioControl {
         Map<String, ISlotType> slots = CuriosApi.getPlayerSlots(event.getEntity());
         for (ISlotType slot : slots.values()) {
             String id = slot.getIdentifier();
-            if (!Objects.equals(id, ACCESSORY_SLOT)
-                    && !Objects.equals(id, "back")
-                    && !Objects.equals(id, "mountbauble")
-                    && !Objects.equals(id, "spellbook") //whoever wanted to use Iron's Spells you should thank me for actually doing this
-                    && !Objects.equals(id, "hook")
-                    && !Objects.equals(id, "atlas")
-            ) {
+            if (!ADJData.curioSlotsToKeep.contains(id)) {
                 CuriosApi.getSlotHelper().setSlotsForType(id, event.getEntity(), 0);
             }
         }

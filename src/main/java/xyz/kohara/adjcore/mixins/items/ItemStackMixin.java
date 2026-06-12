@@ -27,7 +27,7 @@ public abstract class ItemStackMixin {
      */
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     public void modifyDurability(int amount, RandomSource random, ServerPlayer user, CallbackInfoReturnable<Boolean> cir) {
-        if (Math.random() <= Config.DURABILITY_SAVE_CHANCE.get()) {
+        if (Math.random() <= Config.Tools.durabilitySaveChance) {
             cir.setReturnValue(false);
         }
     }
