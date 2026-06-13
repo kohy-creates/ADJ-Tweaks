@@ -1,6 +1,7 @@
 package xyz.kohara.adjcore;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -78,6 +79,8 @@ public class ADJCore {
 		MOD_BUS.addListener(ADJAttributes::addEntityAttributes);
 		MOD_BUS.addListener(ADJCapabilities::register);
 		MOD_BUS.addListener(LangGenerator::gatherData);
+		MOD_BUS.addListener(Config::onLoad);
+		MOD_BUS.addListener(Config::onReload);
 
 		FORGE_BUS.register(ADJCore.class);
 		FORGE_BUS.register(DamageHandler.class);

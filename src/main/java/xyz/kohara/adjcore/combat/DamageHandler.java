@@ -255,6 +255,7 @@ public class DamageHandler {
 
         // 2. Apply variation
         if (DISALLOWED_TAGS.stream().noneMatch(source::is)) {
+//            System.out.println(Config.Combat.damageVariation);
             double min = 1d - Config.Combat.damageVariation;
             double max = 1d + Config.Combat.damageVariation;
             double multiplier = min + Math.random() * (max - min);

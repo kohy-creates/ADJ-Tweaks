@@ -118,6 +118,7 @@
 		"client.EntityRendererMixin",
 		"client.FontMixin",
 		"client.FontStringRenderOutputMixin",
+		"client.GameRendererMixin",
 		"client.GuiItemRenderingMixin",
 		"client.GuiItemRenderingMixinBiggerStacks",
 		"client.GuiMixin",

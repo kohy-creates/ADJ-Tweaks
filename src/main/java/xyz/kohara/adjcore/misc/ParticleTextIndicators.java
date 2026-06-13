@@ -86,7 +86,9 @@ public class ParticleTextIndicators {
     @SubscribeEvent
     public static void onADJHurt(ADJHurtEvent event) {
 
-        if (event.getDamage() == Integer.MAX_VALUE) return;
+        float amount = event.getDamage();
+        float amountMax = 99999;
+        if (amount >= amountMax) amount = amountMax;
 
         Entity victim = event.getVictim();
         LivingEntity attacker = event.getAttacker();
@@ -104,7 +106,7 @@ public class ParticleTextIndicators {
         showIndicator(
                 victim,
                 attacker,
-                event.getDamage(),
+                amount,
                 type,
                 (event.isCritical()) ? 1 : 0
         );
@@ -141,7 +143,8 @@ public class ParticleTextIndicators {
         POISON(6, "#39782F", "#45A137"),
         WITHER(7, "#764857", "#6E2F3F"),
         EXPLOSION(8, "#F53C27", "#F56B51", "💥"),
-        MIDNIGHT(9, "#F2FBFC", "#D9DDDE", "🌙");
+        MIDNIGHT(9, "#F2FBFC", "#D9DDDE", "🌙"),
+        ZAP(10, "#F5B027", "#F5AD27", "⚡");
 
         private final int id;
         private final Pair<Color, Color> colors;

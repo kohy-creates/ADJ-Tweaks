@@ -4,13 +4,14 @@ import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
 import xyz.kohara.adjcore.compat.kubejs.serverevents.ADJExplosionDamageCalcEventJS;
 import xyz.kohara.adjcore.compat.kubejs.serverevents.ADJHurtEventJS;
+import xyz.kohara.adjcore.compat.kubejs.serverevents.ItemRarityGetEventJS;
 import xyz.kohara.adjcore.compat.kubejs.serverevents.RecipeLookupEventJS;
 
 public interface ServerEvents {
-    EventGroup GROUP = EventGroup.of("ADJServerEvents");
+	EventGroup GROUP = EventGroup.of("ADJServerEvents");
 
-    EventHandler ADJ_HURT = GROUP.server("adjHurt", () -> ADJHurtEventJS.class);
-    EventHandler RECIPE_LOOKUP = GROUP.server("recipeLookup", () -> RecipeLookupEventJS.class).hasResult();
-    EventHandler EXPLOSION_DAMAGE_CALC = GROUP.server("explosionDamageCalc", () -> ADJExplosionDamageCalcEventJS.class);
-
+	EventHandler ADJ_HURT = GROUP.server("adjHurt", () -> ADJHurtEventJS.class);
+	EventHandler RECIPE_LOOKUP = GROUP.server("recipeLookup", () -> RecipeLookupEventJS.class).hasResult();
+	EventHandler EXPLOSION_DAMAGE_CALC = GROUP.server("explosionDamageCalc", () -> ADJExplosionDamageCalcEventJS.class);
+	EventHandler ITEM_RARITY_GET_EVENT = GROUP.server("itemRarityGet", () -> ItemRarityGetEventJS.class);
 }
