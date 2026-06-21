@@ -77,6 +77,7 @@ public class ADJCore {
 		MOD_BUS.addListener(this::commonSetup);
 		MOD_BUS.addListener(this::clientSetup);
 		MOD_BUS.addListener(ADJAttributes::addEntityAttributes);
+		MOD_BUS.addListener(ADJAttributes::onAttributeCreate);
 		MOD_BUS.addListener(ADJCapabilities::register);
 		MOD_BUS.addListener(LangGenerator::gatherData);
 		MOD_BUS.addListener(Config::onLoad);

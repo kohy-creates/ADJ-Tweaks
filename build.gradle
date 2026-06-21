@@ -193,6 +193,8 @@ dependencies {
 //    compileOnly "curse.maven:fancymenu-367706:8094800"
     compileOnly"curse.maven:decursio-stages-1116604:7105808"
 
+    compileOnly "curse.maven:botania-window-box-1403414:7439215"
+
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

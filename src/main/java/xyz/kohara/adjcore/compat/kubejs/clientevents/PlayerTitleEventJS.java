@@ -4,7 +4,7 @@ import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
-import xyz.kohara.adjcore.misc.events.PlayerTitleEvent;
+import xyz.kohara.adjcore.client.misc.events.PlayerTitleEvent;
 
 public class PlayerTitleEventJS extends EventJS {
 

@@ -49,6 +49,7 @@
 		"compat.botania.ManaInventoryMixin",
 		"compat.botania.NukeFlugelTiaraAbilityMixin",
 		"compat.botania.TerraSwordItemMixin",
+		"compat.botania.windowbox.AlfthorneTreeMixin",
 		"compat.evilcraft.WorldStructureDarkTempleMixin",
 		"compat.evilcraft.WorldStructureDarkTemplePieceMixin",
 		"compat.twilightforest.CapabilityEventsMixin",
@@ -106,6 +107,7 @@
 	],
 	"client": [
 		"client.ArmorTrimMixin",
+		"client.ArrowLayerMixin",
 		"client.ChatHUDMixin",
 		"client.CloudHeightMixin",
 		"client.CreditScreenMixin",

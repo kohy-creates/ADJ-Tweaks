@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.misc.events;
+package xyz.kohara.adjcore.client.misc.events;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

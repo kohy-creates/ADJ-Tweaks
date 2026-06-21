@@ -1,4 +1,4 @@
-package xyz.kohara.adjcore.misc.events;
+package xyz.kohara.adjcore.client.misc.events;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;

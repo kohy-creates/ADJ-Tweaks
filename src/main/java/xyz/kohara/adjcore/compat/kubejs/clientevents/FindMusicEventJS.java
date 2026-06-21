@@ -4,9 +4,7 @@ import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.Music;
-import net.minecraft.world.item.ItemStack;
 import xyz.kohara.adjcore.client.misc.events.ADJFindMusicEvent;
-import xyz.kohara.adjcore.misc.events.ItemIsLockedRenderCheckEvent;
 
 import javax.annotation.Nullable;
 

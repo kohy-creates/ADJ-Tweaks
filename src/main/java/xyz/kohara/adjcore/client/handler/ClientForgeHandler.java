@@ -1,8 +1,6 @@
 package xyz.kohara.adjcore.client.handler;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Screenshot;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
@@ -12,7 +10,7 @@ import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.client.Keybindings;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.ChangeLoadOutC2SPacket;
-import xyz.kohara.adjcore.misc.events.ItemIsLockedRenderCheckEvent;
+import xyz.kohara.adjcore.client.misc.events.ItemIsLockedRenderCheckEvent;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = ADJCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)

@@ -9,11 +9,12 @@ import xyz.kohara.adjcore.compat.kubejs.serverevents.ItemRarityGetEventJS;
 public class ItemRarityGetEvent extends Event {
 
 	public Rarity rarity = null;
+	private final Rarity baseRarity;
 	private final ItemStack itemStack;
 
-	public ItemRarityGetEvent(ItemStack itemStack) {
+	public ItemRarityGetEvent(ItemStack itemStack, Rarity baseRarity) {
 		this.itemStack = itemStack;
-
+		this.baseRarity = baseRarity;
 		if (ServerEvents.ITEM_RARITY_GET_EVENT.hasListeners()) {
 			ServerEvents.ITEM_RARITY_GET_EVENT.post(new ItemRarityGetEventJS(this));
 		}
@@ -24,7 +25,7 @@ public class ItemRarityGetEvent extends Event {
 	}
 
 	public Rarity getBaseRarity() {
-		return itemStack.getRarity();
+		return baseRarity;
 	}
 
 	public void setRarity(Rarity rarity) {

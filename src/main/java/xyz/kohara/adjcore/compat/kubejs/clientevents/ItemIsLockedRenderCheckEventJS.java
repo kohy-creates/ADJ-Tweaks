@@ -3,7 +3,7 @@ package xyz.kohara.adjcore.compat.kubejs.clientevents;
 import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
-import xyz.kohara.adjcore.misc.events.ItemIsLockedRenderCheckEvent;
+import xyz.kohara.adjcore.client.misc.events.ItemIsLockedRenderCheckEvent;
 
 public class ItemIsLockedRenderCheckEventJS extends EventJS {
 

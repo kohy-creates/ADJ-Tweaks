@@ -14,6 +14,8 @@ import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.compat.kubejs.serverevents.ItemRarityGetEventJS;
 import xyz.kohara.adjcore.misc.events.ItemRarityGetEvent;
 
+import java.util.Objects;
+
 @Mixin(Item.class)
 public abstract class ItemMixin implements IForgeItem {
 
@@ -29,12 +31,9 @@ public abstract class ItemMixin implements IForgeItem {
 
 	@WrapMethod(method = "getRarity")
 	private Rarity getRarity(ItemStack stack, Operation<Rarity> original) {
-		var handler = new ItemRarityGetEvent(stack);
+		var base = original.call(stack);
+		var handler = new ItemRarityGetEvent(stack, base);
 		MinecraftForge.EVENT_BUS.post(handler);
-		if (handler.rarity == null) {
-			return Rarity.COMMON;
-		} else {
-			return handler.rarity;
-		}
+		return Objects.requireNonNullElse(handler.rarity, base);
 	}
 }
