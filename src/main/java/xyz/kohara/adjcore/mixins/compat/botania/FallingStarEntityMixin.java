@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import vazkii.botania.client.fx.SparkleParticleData;
+import vazkii.botania.common.block.flower.functional.ExoflameBlockEntity;
+import vazkii.botania.common.block.flower.generating.EndoflameBlockEntity;
 import vazkii.botania.common.entity.FallingStarEntity;
 import vazkii.botania.common.entity.ThrowableCopyEntity;
 import xyz.kohara.adjcore.registry.ADJParticles;
