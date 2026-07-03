@@ -53,307 +53,312 @@ import java.util.function.Supplier;
 
 public class DamageHandler {
 
-    private static int INVUL_TIME;
+	private static int INVUL_TIME;
 
-    private static final List<TagKey<DamageType>> DISALLOWED_TAGS = List.of(
-            DamageTypeTags.BYPASSES_ARMOR,
-            DamageTypeTags.BYPASSES_RESISTANCE,
-            DamageTypeTags.BYPASSES_EFFECTS,
-            DamageTypeTags.BYPASSES_INVULNERABILITY
-    );
+	private static final List<TagKey<DamageType>> DISALLOWED_TAGS = List.of(
+			DamageTypeTags.BYPASSES_ARMOR,
+			DamageTypeTags.BYPASSES_RESISTANCE,
+			DamageTypeTags.BYPASSES_EFFECTS,
+			DamageTypeTags.BYPASSES_INVULNERABILITY
+	);
 
-    private static final String PATH = "config/adjcore/damage_multipliers.json";
-    public static Map<String, Double> MULTIPLIERS = new HashMap<>();
+	private static final String PATH = "config/adjcore/damage_multipliers.json";
+	public static Map<String, Double> MULTIPLIERS = new HashMap<>();
 
-    public static Map<String, IFrameConfig> IFRAMES = new HashMap<>();
-    public static final String IFRAMES_PATH = "config/adjcore/iframes.json";
+	public static Map<String, IFrameConfig> IFRAMES = new HashMap<>();
+	public static final String IFRAMES_PATH = "config/adjcore/iframes.json";
 
-    static {
-        loadConfig();
-        loadIFrameConfig();
-    }
+	static {
+		loadConfig();
+		loadIFrameConfig();
+	}
 
-    public static void setInvulTime(LivingEntity entity, int time) {
-        entity.invulnerableTime = time * 2;
-        entity.hurtTime = entity.hurtDuration = time;
-    }
+	public static void setInvulTime(LivingEntity entity, int time) {
+		entity.invulnerableTime = time * 2;
+		entity.hurtTime = entity.hurtDuration = time;
+	}
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onLivingKnockback(LivingKnockBackEvent event) {
-        LivingEntity entity = event.getEntity();
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onLivingKnockback(LivingKnockBackEvent event) {
+		LivingEntity entity = event.getEntity();
 
-        if (!event.isCanceled()) {
-            if (entity.swinging) {
-                entity.swinging = false;
-                event.setCanceled(true);
-                return;
-            }
-        }
+		if (!event.isCanceled()) {
+			if (entity.swinging) {
+				entity.swinging = false;
+				event.setCanceled(true);
+				return;
+			}
+		}
 
-        int cooldown = entity.adjcore$getKnockbackCooldown();
-        if (cooldown > 0) {
-            float s = event.getStrength();
-            s = Math.max(0f, s - s * cooldown / 15f);
-            event.setStrength(s);
-        } else if (cooldown == 0) {
-            entity.adjcore$setKnockbackCooldown(INVUL_TIME != 0 ? INVUL_TIME * 2 : 5);
-        }
-        setInvulTime(entity, INVUL_TIME);
-    }
+		int cooldown = entity.adjcore$getKnockbackCooldown();
+		if (cooldown > 0) {
+			float s = event.getStrength();
+			s = Math.max(0f, s - s * cooldown / 15f);
+			event.setStrength(s);
+		} else if (cooldown == 0) {
+			entity.adjcore$setKnockbackCooldown(INVUL_TIME != 0 ? INVUL_TIME * 2 : 5);
+		}
+		setInvulTime(entity, INVUL_TIME);
+	}
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void adjustIFrames(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
-        LivingEntity entity = event.getEntity();
-        Entity attacker = source.getEntity();
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void adjustIFrames(LivingHurtEvent event) {
+		DamageSource source = event.getSource();
+		LivingEntity entity = event.getEntity();
+		Entity attacker = source.getEntity();
 
-        int finalIFrames = -1;
+		int finalIFrames = -1;
 
-        for (String id : IFRAMES.keySet()) {
-            IFrameConfig cfg = IFRAMES.get(id);
-            if (id.startsWith("#")) {
-                TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
-                if (source.is(damageTypeTag)) {
-                    finalIFrames = cfg.iframes;
-                    if (attacker != null) {
-                        String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
-                        if (cfg.overrides.containsKey(attackerId)) {
-                            finalIFrames = cfg.overrides.get(attackerId);
-                        }
-                    }
-                }
-            } else {
-                if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
-                    finalIFrames = cfg.iframes;
-                    if (attacker != null) {
-                        String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
-                        if (cfg.overrides.containsKey(attackerId)) {
-                            finalIFrames = cfg.overrides.get(attackerId);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+		for (String id : IFRAMES.keySet()) {
+			IFrameConfig cfg = IFRAMES.get(id);
+			if (id.startsWith("#")) {
+				TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
+				if (source.is(damageTypeTag)) {
+					finalIFrames = cfg.iframes;
+					if (attacker != null) {
+						String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
+						if (cfg.overrides.containsKey(attackerId)) {
+							finalIFrames = cfg.overrides.get(attackerId);
+						}
+					}
+				}
+			} else {
+				if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
+					finalIFrames = cfg.iframes;
+					if (attacker != null) {
+						String attackerId = ForgeRegistries.ENTITY_TYPES.getKey(attacker.getType()).toString();
+						if (cfg.overrides.containsKey(attackerId)) {
+							finalIFrames = cfg.overrides.get(attackerId);
+						}
+					}
+					break;
+				}
+			}
+		}
 
-        if (finalIFrames < 0) {
-            finalIFrames = 10;
-        }
+		if (finalIFrames < 0) {
+			finalIFrames = 10;
+		}
 
-        INVUL_TIME = finalIFrames;
-        setInvulTime(entity, INVUL_TIME);
-    }
+		INVUL_TIME = finalIFrames;
+		setInvulTime(entity, INVUL_TIME);
+	}
 
-    private static float getAttributeValue(LivingEntity entity, Attribute attribute) {
-        AttributeInstance instance = entity.getAttribute(attribute);
-        return instance != null ? (float) instance.getValue() : 0;
-    }
+	private static float getAttributeValue(LivingEntity entity, Attribute attribute) {
+		AttributeInstance instance = entity.getAttribute(attribute);
+		return instance != null ? (float) instance.getValue() : 0;
+	}
 
-    public static void loadConfig() {
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Double>>() {
-        }.getType();
+	public static void loadConfig() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<Map<String, Double>>() {
+		}.getType();
 
-        if (!Files.exists(Path.of(PATH))) return;
+		if (!Files.exists(Path.of(PATH))) return;
 
-        try (FileReader reader = new FileReader(PATH)) {
-            MULTIPLIERS = gson.fromJson(reader, type);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		try (FileReader reader = new FileReader(PATH)) {
+			MULTIPLIERS = gson.fromJson(reader, type);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public static void loadIFrameConfig() {
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, IFrameConfig>>() {
-        }.getType();
+	public static void loadIFrameConfig() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<Map<String, IFrameConfig>>() {
+		}.getType();
 
-        if (!Files.exists(Path.of(IFRAMES_PATH))) return;
+		if (!Files.exists(Path.of(IFRAMES_PATH))) return;
 
-        try (FileReader reader = new FileReader(IFRAMES_PATH)) {
-            IFRAMES = gson.fromJson(reader, type);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		try (FileReader reader = new FileReader(IFRAMES_PATH)) {
+			IFRAMES = gson.fromJson(reader, type);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public static void handleLivingHurt(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
-        LivingEntity victimEntity = event.getEntity();
-        Entity attackerEntity = source.getEntity();
-        float baseAmount = event.getAmount();
+	public static void handleLivingHurt(LivingHurtEvent event) {
+		DamageSource source = event.getSource();
+		LivingEntity victimEntity = event.getEntity();
+		Entity attackerEntity = source.getEntity();
+		float baseAmount = event.getAmount();
 
-        // Whenever attackerEntity is needed as a LivingEntity
-        LivingEntity livingAttacker = (attackerEntity instanceof LivingEntity le) ? le : null;
+		// Whenever attackerEntity is needed as a LivingEntity
+		LivingEntity livingAttacker = (attackerEntity instanceof LivingEntity le) ? le : null;
 
-        // 0. Prevent damaging tamed animals
-        if (livingAttacker != null && victimEntity instanceof TamableAnimal tamableAnimal) {
-            if (tamableAnimal.getOwner() == livingAttacker && !livingAttacker.isShiftKeyDown()) {
-                event.setAmount(0);
-                return;
-            }
-        }
+		// 0. Prevent damaging tamed animals
+		if (livingAttacker != null && victimEntity instanceof TamableAnimal tamableAnimal) {
+			if (tamableAnimal.getOwner() == livingAttacker && !livingAttacker.isShiftKeyDown()) {
+				event.setAmount(0);
+				return;
+			}
+		}
 
-        // 1. Apply damage multipliers from config
-        float finalAmount = baseAmount;
-        for (String id : MULTIPLIERS.keySet()) {
-            if (id.startsWith("#")) {
-                TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
-                if (source.is(damageTypeTag)) {
-                    finalAmount *= MULTIPLIERS.get(id);
-                }
-            } else {
-                if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
-                    finalAmount = baseAmount;
-                    finalAmount *= MULTIPLIERS.get(id);
-                    break;
-                }
-            }
-        }
+		if (baseAmount > Config.Combat.maxDamageInOneHit) {
+			event.setAmount(Config.Combat.maxDamageInOneHit);
+			return;
+		}
 
-        // 1.5. Apply enchantment multipliers
-        if (livingAttacker != null) {
-            ItemStack weapon = livingAttacker.getMainHandItem();
+		// 1. Apply damage multipliers from config
+		float finalAmount = baseAmount;
+		for (String id : MULTIPLIERS.keySet()) {
+			if (id.startsWith("#")) {
+				TagKey<DamageType> damageTypeTag = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id.substring(1)));
+				if (source.is(damageTypeTag)) {
+					finalAmount *= MULTIPLIERS.get(id);
+				}
+			} else {
+				if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.parse(id)))) {
+					finalAmount = baseAmount;
+					finalAmount *= MULTIPLIERS.get(id);
+					break;
+				}
+			}
+		}
 
-            final int sharpness = weapon.getEnchantmentLevel(Enchantments.SHARPNESS);
-            int isMagic = sharpness;
-            if (sharpness > 0) {
-                finalAmount += finalAmount * (float) (0.1 + (sharpness * 0.04));
-            }
+		// 1.5. Apply enchantment multipliers
+		if (livingAttacker != null) {
+			ItemStack weapon = livingAttacker.getMainHandItem();
 
-            if (victimEntity.getMobType() == MobType.UNDEAD) {
-                final int smite = weapon.getEnchantmentLevel(Enchantments.SMITE);
-                if (smite > 0) {
-                    isMagic += smite;
-                    finalAmount += finalAmount * (float) (0.14 + (smite * 0.07));
-                }
-            } else if (victimEntity.getMobType() == MobType.ARTHROPOD) {
-                final int bane = weapon.getEnchantmentLevel(Enchantments.BANE_OF_ARTHROPODS);
-                if (bane > 0) {
-                    isMagic += bane;
-                    finalAmount += finalAmount * (float) (0.14 + (bane * 0.07));
-                }
-            }
+			final int sharpness = weapon.getEnchantmentLevel(Enchantments.SHARPNESS);
+			int isMagic = sharpness;
+			if (sharpness > 0) {
+				finalAmount += finalAmount * (float) (0.1 + (sharpness * 0.04));
+			}
 
-            if (victimEntity.isInWater() || victimEntity.level().isRainingAt(victimEntity.blockPosition())) {
-                final int impaling = weapon.getEnchantmentLevel(Enchantments.IMPALING);
-                if (impaling > 0) {
-                    isMagic += impaling;
-                    finalAmount *= (float) (1 + impaling * 0.1);
-                }
-            }
+			if (victimEntity.getMobType() == MobType.UNDEAD) {
+				final int smite = weapon.getEnchantmentLevel(Enchantments.SMITE);
+				if (smite > 0) {
+					isMagic += smite;
+					finalAmount += finalAmount * (float) (0.14 + (smite * 0.07));
+				}
+			} else if (victimEntity.getMobType() == MobType.ARTHROPOD) {
+				final int bane = weapon.getEnchantmentLevel(Enchantments.BANE_OF_ARTHROPODS);
+				if (bane > 0) {
+					isMagic += bane;
+					finalAmount += finalAmount * (float) (0.14 + (bane * 0.07));
+				}
+			}
 
-            if (isMagic > 0 && !livingAttacker.level().isClientSide()) {
-                livingAttacker.level().getServer().getPlayerList().getPlayers().forEach(viewer -> {
-                    ADJMessages.sendToPlayer(
-                            new EnchantedCritParticleS2CPacket(victimEntity.getId()),
-                            viewer
-                    );
-                });
-            }
-        }
+			if (victimEntity.isInWater() || victimEntity.level().isRainingAt(victimEntity.blockPosition())) {
+				final int impaling = weapon.getEnchantmentLevel(Enchantments.IMPALING);
+				if (impaling > 0) {
+					isMagic += impaling;
+					finalAmount *= (float) (1 + impaling * 0.1);
+				}
+			}
 
-        // 2. Apply variation
-        if (DISALLOWED_TAGS.stream().noneMatch(source::is)) {
+			if (isMagic > 0 && !livingAttacker.level().isClientSide()) {
+				livingAttacker.level().getServer().getPlayerList().getPlayers().forEach(viewer -> {
+					ADJMessages.sendToPlayer(
+							new EnchantedCritParticleS2CPacket(victimEntity.getId()),
+							viewer
+					);
+				});
+			}
+		}
+
+		// 2. Apply variation
+		if (DISALLOWED_TAGS.stream().noneMatch(source::is)) {
 //            System.out.println(Config.Combat.damageVariation);
-            double min = 1d - Config.Combat.damageVariation;
-            double max = 1d + Config.Combat.damageVariation;
-            double multiplier = min + Math.random() * (max - min);
+			double min = 1d - Config.Combat.damageVariation;
+			double max = 1d + Config.Combat.damageVariation;
+			double multiplier = min + Math.random() * (max - min);
 
-            if (attackerEntity instanceof LivingEntity attacker) {
-                AttributeInstance luck = attacker.getAttribute(Attributes.LUCK);
-                if (luck != null) {
-                    int luckValue = (int) Math.abs(luck.getValue());
-                    for (int i = 0; i < luckValue; i++) {
-                        if (Math.random() < 0.5) continue;
-                        double test = min + Math.random() * (max - min);
-                        multiplier = luck.getValue() > 0 ? Math.max(multiplier, test) : Math.min(multiplier, test);
-                    }
-                }
-            }
-            finalAmount *= (float) multiplier;
-        }
+			if (attackerEntity instanceof LivingEntity attacker) {
+				AttributeInstance luck = attacker.getAttribute(Attributes.LUCK);
+				if (luck != null) {
+					int luckValue = (int) Math.abs(luck.getValue());
+					for (int i = 0; i < luckValue; i++) {
+						if (Math.random() < 0.5) continue;
+						double test = min + Math.random() * (max - min);
+						multiplier = luck.getValue() > 0 ? Math.max(multiplier, test) : Math.min(multiplier, test);
+					}
+				}
+			}
+			finalAmount *= (float) multiplier;
+		}
 
-        // 3. Apply combat rules
-        if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
-            finalAmount *= 1 - getAttributeValue(victimEntity, ADJAttributes.DAMAGE_REDUCTION.get());
-            if (source.is(DamageTypeTags.IS_PROJECTILE)) {
-                finalAmount *= 1 - getAttributeValue(victimEntity, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
-            }
-        }
+		// 3. Apply combat rules
+		if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
+			finalAmount *= 1 - getAttributeValue(victimEntity, ADJAttributes.DAMAGE_REDUCTION.get());
+			if (source.is(DamageTypeTags.IS_PROJECTILE)) {
+				finalAmount *= 1 - getAttributeValue(victimEntity, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
+			}
+		}
 
-        finalAmount *= ALCombatRules.getProtDamageReduction(EnchantmentHelper.getDamageProtection(victimEntity.getArmorSlots(), source));
+		finalAmount *= ALCombatRules.getProtDamageReduction(EnchantmentHelper.getDamageProtection(victimEntity.getArmorSlots(), source));
 
-        int armorPoints = (int) getAttributeValue(victimEntity, Attributes.ARMOR);
-        if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-            int armorToughness = (int) getAttributeValue(victimEntity, Attributes.ARMOR_TOUGHNESS);
+		int armorPoints = (int) getAttributeValue(victimEntity, Attributes.ARMOR);
+		if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
+			int armorToughness = (int) getAttributeValue(victimEntity, Attributes.ARMOR_TOUGHNESS);
 
-            if (livingAttacker != null) {
-                int armorPierce = (int) getAttributeValue(livingAttacker, ALObjects.Attributes.ARMOR_PIERCE.get());
-                float armorShred = Math.max(1 - getAttributeValue(livingAttacker, ALObjects.Attributes.ARMOR_SHRED.get()), 0);
-                armorPierce = Math.max(0, armorPierce - armorToughness);
-                armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
-            }
+			if (livingAttacker != null) {
+				int armorPierce = (int) getAttributeValue(livingAttacker, ALObjects.Attributes.ARMOR_PIERCE.get());
+				float armorShred = Math.max(1 - getAttributeValue(livingAttacker, ALObjects.Attributes.ARMOR_SHRED.get()), 0);
+				armorPierce = Math.max(0, armorPierce - armorToughness);
+				armorPoints = Math.max(Math.round(armorPoints * armorShred) - armorPierce, 0);
+			}
 
-            float factor = (float) ((victimEntity instanceof Player) ? Config.Combat.armorPointReductionFactor : Config.Combat.armorPointReductionFactorEntity);
-            finalAmount = (float) Math.max(Config.Combat.minDamage, finalAmount - (armorPoints / factor));
-        }
+			float factor = (float) ((victimEntity instanceof Player) ? Config.Combat.armorPointReductionFactor : Config.Combat.armorPointReductionFactorEntity);
+			finalAmount = (float) Math.max(Config.Combat.minDamage, finalAmount - (armorPoints / factor));
+		}
 
-        // 4. Ensure minimum damage
-        finalAmount = (float) Math.max(Math.ceil(finalAmount), Config.Combat.minDamage);
+		// 4. Ensure minimum damage
+		finalAmount = (float) Math.max(Math.ceil(finalAmount), Config.Combat.minDamage);
 
-        // 5. Handle crits
-        //    Logic adapted from AttributesLib
+		// 5. Handle crits
+		//    Logic adapted from AttributesLib
 
-        boolean isCrit = false;
-        double critChance = 0d;
-        float critMult = 1.0F;
+		boolean isCrit = false;
+		double critChance = 0d;
+		float critMult = 1.0F;
 
-        if (livingAttacker != null) {
+		if (livingAttacker != null) {
 
-            critChance = livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
-            float critDmg = (float) livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
+			critChance = livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
+			float critDmg = (float) livingAttacker.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
 
-            RandomSource rand = event.getEntity().getRandom();
+			RandomSource rand = event.getEntity().getRandom();
 
-            // Roll for crits. Each overcrit reduces the effectiveness by 15%
-            // We stop rolling when crit chance fails or the crit damage would reduce the total damage dealt.
-            while (rand.nextFloat() <= critChance && critDmg > 1.0F) {
-                critChance--;
-                critMult *= critDmg;
-                critDmg *= 0.85F;
-            }
+			// Roll for crits. Each overcrit reduces the effectiveness by 15%
+			// We stop rolling when crit chance fails or the crit damage would reduce the total damage dealt.
+			while (rand.nextFloat() <= critChance && critDmg > 1.0F) {
+				critChance--;
+				critMult *= critDmg;
+				critDmg *= 0.85F;
+			}
 
-            finalAmount *= critMult;
-            event.setAmount(finalAmount);
+			finalAmount *= critMult;
+			event.setAmount(finalAmount);
 
-            if (critMult > 1) {
-                isCrit = true;
-                if (!livingAttacker.level().isClientSide) {
-                    PacketDistro.sendToTracking(AttributesLib.CHANNEL, new CritParticleMessage(event.getEntity().getId()), (ServerLevel) livingAttacker.level(), event.getEntity().blockPosition());
-                }
-            }
-        }
+			if (critMult > 1) {
+				isCrit = true;
+				if (!livingAttacker.level().isClientSide) {
+					PacketDistro.sendToTracking(AttributesLib.CHANNEL, new CritParticleMessage(event.getEntity().getId()), (ServerLevel) livingAttacker.level(), event.getEntity().blockPosition());
+				}
+			}
+		}
 
-        // 6. Fire event and edit amount
-        event.setAmount(finalAmount);
+		// 6. Fire event and edit amount
+		event.setAmount(finalAmount);
 
-        ADJHurtEvent eventHook = new ADJHurtEvent(
-                livingAttacker,
-                event.getEntity(),
-                baseAmount,
-                finalAmount,
-                isCrit,
-                (float) critChance,
-                critMult,
-                event.getSource()
-        );
-        MinecraftForge.EVENT_BUS.post(eventHook);
+		ADJHurtEvent eventHook = new ADJHurtEvent(
+				livingAttacker,
+				event.getEntity(),
+				baseAmount,
+				finalAmount,
+				isCrit,
+				(float) critChance,
+				critMult,
+				event.getSource()
+		);
+		MinecraftForge.EVENT_BUS.post(eventHook);
 
-    }
+	}
 
-    public static class IFrameConfig {
-        public int iframes;
-        public Map<String, Integer> overrides = new HashMap<>();
-    }
+	public static class IFrameConfig {
+		public int iframes;
+		public Map<String, Integer> overrides = new HashMap<>();
+	}
 }

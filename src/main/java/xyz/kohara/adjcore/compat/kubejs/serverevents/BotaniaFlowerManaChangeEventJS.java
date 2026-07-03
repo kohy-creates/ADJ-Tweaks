@@ -3,6 +3,7 @@ package xyz.kohara.adjcore.compat.kubejs.serverevents;
 import dev.latvian.mods.kubejs.event.EventJS;
 import net.minecraft.world.level.block.Block;
 import vazkii.botania.api.block_entity.FunctionalFlowerBlockEntity;
+import vazkii.botania.api.block_entity.GeneratingFlowerBlockEntity;
 import xyz.kohara.adjcore.misc.events.BotaniaFlowerManaChangeEvent;
 
 public class BotaniaFlowerManaChangeEventJS extends EventJS {
@@ -16,8 +17,12 @@ public class BotaniaFlowerManaChangeEventJS extends EventJS {
 		return this.event.getBlock();
 	}
 
-	public FunctionalFlowerBlockEntity getFlower() {
-		return this.event.getFlower();
+	public FunctionalFlowerBlockEntity getFunctionalFlower() {
+		return this.event.getFunctionalFlower();
+	}
+
+	public GeneratingFlowerBlockEntity getGeneratingFlower() {
+		return this.event.getGeneratingFlower();
 	}
 
 	public int getAmount() {

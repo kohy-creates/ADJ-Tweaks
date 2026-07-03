@@ -19,6 +19,7 @@ public class Config {
 	private static final ForgeConfigSpec.DoubleValue ARMOR_POINT_REDUCTION_FACTOR;
 	private static final ForgeConfigSpec.DoubleValue ARMOR_POINT_REDUCTION_FACTOR_ENTITY;
 	private static final ForgeConfigSpec.DoubleValue ARMOR_DURABILITY_DAMAGE_FACTOR;
+	private static final ForgeConfigSpec.IntValue MAX_DAMAGE_IN_ONE_HIT;
 
 	private static final ForgeConfigSpec.DoubleValue CAMPFIRE_HEAL_RADIUS;
 	private static final ForgeConfigSpec.DoubleValue CAMPFIRE_HEAL_RADIUS_SIGNAL;
@@ -50,6 +51,7 @@ public class Config {
 		public static double armorPointReductionFactor;
 		public static double armorPointReductionFactorEntity;
 		public static double armorDurabilityDamageFactor;
+		public static int maxDamageInOneHit;
 	}
 
 	public static class Tools {
@@ -92,6 +94,7 @@ public class Config {
 		Combat.armorPointReductionFactor = ARMOR_POINT_REDUCTION_FACTOR.get();
 		Combat.armorPointReductionFactorEntity = ARMOR_POINT_REDUCTION_FACTOR_ENTITY.get();
 		Combat.armorDurabilityDamageFactor = ARMOR_DURABILITY_DAMAGE_FACTOR.get();
+		Combat.maxDamageInOneHit = MAX_DAMAGE_IN_ONE_HIT.get();
 
 		Campfire.healRadius = CAMPFIRE_HEAL_RADIUS.get();
 		Campfire.healRadiusSignal = CAMPFIRE_HEAL_RADIUS_SIGNAL.get();
@@ -125,7 +128,6 @@ public class Config {
 	}
 
 	static {
-
 		HARDCORE_RESPAW_RADIUS = BUILDER.defineInRange("HARDCORE_RESPAWN_RADIUS", 5000, 0, Integer.MAX_VALUE);
 
 		BUILDER.comment("Structures").push("structures");
@@ -193,6 +195,10 @@ public class Config {
 		ARMOR_DURABILITY_DAMAGE_FACTOR = BUILDER
 				.comment("How many damage points per 1 durability lost on block")
 				.defineInRange("ARMOR_DURABILITY_DAMAGE_FACTOR", 4d, 1d, 100d);
+
+		MAX_DAMAGE_IN_ONE_HIT = BUILDER
+				.comment("Maximum amount of damage that can be dealt in a single damage instance. Anything higher than that gets clamped to that value")
+				.defineInRange("MAX_DAMAGE_IN_ONE_HIT", 999999, 0, Integer.MAX_VALUE);
 
 		BUILDER.pop();
 

@@ -47,6 +47,7 @@
 		"compat.botania.FallenKanadeBlockEntityMixin",
 		"compat.botania.FallingStarEntityMixin",
 		"compat.botania.FunctionalFlowerBlockEntityMixin",
+		"compat.botania.GeneratingFlowerBlockEntityMixin",
 		"compat.botania.ManaInventoryMixin",
 		"compat.botania.NukeFlugelTiaraAbilityMixin",
 		"compat.botania.TerraSwordItemMixin",

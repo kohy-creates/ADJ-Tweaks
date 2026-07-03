@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
+import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
@@ -87,8 +88,7 @@ public class ParticleTextIndicators {
     public static void onADJHurt(ADJHurtEvent event) {
 
         float amount = event.getDamage();
-        float amountMax = 99999;
-        if (amount >= amountMax) amount = amountMax;
+        if (amount >= Config.Combat.maxDamageInOneHit) amount = Config.Combat.maxDamageInOneHit;
 
         Entity victim = event.getVictim();
         LivingEntity attacker = event.getAttacker();

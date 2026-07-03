@@ -16,22 +16,21 @@ import xyz.kohara.adjcore.combat.DamageHandler;
 @Mixin(value = AttributeEvents.class, remap = false)
 public class AttributesLibEventsMixin {
 
-    @ModifyExpressionValue(
-            method = "affixModifiers",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraftforge/event/ItemAttributeModifierEvent;getModifiers()Lcom/google/common/collect/Multimap;"
+	@ModifyExpressionValue(
+			method = "affixModifiers",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraftforge/event/ItemAttributeModifierEvent;getModifiers()Lcom/google/common/collect/Multimap;"
 
-            )
-    )
-    private Multimap<Attribute, AttributeModifier> fuckingNukeThisLineLikeWhyIsntItEvenAConfigBruh(Multimap<Attribute, AttributeModifier> original) {
-        return ArrayListMultimap.create();
-    }
+			)
+	)
+	private Multimap<Attribute, AttributeModifier> fuckingNukeThisLineLikeWhyIsntItEvenAConfigBruh(Multimap<Attribute, AttributeModifier> original) {
+		return ArrayListMultimap.create();
+	}
 
-    @Inject(method = "apothCriticalStrike", at = @At(value = "HEAD"), cancellable = true)
-    private void critStrikeHook(LivingHurtEvent event, CallbackInfo ci) {
-        ci.cancel();
-
-        DamageHandler.handleLivingHurt(event);
-    }
+	@Inject(method = "apothCriticalStrike", at = @At(value = "HEAD"), cancellable = true)
+	private void critStrikeHook(LivingHurtEvent event, CallbackInfo ci) {
+		ci.cancel();
+		DamageHandler.handleLivingHurt(event);
+	}
 }
