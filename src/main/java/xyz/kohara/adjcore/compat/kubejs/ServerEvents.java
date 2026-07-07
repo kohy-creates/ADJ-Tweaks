@@ -2,6 +2,7 @@ package xyz.kohara.adjcore.compat.kubejs;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
+import jdk.jfr.Event;
 import xyz.kohara.adjcore.compat.kubejs.serverevents.*;
 
 public interface ServerEvents {
@@ -12,4 +13,5 @@ public interface ServerEvents {
 	EventHandler EXPLOSION_DAMAGE_CALC = GROUP.server("explosionDamageCalc", () -> ADJExplosionDamageCalcEventJS.class);
 	EventHandler ITEM_RARITY_GET_EVENT = GROUP.server("itemRarityGet", () -> ItemRarityGetEventJS.class);
 	EventHandler BOTANIA_MANA_CHANGE = GROUP.server("botaniaFlowerManaChange", () -> BotaniaFlowerManaChangeEventJS.class);
+	EventHandler ADJ_HEAL = GROUP.server("adjHeal", () -> ADJHealEventJS.class);
 }

@@ -3,7 +3,10 @@ package xyz.kohara.adjcore.mixins.compat;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.shadowsoffire.attributeslib.impl.AttributeEvents;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -32,5 +35,15 @@ public class AttributesLibEventsMixin {
 	private void critStrikeHook(LivingHurtEvent event, CallbackInfo ci) {
 		ci.cancel();
 		DamageHandler.handleLivingHurt(event);
+	}
+
+	@WrapOperation(method = "lifeStealOverheal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
+	private void wrapHeal(LivingEntity instance, float f, Operation<Void> original) {
+		instance.adjcore$heal(f, null, "overheal");
+	}
+
+	@ModifyExpressionValue(method = "lifeStealOverheal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getMaxHealth()F"))
+	private float lowerOverhealCap(float original) {
+		return original * 0.2f;
 	}
 }

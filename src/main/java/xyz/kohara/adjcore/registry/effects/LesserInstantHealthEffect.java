@@ -9,14 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class LesserInstantHealthEffect extends InstantenousMobEffect {
-    public LesserInstantHealthEffect() {
-        super(MobEffectCategory.BENEFICIAL, 16278114);
-    }
+	public LesserInstantHealthEffect() {
+		super(MobEffectCategory.BENEFICIAL, 16278114);
+	}
 
-    @Override
-    public void applyInstantenousEffect(@Nullable Entity source, @Nullable Entity indirectSource, @NotNull LivingEntity livingEntity, int amplifier, double health) {
-        if (livingEntity.getMaxHealth() != livingEntity.getHealth()) {
-            livingEntity.heal(10 * (amplifier + 1));
-        }
-    }
+	@Override
+	public void applyInstantenousEffect(@Nullable Entity source, @Nullable Entity indirectSource, @NotNull LivingEntity livingEntity, int amplifier, double health) {
+		if (livingEntity.getMaxHealth() != livingEntity.getHealth()) {
+			livingEntity.adjcore$heal(10 * (amplifier + 1), null, "lesserHealingPotion");
+		}
+	}
 }

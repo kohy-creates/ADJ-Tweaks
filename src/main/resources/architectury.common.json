@@ -2,6 +2,7 @@
 	"injected_interfaces": {
 		"net/minecraft/class_1309": [
 			"xyz/kohara/adjcore/combat/KnockbackCooldown",
+			"xyz/kohara/adjcore/combat/HealingWithSourceEntity",
 			"xyz/kohara/adjcore/entity/IHealTime"
 		],
 		"net/minecraft/class_1657": [

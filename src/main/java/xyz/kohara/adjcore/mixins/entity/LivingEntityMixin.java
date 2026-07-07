@@ -15,7 +15,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -24,156 +26,167 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
+import xyz.kohara.adjcore.combat.HealingWithSourceEntity;
 import xyz.kohara.adjcore.combat.KnockbackCooldown;
 import xyz.kohara.adjcore.entity.IHealTime;
+import xyz.kohara.adjcore.misc.events.ADJHealEvent;
 
 import java.util.UUID;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown, IHealTime {
+public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown, IHealTime, HealingWithSourceEntity {
 
-    public LivingEntityMixin(EntityType<?> entityType, Level level) {
-        super(entityType, level);
-    }
+	public LivingEntityMixin(EntityType<?> entityType, Level level) {
+		super(entityType, level);
+	}
 
-    @Shadow
-    public abstract @NotNull Iterable<ItemStack> getArmorSlots();
+	@Shadow
+	public abstract @NotNull Iterable<ItemStack> getArmorSlots();
 
-    @Shadow
-    @Final
-    private static UUID SPEED_MODIFIER_SPRINTING_UUID;
+	@Shadow
+	@Final
+	private static UUID SPEED_MODIFIER_SPRINTING_UUID;
 
-    @Shadow
-    @Final
-    @Mutable
-    private static AttributeModifier SPEED_MODIFIER_SPRINTING;
+	@Shadow
+	@Final
+	@Mutable
+	private static AttributeModifier SPEED_MODIFIER_SPRINTING;
 
-    // Yeeting Resistance effect logic out of here
-    @Inject(
-            method = "getDamageAfterMagicAbsorb",
-            at = @At(
-                    value = "HEAD"
-            ),
-            cancellable = true
-    )
-    private void resistanceEdit(DamageSource damageSource, float damageAmount, CallbackInfoReturnable<Float> cir) {
-        if (damageSource.is(DamageTypeTags.BYPASSES_EFFECTS)) {
-            cir.setReturnValue(damageAmount);
-        } else {
-            if (damageAmount <= 0.0F) {
-                cir.setReturnValue(0.0F);
-            } else if (damageSource.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-                cir.setReturnValue(damageAmount);
-            } else {
-                int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), damageSource);
-                if (k > 0) {
-                    damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, k);
-                }
-                cir.setReturnValue(damageAmount);
-            }
-        }
-    }
+	@Shadow
+	public abstract void heal(float healAmount);
 
-    // Removes shield use delay
-    @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
-    private int setShieldUseDelay(int constant) {
-        return Config.Combat.shieldDelay;
-    }
+	// Yeeting Resistance effect logic out of here
+	@Inject(
+			method = "getDamageAfterMagicAbsorb",
+			at = @At(
+					value = "HEAD"
+			),
+			cancellable = true
+	)
+	private void resistanceEdit(DamageSource damageSource, float damageAmount, CallbackInfoReturnable<Float> cir) {
+		if (damageSource.is(DamageTypeTags.BYPASSES_EFFECTS)) {
+			cir.setReturnValue(damageAmount);
+		} else {
+			if (damageAmount <= 0.0F) {
+				cir.setReturnValue(0.0F);
+			} else if (damageSource.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
+				cir.setReturnValue(damageAmount);
+			} else {
+				int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), damageSource);
+				if (k > 0) {
+					damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, k);
+				}
+				cir.setReturnValue(damageAmount);
+			}
+		}
+	}
 
-    @Unique
-    public int adjcore$knockbackCooldown;
+	// Removes shield use delay
+	@ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
+	private int setShieldUseDelay(int constant) {
+		return Config.Combat.shieldDelay;
+	}
 
-    @Unique
-    public int adjcore$healTime;
+	@Unique
+	public int adjcore$knockbackCooldown;
 
-    @Override
-    public int adjcore$getKnockbackCooldown() {
-        return adjcore$knockbackCooldown;
-    }
+	@Unique
+	public int adjcore$healTime;
 
-    @Override
-    public void adjcore$setKnockbackCooldown(int cooldown) {
-        adjcore$knockbackCooldown = cooldown;
-    }
+	@Override
+	public int adjcore$getKnockbackCooldown() {
+		return adjcore$knockbackCooldown;
+	}
 
-    @Override
-    public int adjcore$getHealTime() {
-        return adjcore$healTime;
-    }
+	@Override
+	public void adjcore$setKnockbackCooldown(int cooldown) {
+		adjcore$knockbackCooldown = cooldown;
+	}
 
-    public void adjcore$setHealTime(int time) {
-        adjcore$healTime = time;
-    }
+	@Override
+	public int adjcore$getHealTime() {
+		return adjcore$healTime;
+	}
+
+	public void adjcore$setHealTime(int time) {
+		adjcore$healTime = time;
+	}
 
 
-    @Inject(
-            method = "tick",
-            at = @At("HEAD")
-    )
-    private void onTick(CallbackInfo ci) {
-        if (adjcore$knockbackCooldown > 0) {
-            adjcore$knockbackCooldown--;
-        }
-        if (adjcore$healTime > 0) {
-            adjcore$healTime--;
-        }
-    }
+	@Inject(
+			method = "tick",
+			at = @At("HEAD")
+	)
+	private void onTick(CallbackInfo ci) {
+		if (adjcore$knockbackCooldown > 0) {
+			adjcore$knockbackCooldown--;
+		}
+		if (adjcore$healTime > 0) {
+			adjcore$healTime--;
+		}
+	}
 
-    @Inject(
-            method = "<clinit>",
-            at = @At("TAIL")
-    )
-    private static void nerfSprinting(CallbackInfo ci) {
-        SPEED_MODIFIER_SPRINTING = new AttributeModifier(
-                SPEED_MODIFIER_SPRINTING_UUID, "Sprinting speed boost", 0.3F, AttributeModifier.Operation.MULTIPLY_BASE
-        );
-    }
+	@Inject(
+			method = "<clinit>",
+			at = @At("TAIL")
+	)
+	private static void nerfSprinting(CallbackInfo ci) {
+		SPEED_MODIFIER_SPRINTING = new AttributeModifier(
+				SPEED_MODIFIER_SPRINTING_UUID, "Sprinting speed boost", 0.3F, AttributeModifier.Operation.MULTIPLY_BASE
+		);
+	}
 
-    @Inject(
-            method = "baseTick",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private void injectBaseTick(CallbackInfo ci) {
-        if (this.isAlive()) {
-            LivingEntity living = (LivingEntity) (Object) this;
+	@Inject(
+			method = "baseTick",
+			at = @At("HEAD"),
+			cancellable = true
+	)
+	private void injectBaseTick(CallbackInfo ci) {
+		if (this.isAlive()) {
+			LivingEntity living = (LivingEntity) (Object) this;
 
-            if (living instanceof Player player) {
-                WorldBorder border = this.level().getWorldBorder();
+			if (living instanceof Player player) {
+				WorldBorder border = this.level().getWorldBorder();
 
-                if (!border.isWithinBounds(this.blockPosition())) {
-                    ci.cancel();
+				if (!border.isWithinBounds(this.blockPosition())) {
+					ci.cancel();
 
-                    if (!this.level().isClientSide) {
-                        double targetX = Mth.clamp(
-                                this.position().x,
-                                border.getMinX() + 0.5D,
-                                border.getMaxX() - 0.5D
-                        );
+					if (!this.level().isClientSide) {
+						double targetX = Mth.clamp(
+								this.position().x,
+								border.getMinX() + 0.5D,
+								border.getMaxX() - 0.5D
+						);
 
-                        double targetZ = Mth.clamp(
-                                this.position().z,
-                                border.getMinZ() + 0.5D,
-                                border.getMaxZ() - 0.5D
-                        );
+						double targetZ = Mth.clamp(
+								this.position().z,
+								border.getMinZ() + 0.5D,
+								border.getMaxZ() - 0.5D
+						);
 
-                        double targetY =
-                                this.level().getHeight(
-                                        Heightmap.Types.MOTION_BLOCKING,
-                                        (int) Math.floor(targetX),
-                                        (int) Math.floor(targetZ)
-                                ) + 1.0D;
+						double targetY =
+								this.level().getHeight(
+										Heightmap.Types.MOTION_BLOCKING,
+										(int) Math.floor(targetX),
+										(int) Math.floor(targetZ)
+								) + 1.0D;
 
-                        this.setPos(targetX, targetY, targetZ);
+						this.setPos(targetX, targetY, targetZ);
 
-                        player.playSound(
-                                SoundEvents.ENDERMAN_TELEPORT,
-                                1.0F,
-                                1.0F
-                        );
-                    }
-                }
-            }
-        }
-    }
+						player.playSound(
+								SoundEvents.ENDERMAN_TELEPORT,
+								1.0F,
+								1.0F
+						);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void adjcore$heal(float amount, @Nullable LivingEntity sourceEntity, @Nullable String reason) {
+		var eventHandler = new ADJHealEvent(amount, (LivingEntity) (Object) this, sourceEntity, reason);
+		if (!MinecraftForge.EVENT_BUS.post(eventHandler)) this.heal(eventHandler.getAmount());
+	}
 }
