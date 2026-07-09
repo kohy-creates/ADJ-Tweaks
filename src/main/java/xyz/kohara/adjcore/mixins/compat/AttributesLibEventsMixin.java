@@ -42,8 +42,8 @@ public class AttributesLibEventsMixin {
 		instance.adjcore$heal(f, null, "overheal");
 	}
 
-	@ModifyExpressionValue(method = "lifeStealOverheal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getMaxHealth()F"))
-	private float lowerOverhealCap(float original) {
-		return original * 0.2f;
-	}
+//	@ModifyExpressionValue(method = "lifeStealOverheal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getMaxHealth()F"))
+//	private float lowerOverhealCap(float original) {
+//		return original * 0.2f;
+//	}
 }
