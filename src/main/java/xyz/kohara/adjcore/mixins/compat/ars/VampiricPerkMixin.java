@@ -14,7 +14,15 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = VampiricPerk.class, remap = false)
 public class VampiricPerkMixin {
 
-	@WrapOperation(method = "onPostSpellDamageEvent", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
+	@WrapOperation(
+			method = "onPostSpellDamageEvent",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V",
+					remap = true
+			),
+			remap = false
+	)
 	private void wrapHeal(
 			LivingEntity instance,
 			float f,

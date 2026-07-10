@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = RitualHealing.class, remap = false)
 public class RitualHealingMixin {
 
-	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
+	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V", remap = true), remap = false)
 	private void wrapHealing(LivingEntity instance, float f, Operation<Void> original) {
 		instance.adjcore$heal(25f, null, "ritualHealing");
 	}

@@ -15,7 +15,8 @@ public class HealGlyphMixin {
 			method = "onResolveEntity",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"
+					target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V",
+					remap = true
 			),
 			remap = false
 	)
