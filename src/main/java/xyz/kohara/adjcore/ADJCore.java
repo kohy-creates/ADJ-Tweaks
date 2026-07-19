@@ -1,10 +1,10 @@
 package xyz.kohara.adjcore;
 
+import com.hollingsworth.arsnouveau.api.mana.IManaCap;
+import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -14,7 +14,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -306,5 +307,15 @@ public class ADJCore {
 			return base - 2f;
 		}
 		return base;
+	}
+
+	public static void setPlayerManaRegenDelay(Player player, IManaCap manaCap) {
+		double i1 = 1d - (manaCap.getCurrentMana() / manaCap.getMaxMana());
+		double regenDelay = 0.7d * (i1 * 240d + 45);
+		if (player.hasEffect(ModPotions.MANA_REGEN_EFFECT.get())) {
+			regenDelay = Math.min(regenDelay, 20);
+		}
+		int delay = (int) Math.ceil(regenDelay / 4);
+		player.adjcore$setManaRegenDelay(delay);
 	}
 }

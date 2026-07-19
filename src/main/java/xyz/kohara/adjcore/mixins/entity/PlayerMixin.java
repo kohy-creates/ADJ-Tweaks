@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,9 +30,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.compat.ArsManaShenanigans;
 import xyz.kohara.adjcore.misc.ParticleTextIndicators;
+import xyz.kohara.adjcore.registry.ADJAttributes;
 
 import java.util.List;
 
@@ -229,19 +232,29 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
 	@Override
 	public boolean adjcore$tryCastSpell(int manaCost) {
 		var player = (Player) (Object) this;
+
 		IManaCap manaCap = CapabilityRegistry.getMana(player).orElse(null);
 		if (manaCap == null)
 			return false;
-		boolean canCast = manaCost <= manaCap.getCurrentMana() || player.isCreative();
+
+		double reduction = 0d;
+		AttributeInstance costReduction = player.getAttribute(ADJAttributes.MANA_COST_REDUCTION.get());
+		if (costReduction != null) {
+			reduction = costReduction.getValue();
+		}
+		int cost = (int) (manaCost - (manaCost * reduction));
+
+		boolean canCast = cost <= manaCap.getCurrentMana() || player.isCreative();
 		if (!canCast) {
 			if (!player.getCommandSenderWorld().isClientSide) {
-//				PortUtil.sendMessageNoSpam(player, Component.translatable("ars_nouveau.spell.no_mana"));
 				if (player instanceof ServerPlayer serverPlayer) {
-					Networking.sendToPlayerClient(new NotEnoughManaPacket(manaCost), serverPlayer);
+					Networking.sendToPlayerClient(new NotEnoughManaPacket(cost), serverPlayer);
 				}
 			}
 		} else {
-			manaCap.removeMana(manaCost);
+			manaCap.removeMana(cost);
+			// Mana regen delay
+			ADJCore.setPlayerManaRegenDelay(player, manaCap);
 		}
 		return canCast;
 	}

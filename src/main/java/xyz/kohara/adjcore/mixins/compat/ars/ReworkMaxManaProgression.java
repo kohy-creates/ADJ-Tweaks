@@ -110,14 +110,12 @@ public class ReworkMaxManaProgression {
         if (!(e instanceof Player player)) return original;
 
         double reduction = 0d;
-
         AttributeInstance costReduction = player.getAttribute(ADJAttributes.MANA_COST_REDUCTION.get());
         if (costReduction != null) {
             reduction = costReduction.getValue();
         }
 
         double cost = spell.getCost();
-
         return (int) (original + (cost * reduction));
     }
 
@@ -129,14 +127,12 @@ public class ReworkMaxManaProgression {
         }
 
         double reduction = 0d;
-
         AttributeInstance costReduction = e.getAttribute(ADJAttributes.MANA_COST_REDUCTION.get());
         if (costReduction != null) {
             reduction = costReduction.getValue();
         }
 
         double cost = spell.getCost();
-
         cir.setReturnValue((int) (cost * reduction));
     }
 }

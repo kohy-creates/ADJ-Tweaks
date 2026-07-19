@@ -14,43 +14,36 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.kohara.adjcore.ADJCore;
 
 import java.util.Map;
 
 @Mixin(value = SpellResolver.class, remap = false)
 public class SpellCooldownMixin {
 
-    @Shadow
-    public SpellContext spellContext;
+	@Shadow
+	public SpellContext spellContext;
 
-    @Unique
-    private final Map<Integer, Integer> adj$spellCooldowns = Map.of(
-            1, 8,
-            2, 7,
-            3, 6,
-            99, 6
-    );
+	@Unique
+	private final Map<Integer, Integer> adj$spellCooldowns = Map.of(
+			1, 8,
+			2, 7,
+			3, 6,
+			99, 6
+	);
 
-    @Inject(method = "expendMana", at = @At("TAIL"))
-    private void addSpellCooldown(CallbackInfo ci) {
-        if (spellContext.getUnwrappedCaster() instanceof Player player && spellContext.getCasterTool().getItem() instanceof SpellBook spellBook) {
-            SpellTier tier = spellBook.getTier();
+	@Inject(method = "expendMana", at = @At("TAIL"))
+	private void addSpellCooldown(CallbackInfo ci) {
+		if (spellContext.getUnwrappedCaster() instanceof Player player && spellContext.getCasterTool().getItem() instanceof SpellBook spellBook) {
+			SpellTier tier = spellBook.getTier();
 
-            int cooldown = adj$spellCooldowns.getOrDefault(tier.value, 20);
-            player.getCooldowns().addCooldown(spellBook, cooldown);
+			int cooldown = adj$spellCooldowns.getOrDefault(tier.value, 20);
+			player.getCooldowns().addCooldown(spellBook, cooldown);
 
-            IManaCap mana = CapabilityRegistry.getMana(player).orElse(null);
+			IManaCap mana = CapabilityRegistry.getMana(player).orElse(null);
 
-            // Mana regen delay
-            double i1 = 1d - (mana.getCurrentMana() / mana.getMaxMana());
-            double regenDelay = 0.7d * (i1 * 240d + 45);
-            if (player.hasEffect(ModPotions.MANA_REGEN_EFFECT.get())) {
-                regenDelay = Math.min(regenDelay, 20);
-            }
-
-            int delay = (int) Math.ceil(regenDelay / 4);
-
-            player.adjcore$setManaRegenDelay(delay);
-        }
-    }
+			// Mana regen delay
+			ADJCore.setPlayerManaRegenDelay(player, mana);
+		}
+	}
 }
