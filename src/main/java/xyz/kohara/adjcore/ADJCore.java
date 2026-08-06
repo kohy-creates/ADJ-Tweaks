@@ -182,17 +182,6 @@ public class ADJCore {
 	}
 
 	@SubscribeEvent
-	public static void onBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
-		Player player = event.getEntity();
-		if (player.isInWater() && player.isEyeInFluid(FluidTags.WATER)) {
-			event.setNewSpeed(event.getNewSpeed() * 5.0F);
-		}
-		if (!player.onGround()) {
-			event.setNewSpeed(event.getNewSpeed() * 5.0F);
-		}
-	}
-
-	@SubscribeEvent
 	public static void onServerChat(ServerChatEvent event) {
 		event.setCanceled(true);
 

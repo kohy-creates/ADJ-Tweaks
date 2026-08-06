@@ -99,6 +99,15 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
 		itementity.lifespan *= 3;
 	}
 
+	@Redirect(
+			method = "getDigSpeed(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)F",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/world/entity/player/Player;onGround()Z")
+	)
+	private boolean flightAffinity$shouldTreatAsOnGround(Player instance) {
+		return true;
+	}
+
 	@Unique
 	public int adjcore$manaRegenDelay;
 
