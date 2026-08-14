@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -121,7 +122,9 @@ public abstract class QuarkItemTooltipMixin {
 	private static TagKey<Attribute> adj$joinStatsInDescription = TagKey.create(Registries.ATTRIBUTE, ADJCore.of("join_stats_in_description"));
 
 	@Unique
-	private static boolean adj$shouldJoinBonuses(Attribute attribute, Player player) {
+	private static boolean adj$shouldJoinBonuses(ItemStack itemstack, Attribute attribute, Player player) {
+		if (itemstack.getItem() instanceof Equipable) return false;
+
 		var level = player.level();
 
 		ResourceKey<Attribute> resourceKey =
@@ -161,7 +164,7 @@ public abstract class QuarkItemTooltipMixin {
 						AttributeInstance attribute = player.getAttribute(key);
 						if (attribute != null) {
 							value = attribute.getBaseValue();
-							if (adj$shouldJoinBonuses(key, player)) for (var modifier : attribute.getModifiers()) {
+							if (adj$shouldJoinBonuses(stack, key, player)) for (var modifier : attribute.getModifiers()) {
 								hashMultimap.put(key, modifier);
 							}
 						}
