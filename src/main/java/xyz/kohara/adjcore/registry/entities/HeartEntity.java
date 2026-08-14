@@ -23,7 +23,7 @@ public class HeartEntity extends CollectibleEntity {
 
 	@Override
 	public void pickupEffects(@NotNull Player player) {
-		player.adjcore$heal(20, null, "heart");
+		player.adjcore$heal(20, null, "heart", true, false);
 		super.pickupEffects(player);
 	}
 

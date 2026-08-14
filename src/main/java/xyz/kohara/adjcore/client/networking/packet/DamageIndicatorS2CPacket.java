@@ -13,15 +13,15 @@ public class DamageIndicatorS2CPacket {
     private final double x, y, z;
     private final float amount;
     private final int type;
-    private final int isCrit;
+    private final int critOrSmall;
 
-    public DamageIndicatorS2CPacket(double x, double y, double z, float amount, int type, int isCrit) {
+    public DamageIndicatorS2CPacket(double x, double y, double z, float amount, int type, int critOrSmall) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.amount = amount;
         this.type = type;
-        this.isCrit = isCrit;
+        this.critOrSmall = critOrSmall;
     }
 
     public DamageIndicatorS2CPacket(FriendlyByteBuf buf) {
@@ -30,7 +30,7 @@ public class DamageIndicatorS2CPacket {
         this.z = buf.readDouble();
         this.amount = buf.readFloat();
         this.type = buf.readInt();
-        this.isCrit = buf.readInt();
+        this.critOrSmall = buf.readInt();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
@@ -39,7 +39,7 @@ public class DamageIndicatorS2CPacket {
         buf.writeDouble(this.z);
         buf.writeFloat(this.amount);
         buf.writeInt(this.type);
-        buf.writeInt(this.isCrit);
+        buf.writeInt(this.critOrSmall);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
@@ -55,7 +55,7 @@ public class DamageIndicatorS2CPacket {
                     this.z,
                     this.amount,
                     this.type,
-                    this.isCrit
+                    this.critOrSmall
             );
         });
         return true;

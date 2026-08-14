@@ -14,12 +14,16 @@ public class ADJHealEvent extends LivingEvent {
 	private float amount;
 	private final Entity sourceEntity;
 	private final String reason;
+	public final boolean smallIndicator;
+	public final boolean showIndicator;
 
-	public ADJHealEvent(float amount, LivingEntity entity, @Nullable Entity sourceEntity, @Nullable String reason) {
+	public ADJHealEvent(float amount, LivingEntity entity, @Nullable Entity sourceEntity, @Nullable String reason, boolean showIndicator, boolean smallIndicator) {
 		super(entity);
 		this.amount = amount;
 		this.sourceEntity = sourceEntity;
 		this.reason = reason;
+		this.smallIndicator = smallIndicator;
+		this.showIndicator = showIndicator;
 
 		if (ServerEvents.ADJ_HEAL.hasListeners()) ServerEvents.ADJ_HEAL.post(new ADJHealEventJS(this));
 	}
@@ -38,5 +42,17 @@ public class ADJHealEvent extends LivingEvent {
 
 	public String getReason() {
 		return this.reason;
+	}
+
+	public static class HealGuard {
+		private static final ThreadLocal<Boolean> IS_ADJ_HEAL = ThreadLocal.withInitial(() -> false);
+
+		public static boolean isADJHeal() {
+			return IS_ADJ_HEAL.get();
+		}
+
+		public static void setADJHeal(boolean value) {
+			IS_ADJ_HEAL.set(value);
+		}
 	}
 }

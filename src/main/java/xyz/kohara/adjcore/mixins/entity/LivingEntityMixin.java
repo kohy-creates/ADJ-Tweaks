@@ -28,13 +28,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.combat.HealingWithSourceEntity;
 import xyz.kohara.adjcore.combat.KnockbackCooldown;
-import xyz.kohara.adjcore.entity.IHealTime;
 import xyz.kohara.adjcore.misc.events.ADJHealEvent;
 
 import java.util.UUID;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown, IHealTime, HealingWithSourceEntity {
+public abstract class LivingEntityMixin extends Entity implements KnockbackCooldown, HealingWithSourceEntity {
 
 	public LivingEntityMixin(EntityType<?> entityType, Level level) {
 		super(entityType, level);
@@ -102,16 +101,6 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
 	public void adjcore$setKnockbackCooldown(int cooldown) {
 		adjcore$knockbackCooldown = cooldown;
 	}
-
-	@Override
-	public int adjcore$getHealTime() {
-		return adjcore$healTime;
-	}
-
-	public void adjcore$setHealTime(int time) {
-		adjcore$healTime = time;
-	}
-
 
 	@Inject(
 			method = "tick",
@@ -185,8 +174,15 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
 	}
 
 	@Override
-	public void adjcore$heal(float amount, @Nullable LivingEntity sourceEntity, @Nullable String reason) {
-		var eventHandler = new ADJHealEvent(amount, (LivingEntity) (Object) this, sourceEntity, reason);
-		if (!MinecraftForge.EVENT_BUS.post(eventHandler)) this.heal(eventHandler.getAmount());
+	public void adjcore$heal(float amount, @Nullable LivingEntity sourceEntity, @Nullable String reason, boolean showIndicator, boolean smallIndicator) {
+		var eventHandler = new ADJHealEvent(amount, (LivingEntity) (Object) this, sourceEntity, reason, showIndicator, smallIndicator);
+		if (!MinecraftForge.EVENT_BUS.post(eventHandler)) {
+			try {
+				ADJHealEvent.HealGuard.setADJHeal(true);
+				this.heal(eventHandler.getAmount());
+			} finally {
+				ADJHealEvent.HealGuard.setADJHeal(false);
+			}
+		}
 	}
 }

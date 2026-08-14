@@ -39,7 +39,7 @@ public class AttributesLibEventsMixin {
 
 	@WrapOperation(method = "lifeStealOverheal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V", remap = true), remap = false)
 	private void wrapHeal(LivingEntity instance, float f, Operation<Void> original) {
-		instance.adjcore$heal(f, null, "overheal");
+		instance.adjcore$heal(f, null, "overheal", true, false);
 	}
 
 	@ModifyExpressionValue(method = "lifeStealOverheal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getMaxHealth()F", remap = true), remap = false)

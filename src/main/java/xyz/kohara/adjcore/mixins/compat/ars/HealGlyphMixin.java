@@ -20,7 +20,7 @@ public class HealGlyphMixin {
 			),
 			remap = false
 	)
-	private void healWithSource(LivingEntity instance, float f, Operation<Void> original, @Local(name = "shooter") LivingEntity shooter) {
-		instance.adjcore$heal(f, shooter, "healSpell");
+	private void healWithSource(LivingEntity instance, float healAmount, Operation<Void> original, @Local(name = "shooter") LivingEntity shooter) {
+		instance.adjcore$heal(healAmount, shooter, "healSpell", true, false);
 	}
 }

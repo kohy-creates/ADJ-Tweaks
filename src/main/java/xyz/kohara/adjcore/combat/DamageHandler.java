@@ -28,18 +28,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.kohara.adjcore.Config;
-import xyz.kohara.adjcore.registry.ADJAttributes;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.client.networking.packet.EnchantedCritParticleS2CPacket;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
+import xyz.kohara.adjcore.registry.ADJAttributes;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -49,7 +47,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class DamageHandler {
 
@@ -223,20 +220,20 @@ public class DamageHandler {
 			final int sharpness = weapon.getEnchantmentLevel(Enchantments.SHARPNESS);
 			int isMagic = sharpness;
 			if (sharpness > 0) {
-				finalAmount += finalAmount * (float) (0.1 + (sharpness * 0.04));
+				finalAmount += finalAmount * (float) (0.08 + (sharpness * 0.04));
 			}
 
 			if (victimEntity.getMobType() == MobType.UNDEAD) {
 				final int smite = weapon.getEnchantmentLevel(Enchantments.SMITE);
 				if (smite > 0) {
 					isMagic += smite;
-					finalAmount += finalAmount * (float) (0.14 + (smite * 0.07));
+					finalAmount += finalAmount * (float) (0.08 + (smite * 0.04));
 				}
 			} else if (victimEntity.getMobType() == MobType.ARTHROPOD) {
 				final int bane = weapon.getEnchantmentLevel(Enchantments.BANE_OF_ARTHROPODS);
 				if (bane > 0) {
 					isMagic += bane;
-					finalAmount += finalAmount * (float) (0.14 + (bane * 0.07));
+					finalAmount += finalAmount * (float) (0.08 + (bane * 0.04));
 				}
 			}
 
@@ -244,7 +241,7 @@ public class DamageHandler {
 				final int impaling = weapon.getEnchantmentLevel(Enchantments.IMPALING);
 				if (impaling > 0) {
 					isMagic += impaling;
-					finalAmount *= (float) (1 + impaling * 0.1);
+					finalAmount *= (float) (1 + impaling * 0.08);
 				}
 			}
 
@@ -269,11 +266,10 @@ public class DamageHandler {
 				AttributeInstance luck = attacker.getAttribute(Attributes.LUCK);
 				if (luck != null) {
 					int luckValue = (int) Math.abs(luck.getValue());
-					for (int i = 0; i < luckValue; i++) {
-						if (Math.random() < 0.5) continue;
-						double test = min + Math.random() * (max - min);
-						multiplier = luck.getValue() > 0 ? Math.max(multiplier, test) : Math.min(multiplier, test);
-					}
+						if (Math.random() <= luckValue / 10d) {
+							double test = min + Math.random() * (max - min);
+							multiplier = luck.getValue() > 0 ? Math.max(multiplier, test) : Math.min(multiplier, test);
+						}
 				}
 			}
 			finalAmount *= (float) multiplier;

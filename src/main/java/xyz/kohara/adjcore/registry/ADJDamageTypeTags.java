@@ -1,7 +1,6 @@
 package xyz.kohara.adjcore.registry;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import xyz.kohara.adjcore.ADJCore;
@@ -9,8 +8,8 @@ import xyz.kohara.adjcore.ADJCore;
 public class ADJDamageTypeTags {
 	public static final TagKey<DamageType> MELEE = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of("melee"));
 	public static final TagKey<DamageType> PLAYER_MELEE = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of("player_melee"));
-	// public static final TagKey<DamageType> MOB_MELEE = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of( "mob_melee"));
-	// public static final TagKey<DamageType> DOT = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of( "dot"));
+	 public static final TagKey<DamageType> MOB_MELEE = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of( "mob_melee"));
+	 public static final TagKey<DamageType> DAMAGE_OVER_TIME = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of( "dot"));
 
 	public static final TagKey<DamageType> IGNORES_COOLDOWN = TagKey.create(Registries.DAMAGE_TYPE, ADJCore.of("bypasses_cooldown"));
 

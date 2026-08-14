@@ -33,6 +33,6 @@ public class VampiricPerkMixin {
 		var count = PerkUtil.countForPerk(perkInstance.getPerk(), event.caster);
 		event.damage = event.damage - (event.damage * (0.10f * count));
 		var heal = event.damage * (0.1f * count);
-		instance.adjcore$heal(heal, null, "vampiricPerk");
+		instance.adjcore$heal(heal, null, "vampiricPerk", true, false);
 	}
 }

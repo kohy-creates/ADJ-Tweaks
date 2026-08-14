@@ -6,6 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 public interface HealingWithSourceEntity {
 
-	default void adjcore$heal(float amount, @Nullable LivingEntity sourceEntity, @Nullable String reason) {
+	default void adjcore$heal(float amount, @Nullable LivingEntity sourceEntity, @Nullable String reason, boolean showIndicator, boolean smallIndicator) {
 	}
 }

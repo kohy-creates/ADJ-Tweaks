@@ -50,7 +50,7 @@ public abstract class MobEffectMixin {
 			}
 		} else {
 			int heal = 50 * (amplifier + 1);
-			livingEntity.adjcore$heal(Math.max(heal, 0), null, "healingPotion");
+			livingEntity.adjcore$heal(Math.max(heal, 0), null, "healingPotion", true, false);
 		}
 	}
 
@@ -81,7 +81,7 @@ public abstract class MobEffectMixin {
 		} else {
 			// Case: effect is HEAL (normal) OR HARM (inverted) -> HEAL
 			int heal = 50 * (amplifier + 1);
-			livingEntity.adjcore$heal(heal, null, "healingPotion");
+			livingEntity.adjcore$heal(heal, null, "healingPotion", true, false);
 		}
 	}
 

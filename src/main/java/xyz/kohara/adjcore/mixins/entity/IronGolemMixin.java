@@ -13,6 +13,6 @@ public class IronGolemMixin {
 
 	@WrapOperation(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/IronGolem;heal(F)V"))
 	private void wrapHeal(IronGolem instance, float v, Operation<Void> original, @Local(argsOnly = true) Player player) {
-		instance.adjcore$heal(250f, player, "golemHeal");
+		instance.adjcore$heal(250f, player, "golemHeal", true, false);
 	}
 }

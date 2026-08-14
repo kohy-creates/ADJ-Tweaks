@@ -165,7 +165,7 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
 					)
 			);
 
-			ParticleTextIndicators.showIndicator(player, null, amount, ParticleTextIndicators.Type.MANA, 0);
+			ParticleTextIndicators.showIndicator(player, null, amount, ParticleTextIndicators.Type.MANA, false, false);
 		});
 	}
 

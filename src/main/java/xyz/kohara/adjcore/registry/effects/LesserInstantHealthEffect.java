@@ -16,7 +16,7 @@ public class LesserInstantHealthEffect extends InstantenousMobEffect {
 	@Override
 	public void applyInstantenousEffect(@Nullable Entity source, @Nullable Entity indirectSource, @NotNull LivingEntity livingEntity, int amplifier, double health) {
 		if (livingEntity.getMaxHealth() != livingEntity.getHealth()) {
-			livingEntity.adjcore$heal(10 * (amplifier + 1), null, "lesserHealingPotion");
+			livingEntity.adjcore$heal(10 * (amplifier + 1), null, "lesserHealingPotion", true, false);
 		}
 	}
 }

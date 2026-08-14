@@ -181,7 +181,7 @@ dependencies {
     compileOnly "vazkii.botania:Botania:1.20.1-450-FORGE"
 
     modImplementation "curse.maven:travelers-backpack-321117:7573110"
-    modImplementation "teamtwilight:twilightforest:4.3.2145:universal"
+    modImplementation "curse.maven:the-twilight-forest-227639:5468648"
 
     modImplementation "curse.maven:fastsuite-475117:7527943"
     compileOnly "curse.maven:loot-journal-700723:7867729"
