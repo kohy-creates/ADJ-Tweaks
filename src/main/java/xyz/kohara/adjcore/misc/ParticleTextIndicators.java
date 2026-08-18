@@ -1,14 +1,19 @@
 package xyz.kohara.adjcore.misc;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
+import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.Config;
 import xyz.kohara.adjcore.misc.events.ADJHealEvent;
 import xyz.kohara.adjcore.misc.events.ADJHurtEvent;
@@ -17,6 +22,7 @@ import xyz.kohara.adjcore.client.networking.packet.DamageIndicatorS2CPacket;
 import xyz.kohara.adjcore.registry.ADJDamageTypeTags;
 
 import java.awt.*;
+import java.util.function.UnaryOperator;
 
 public class ParticleTextIndicators {
 
@@ -159,7 +165,7 @@ public class ParticleTextIndicators {
 		}
 	}
 
-	public enum Type {
+	public enum Type implements IExtensibleEnum {
 		DAMAGE_ENTITY(0, "#F58E27", "#FAAE64"),
 		DAMAGE_PLAYER(1, "#9C0909", "#E33B3B"),
 		HEAL(2, "#3BE346", "#7EE686"),
@@ -167,15 +173,17 @@ public class ParticleTextIndicators {
 		MANA(4, "#2787F5", "#2963E3"),
 		FIRE(5, "#F55E27", "#F58E27", "🔥"),
 		POISON(6, "#39782F", "#45A137"),
-		WITHER(7, "#764857", "#6E2F3F"),
+		WITHER(7, "#764857", "#6E2F3F", "\uD83D\uDC80"),
 		EXPLOSION(8, "#F53C27", "#F56B51", "💥"),
 		MIDNIGHT(9, "#F2FBFC", "#D9DDDE", "🌙"),
 		ZAP(10, "#F5B027", "#F5AD27", "⚡"),
 		PLAYER_RANGED_DAMAGE(11, "#F5CF27", "#FFC300"),
 		PLAYER_RANGED_CRIT(12, "#FFCE00", "#FFD042"),
 		PLAYER_MAGIC_DAMAGE(13, "#BE27F5", "#C664FA"),
-		PLAYER_MAGIC_CRIT(13, "#9500FF", "#A742FF"),
-		PLAYER_SUMMON_DAMAGE(14, "#27D6F5", "#64E6FA");
+		PLAYER_MAGIC_CRIT(14, "#9500FF", "#A742FF"),
+		PLAYER_SUMMON_DAMAGE(15, "#27D6F5", "#64E6FA"),
+		PLAYER_RADIANT_DAMAGE(16, "#FCFA53", "#FAF064"),
+		PLAYER_RADIANT_CRIT(17, "#FFF200", "#FFE642");
 
 		private final int id;
 		private final Pair<Color, Color> colors;
@@ -205,7 +213,19 @@ public class ParticleTextIndicators {
 		}
 
 		public static Type fromValue(int id) {
-			return values()[id];
+			for (var value : values()) {
+				if (value.id == id) return value;
+			}
+			ADJCore.LOGGER.error("Attempted to find a ParticleTextIndicator.Type of unknown id {}!", id);
+			return DAMAGE_ENTITY;
+		}
+
+		public static Type create(String name, int id, String baseColor, String fadeColor) {
+			throw new IllegalStateException("Enum not extended");
+		}
+
+		public static Type create(String name, int id, String baseColor, String fadeColor, @Nullable String icon) {
+			throw new IllegalStateException("Enum not extended");
 		}
 	}
 }
