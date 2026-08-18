@@ -23,3 +23,6 @@ accessible field net/minecraft/client/sounds/SoundEngine tickingSounds Ljava/uti
 accessible field net/minecraft/client/sounds/SoundEngine queuedTickableSounds Ljava/util/List;
 accessible field net/minecraft/client/sounds/SoundEngine queuedSounds Ljava/util/Map;
 accessible field net/minecraft/client/sounds/SoundEngine soundDeleteTime Ljava/util/Map;
+accessible field net/minecraft/world/entity/LivingEntity jumping Z
+accessible method net/minecraft/world/entity/LivingEntity getJumpPower ()F
+accessible method net/minecraft/world/entity/Entity getBlockJumpFactor ()F

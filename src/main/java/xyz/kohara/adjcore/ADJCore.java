@@ -12,16 +12,14 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -34,8 +32,10 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 import xyz.kohara.adjcore.client.music.ADJMusicData;
 import xyz.kohara.adjcore.client.networking.ADJMessages;
 import xyz.kohara.adjcore.combat.DamageHandler;
@@ -55,8 +55,10 @@ import xyz.kohara.adjcore.potions.PotionsEditor;
 import xyz.kohara.adjcore.registry.*;
 import xyz.kohara.adjcore.registry.capabilities.CapabilityEvents;
 import xyz.kohara.adjcore.registry.effects.EffectsHandler;
+import xyz.kohara.adjcore.registry.items.WingsItem;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.hollingsworth.arsnouveau.client.jei.MultiInputCategory.rotatePointAbout;
 
@@ -79,6 +81,7 @@ public class ADJCore {
 		IEventBus FORGE_BUS = MinecraftForge.EVENT_BUS;
 		MOD_BUS.addListener(this::commonSetup);
 		MOD_BUS.addListener(this::clientSetup);
+		MOD_BUS.addListener(this::onRegisterAdditionalModels);
 		MOD_BUS.addListener(ADJAttributes::addEntityAttributes);
 		MOD_BUS.addListener(ADJAttributes::onAttributeCreate);
 		MOD_BUS.addListener(ADJCapabilities::register);
@@ -97,6 +100,7 @@ public class ADJCore {
 		FORGE_BUS.register(ArsSpellPowerEdit.class);
 		FORGE_BUS.register(ExtraLivingDrops.class);
 		FORGE_BUS.register(EffectsHandler.class);
+		FORGE_BUS.register(WingsItem.class);
 
 		initRegistries(MOD_BUS);
 	}
@@ -123,7 +127,23 @@ public class ADJCore {
 		EffectsEditor.edit();
 	}
 
-	private void clientSetup(final FMLClientSetupEvent event) {
+	public void clientSetup(FMLClientSetupEvent event) {
+		getAllWings().forEach(wings -> CuriosRendererRegistry.register(wings, WingsItem.WingsCurioRenderer::new));
+	}
+
+	public void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event) {
+		getAllWings().forEach(wings -> event.register(wings.model));
+	}
+
+	private static final Set<WingsItem> WINGS = new HashSet<>();
+	private static Set<WingsItem> getAllWings() {
+		if (WINGS.isEmpty()) {
+			ForgeRegistries.ITEMS.getValues().stream()
+					.filter(WingsItem.class::isInstance)
+					.map(WingsItem.class::cast)
+					.forEach(WINGS::add);
+		}
+		return WINGS;
 	}
 
 	public static ResourceLocation of(String path) {

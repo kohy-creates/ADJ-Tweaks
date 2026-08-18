@@ -11,6 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xyz.kohara.adjcore.ADJCore;
 import xyz.kohara.adjcore.misc.LangGenerator;
 import xyz.kohara.adjcore.registry.items.TerraSlashTestItem;
+import xyz.kohara.adjcore.registry.items.WingsItem;
 
 import java.util.function.Supplier;
 
@@ -51,6 +52,19 @@ public class ADJItems {
             "terra_slash_test_item",
             "Terra Slash Test Item",
             () -> new TerraSlashTestItem(new Item.Properties())
+    );
+
+    public static final RegistryObject<Item> TEST_WINGS = register(
+            "test_wings",
+            "Test Wings",
+            () -> new WingsItem(
+                    new Item.Properties(),
+                    40,
+                    1.0f,
+                    1.0f,
+                    1.0f,
+                    ADJCore.of("item/tiara_wing_1")
+            )
     );
 
     private static RegistryObject<Item> register(String id, String name, Supplier<Item> factory) {

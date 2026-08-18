@@ -70,6 +70,12 @@ public class ADJAttributes {
 			"Defines clientside music pitch. If you can actually read this, then this isn't supposed to be seen and it's a bug."
 	);
 
+	public static final RegistryObject<Attribute> FLIGHT_TIME = register(
+			new RangedAttribute(id("generic", "flight_time"), 0d, 0d, 2048d).setSyncable(true),
+			"Flight Time",
+			"Wing flight time in ticks"
+	);
+
 	private static RegistryObject<Attribute> register(Attribute attribute, String name, String description) {
 		String descriptionID = attribute.getDescriptionId();
 		LangGenerator.addAttributeTranslation(descriptionID, name, description);
@@ -78,16 +84,17 @@ public class ADJAttributes {
 
 	public static void addEntityAttributes(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> type : event.getTypes()) {
-			event.add(type, ADJAttributes.DAMAGE_REDUCTION.get());
-			event.add(type, ADJAttributes.PROJECTILE_DAMAGE_REDUCTION.get());
-			event.add(type, ADJAttributes.SAFE_FALL_DISTANCE.get());
-			event.add(type, ADJAttributes.HEALTH_REGEN.get());
-			event.add(type, ADJAttributes.FALL_DAMAGE_REDUCTION.get());
+			event.add(type, DAMAGE_REDUCTION.get());
+			event.add(type, PROJECTILE_DAMAGE_REDUCTION.get());
+			event.add(type, SAFE_FALL_DISTANCE.get());
+			event.add(type, HEALTH_REGEN.get());
+			event.add(type, FALL_DAMAGE_REDUCTION.get());
 		}
 
-		event.add(EntityType.PLAYER, ADJAttributes.MANA_COST_REDUCTION.get());
-		event.add(EntityType.PLAYER, ADJAttributes.EXTRA_ORE_DROPS.get());
-		event.add(EntityType.PLAYER, ADJAttributes.MUSIC_PITCH.get());
+		event.add(EntityType.PLAYER, MANA_COST_REDUCTION.get());
+		event.add(EntityType.PLAYER, EXTRA_ORE_DROPS.get());
+		event.add(EntityType.PLAYER, MUSIC_PITCH.get());
+		event.add(EntityType.PLAYER, FLIGHT_TIME.get());
 	}
 
 	public static void onAttributeCreate(EntityAttributeCreationEvent event) {

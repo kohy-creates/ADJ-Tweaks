@@ -16,7 +16,7 @@ public interface ArsManaShenanigans {
 		throw new RuntimeException();
 	}
 
-	default void adjcore$restoreMana(int amount) {
+	default void adjcore$restoreMana(int amount, boolean showIndicator) {
 	}
 
 	default boolean adjcore$tryCastSpell(int manaCost) {

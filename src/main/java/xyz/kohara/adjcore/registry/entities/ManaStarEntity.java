@@ -24,7 +24,7 @@ public class ManaStarEntity extends CollectibleEntity {
 
     @Override
     public void pickupEffects(@NotNull Player player) {
-        player.adjcore$restoreMana(50);
+        player.adjcore$restoreMana(50, true);
         super.pickupEffects(player);
     }
 

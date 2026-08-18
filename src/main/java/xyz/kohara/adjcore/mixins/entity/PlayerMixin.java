@@ -149,7 +149,7 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
 	}
 
 	@Override
-	public void adjcore$restoreMana(int amount) {
+	public void adjcore$restoreMana(int amount, boolean showIndicator) {
 		final Player player = (Player) (Object) this;
 		CapabilityRegistry.getMana(player).ifPresent(mana -> {
 
@@ -165,7 +165,8 @@ public abstract class PlayerMixin extends LivingEntity implements ArsManaShenani
 					)
 			);
 
-			ParticleTextIndicators.showIndicator(player, null, amount, ParticleTextIndicators.Type.MANA, false, false);
+			if (showIndicator)
+				ParticleTextIndicators.showIndicator(player, null, amount, ParticleTextIndicators.Type.MANA, false, false);
 		});
 	}
 
