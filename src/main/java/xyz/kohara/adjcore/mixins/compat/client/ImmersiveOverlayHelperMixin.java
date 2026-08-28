@@ -1,8 +1,8 @@
 package xyz.kohara.adjcore.mixins.compat.client;
 
-import cc.cassian.immersiveoverlays.compat.CuriosCompat;
-import cc.cassian.immersiveoverlays.compat.ModCompat;
 import cc.cassian.immersiveoverlays.overlay.OverlayHelpers;
+import cc.cassian.mru.compat.ModCompat;
+import cc.cassian.mru.util.ItemContainerUtils;
 import com.tiviacz.travelersbackpack.capability.CapabilityUtils;
 import com.tiviacz.travelersbackpack.inventory.BackpackWrapper;
 import net.minecraft.client.Minecraft;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-@Mixin(value = OverlayHelpers.class, remap = false)
+@Mixin(value = ItemContainerUtils.class, remap = false)
 public abstract class ImmersiveOverlayHelperMixin {
 
 	/**

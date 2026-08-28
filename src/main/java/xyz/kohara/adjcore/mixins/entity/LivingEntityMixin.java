@@ -1,5 +1,8 @@
 package xyz.kohara.adjcore.mixins.entity;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -15,6 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -184,5 +188,11 @@ public abstract class LivingEntityMixin extends Entity implements KnockbackCoold
 				ADJHealEvent.HealGuard.setADJHeal(false);
 			}
 		}
+	}
+
+	@WrapOperation(method = "knockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(DDD)V"))
+	private void overrideVerticalKnockback(LivingEntity entity, double x, double y, double z, Operation<Void> original, @Local(argsOnly = true, ordinal = 0) double strength, @Local(ordinal = 0) Vec3 vec3) {
+		double amount = Math.min(0.4, Math.abs(vec3.y) / 2.0 + strength);
+		original.call(entity, x, this.onGround() ? amount : amount / 3d, z);
 	}
 }

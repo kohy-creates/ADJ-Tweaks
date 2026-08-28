@@ -188,7 +188,8 @@ dependencies {
 
 //    modImplementation "curse.maven:xaeros-world-map-317780:8042194"
 //    modImplementation "curse.maven:xaeros-minimap-263420:8046960"
-    modImplementation "curse.maven:immersive-overlays-1245453:8055443"
+    modImplementation "curse.maven:mru-669659:8617108"
+    modImplementation "curse.maven:immersive-overlays-1245453:8701556"
 
 //    compileOnly "curse.maven:fancymenu-367706:8094800"
     compileOnly"curse.maven:decursio-stages-1116604:7105808"

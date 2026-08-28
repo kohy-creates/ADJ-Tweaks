@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Quaternionf;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -95,8 +96,18 @@ public class WingsItem extends Item implements ICurioItem {
 		}
 	}
 
-	@SubscribeEvent
-	public static void onLivingKnockback()
+//	@SubscribeEvent
+//	public static void onLivingKnockback(LivingKnockBackEvent event) {
+//		var entity = event.getEntity();
+//		if (entity instanceof Player player) {
+//			if (hasEquipped(player) && isFlying(player)) event.setCanceled(true);
+//		}
+//	}
+
+	public static boolean isFlying(Player player) {
+		CompoundTag data = player.getPersistentData();
+		return data.getBoolean("IsWingFlying");
+	}
 
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
